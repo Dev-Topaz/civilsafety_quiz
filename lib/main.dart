@@ -1,7 +1,5 @@
 import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
-import 'package:civilsafety_quiz/View/screen/LoginScreen.dart';
 import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
-import 'package:civilsafety_quiz/View/screen/RegisterScreen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -19,8 +17,6 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => HomeScreen(),
-        '/login': (context) => LoginScreen(),
-        '/register': (context) => RegisterScreen(),
         '/quiz': (context) => QuizScreen(),
       },
     );

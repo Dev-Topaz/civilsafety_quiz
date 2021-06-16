@@ -1,4 +1,4 @@
-import 'dart:async';
+// import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -35,8 +35,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   late WebViewController _webViewController;
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
+  // final Completer<WebViewController> _controller = Completer<WebViewController>();
   String filePath = 'assets/web/test.html';
 
   @override
