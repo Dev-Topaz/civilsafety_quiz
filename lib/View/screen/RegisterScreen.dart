@@ -93,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       style: TextStyle(fontSize: 18),
                       decoration: InputDecoration(
                         prefixIcon:
-                            Icon(Icons.person_outline, color: lightColor[400]),
+                            Icon(Icons.email_outlined, color: lightColor[400]),
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
                             color: Colors.deepOrangeAccent,
@@ -196,7 +196,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
-            height: height * 0.1,
+            height: height * 0.12,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -226,7 +226,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: 10,
+                  height: 30,
                 ),
               ],
             ),
