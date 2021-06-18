@@ -1,5 +1,7 @@
+import 'package:civilsafety_quiz/Controller/LoginCommand.dart';
 import 'package:civilsafety_quiz/View/widget/CurvePointer.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class LoginScreen extends StatefulWidget {
   Function callback;
@@ -13,6 +15,56 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   bool isObscured =
       true; //for enabling and disabling obscurity in password field
+
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  void login(String email, String password) async {
+    print('[LoginScreen] login');
+
+    if (email == '') {
+      Fluttertoast.showToast(
+          msg: "Please enter your email.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return;
+    }
+
+    if (password == '') {
+      Fluttertoast.showToast(
+          msg: "Please enter your password.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      return;
+    }
+
+    String userToken = await LoginCommand().run(email, password);
+
+    print('[LoginScreen] $userToken');
+
+    if (userToken != '') {
+      this.widget.callback(true, true);
+    } else {
+      Fluttertoast.showToast(
+          msg: "Please enter email and password correctly.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+
+    return;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +120,13 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               children: <Widget>[
                 TextField(
+                    controller: emailController,
                     cursorColor: color,
                     style: TextStyle(fontSize: 18),
                     decoration: InputDecoration(
                       prefixIcon:
-                          Icon(Icons.person_outline, color: lightColor[400]),
-                      labelText: 'USERNAME',
+                          Icon(Icons.email_outlined, color: lightColor[400]),
+                      labelText: 'EMAIL',
                       labelStyle: TextStyle(
                           color: Colors.deepOrangeAccent,
                           fontWeight: FontWeight.w600,
@@ -87,6 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     )),
                 SizedBox(height: 30),
                 TextField(
+                    controller: passwordController,
                     cursorColor: color,
                     style: TextStyle(fontSize: 18),
                     obscureText: isObscured,
@@ -138,7 +192,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialStateProperty.all(Colors.blueGrey),
                     ),
                     onPressed: () {
-                      this.widget.callback(true, true);
+                      login(emailController.text, passwordController.text);
                     },
                     child: Text('CONTINUE',
                         style: TextStyle(color: primaryColor, fontSize: 18)),

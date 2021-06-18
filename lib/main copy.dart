@@ -5,7 +5,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 void main() {
   runApp(MyApp());
@@ -34,7 +33,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late WebViewController _webViewController;
+  // late WebViewController _webViewController;
   // final Completer<WebViewController> _controller = Completer<WebViewController>();
   String filePath = 'assets/web/test.html';
 
@@ -76,17 +75,17 @@ class _MyHomePageState extends State<MyHomePage> {
       //     ..add(Factory<VerticalDragGestureRecognizer>(
       //         () => VerticalDragGestureRecognizer())),
       // ),
-      body: WebView(
-        initialUrl: '',
-        javascriptMode: JavascriptMode.unrestricted,
-        onWebViewCreated: (WebViewController webViewController) {
-          _webViewController = webViewController;
-          _loadHtmlFromAssets();
-        },
-        gestureRecognizers: Set()
-          ..add(Factory<VerticalDragGestureRecognizer>(
-              () => VerticalDragGestureRecognizer())),
-      ),
+      // body: WebView(
+      //   initialUrl: '',
+      //   javascriptMode: JavascriptMode.unrestricted,
+      //   onWebViewCreated: (WebViewController webViewController) {
+      //     _webViewController = webViewController;
+      //     _loadHtmlFromAssets();
+      //   },
+      //   gestureRecognizers: Set()
+      //     ..add(Factory<VerticalDragGestureRecognizer>(
+      //         () => VerticalDragGestureRecognizer())),
+      // ),
       // floatingActionButton: FloatingActionButton(
       //   child: const Icon(Icons.add),
       //   onPressed: () {
@@ -96,10 +95,10 @@ class _MyHomePageState extends State<MyHomePage> {
     ));
   }
 
-  _loadHtmlFromAssets() async {
-    String fileHtmlContents = await rootBundle.loadString(filePath);
-    _webViewController.loadUrl(Uri.dataFromString(fileHtmlContents,
-            mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
-        .toString());
-  }
+  // _loadHtmlFromAssets() async {
+  //   String fileHtmlContents = await rootBundle.loadString(filePath);
+  //   _webViewController.loadUrl(Uri.dataFromString(fileHtmlContents,
+  //           mimeType: 'text/html', encoding: Encoding.getByName('utf-8'))
+  //       .toString());
+  // }
 }

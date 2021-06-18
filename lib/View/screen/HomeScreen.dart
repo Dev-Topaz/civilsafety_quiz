@@ -4,6 +4,7 @@ import 'package:civilsafety_quiz/View/screen/LoginScreen.dart';
 import 'package:civilsafety_quiz/View/screen/QuizListScreen.dart';
 import 'package:civilsafety_quiz/View/screen/RegisterScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,8 +38,23 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
-    print('[HomeScreen] isOnline $isOnline');
+    late bool isOnline;
+
+    if (!isLoading) {
+      isOnline = context.select<AppModel, bool>((value) => value.isOnline);
+
+      if (!isOnline) {
+        Fluttertoast.showToast(
+            msg: "You're offline!",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+      print('[HomeScreen] isOnline $isOnline');
+    }
 
     return isLoading
         ? CircularProgressIndicator(

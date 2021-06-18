@@ -1,10 +1,11 @@
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 
 class LoginCommand extends BaseCommand {
-  Future<bool> run(String email, String password) async {
-    bool loginSuccess = await userService.login(email, password);
+  Future<String> run(String email, String password) async {
+    String loginSuccess = await userService.login(email, password);
 
-    appModel.currentUserToken = (loginSuccess ? email : null)!;
+    print('[LoginCommand] loginSuccess $loginSuccess');
+    appModel.currentUserToken = loginSuccess;
 
     return loginSuccess;
   }

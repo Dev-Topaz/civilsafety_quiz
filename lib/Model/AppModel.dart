@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class AppModel extends ChangeNotifier {
   late String _currentUserToken;
-  bool _isOnline = false;
+  late bool _isOnline;
 
   String get currentUserToken => _currentUserToken;
   set currentUserToken(String currentUserToken) {
