@@ -1,5 +1,7 @@
+import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/View/widget/CurvePointer.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class RegisterScreen extends StatefulWidget {
   Function callback;
@@ -23,6 +25,96 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final primaryColor = Colors.white;
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+
+    final userNameController = TextEditingController();
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
+    final confirmPasswordController = TextEditingController();
+
+    Future<void> register(userName, email, password, confirmPassword) async {
+      if (userName == '') {
+        Fluttertoast.showToast(
+            msg: "Please enter your username.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+
+      if (email == '') {
+        Fluttertoast.showToast(
+            msg: "Please enter your email.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+
+      if (password == '') {
+        Fluttertoast.showToast(
+            msg: "Please enter password.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+
+      if (confirmPassword == '') {
+        Fluttertoast.showToast(
+            msg: "Please enter confirm password.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+
+      if (password != confirmPassword) {
+        passwordController.text = '';
+        confirmPasswordController.text = '';
+
+        Fluttertoast.showToast(
+            msg: "Password does not match. Please enter password again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
+        return;
+      }
+
+      String userToken = await UserCommand().register(userName, email, password, confirmPassword);
+
+      print('[RegisterScreen] $userToken');
+
+      if (userToken != '') {
+        this.widget.callback(true, true);
+      } else {
+        Fluttertoast.showToast(
+            msg: "This email has already registered. Please log in.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: Colors.black,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+
+      return;
+    }
+
     return Material(
       color: primaryColor,
       child: Column(
@@ -70,6 +162,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               child: Column(
                 children: <Widget>[
                   TextField(
+                      controller: userNameController,
                       cursorColor: color,
                       style: TextStyle(fontSize: 18),
                       decoration: InputDecoration(
@@ -89,6 +182,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       )),
                   SizedBox(height: 10),
                   TextField(
+                      controller: emailController,
                       cursorColor: color,
                       style: TextStyle(fontSize: 18),
                       decoration: InputDecoration(
@@ -108,6 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       )),
                   SizedBox(height: 10),
                   TextField(
+                      controller: passwordController,
                       cursorColor: color,
                       style: TextStyle(fontSize: 18),
                       obscureText: isPasswordObscured,
@@ -140,6 +235,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     height: 10,
                   ),
                   TextField(
+                      controller: confirmPasswordController,
                       cursorColor: color,
                       style: TextStyle(fontSize: 18),
                       obscureText: isConfirmPasswordObscured,
@@ -182,7 +278,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             MaterialStateProperty.all(Colors.blueGrey),
                       ),
                       onPressed: () {
-                        this.widget.callback(true, true);
+                        register(
+                            userNameController.text,
+                            emailController.text,
+                            passwordController.text,
+                            confirmPasswordController.text);
                       },
                       child: Text('CONTINUE',
                           style: TextStyle(color: primaryColor, fontSize: 18)),

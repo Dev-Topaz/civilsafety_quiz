@@ -1,4 +1,4 @@
-import 'package:civilsafety_quiz/Controller/LoginCommand.dart';
+import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/View/screen/LoginScreen.dart';
 import 'package:civilsafety_quiz/View/screen/QuizListScreen.dart';
@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    LoginCommand().isOnlineCheck().then((value) {
+    UserCommand().isOnlineCheck().then((value) {
       setState(() {
         isLoading = false;
       });

@@ -1,5 +1,3 @@
-import 'package:civilsafety_quiz/View/screen/LoginScreen.dart';
-import 'package:civilsafety_quiz/View/screen/RegisterScreen.dart';
 import 'package:flutter/material.dart';
 
 class QuizListScreen extends StatefulWidget {
