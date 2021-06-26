@@ -28,22 +28,21 @@ class QuizModel extends ChangeNotifier {
   String toJson() => json.encode(toMap());
 
   factory QuizModel.fromMap(Map<String, dynamic> jsonData) => QuizModel(
-        quizId: jsonData['quizId'],
-        title: jsonData['title'],
-        description: jsonData['description'],
-        passingScore: jsonData['passingScore'],
-        staffEmail: jsonData['staffEmail'],
-        quizContent: jsonData['quizContent'],
-        isDownload: jsonData['isDownload'],
+        quizId: jsonData['id'].toString(),
+        title: jsonData['name'],
+        description: jsonData['description'] != null ? jsonData['description'] : '',
+        passingScore: jsonData['passing_score'],
+        staffEmail: jsonData['stuff_emails'],
+        quizContent: jsonData['quizContent'] != null ? jsonData['quizContent'] : '',
+        isDownload: jsonData['downloaded'] == 1,
       );
 
   Map<String, dynamic> toMap() => {
-        'quizId': quizId,
+        'id': quizId,
         'title': title,
         'description': description,
-        'passingScore': passingScore,
-        'staffEmail': staffEmail,
-        'quizContent': quizContent,
-        'isDownload': isDownload,
+        'passing_score': passingScore,
+        'staff_email': staffEmail,
+        'file_path': '',
       };
 }

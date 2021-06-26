@@ -1,3 +1,4 @@
+import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/View/widget/CurvePointer.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isObscured = true; //for enabling and disabling obscurity in password field
+  bool isObscured =
+      true; //for enabling and disabling obscurity in password field
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -50,7 +52,9 @@ class _LoginScreenState extends State<LoginScreen> {
     print('[LoginScreen] $userToken');
 
     if (userToken != '') {
-      this.widget.callback(true, true);
+      await QuizCommand().updateQuiz(userToken).then((value) {
+        this.widget.callback(true, true);
+      });
     } else {
       Fluttertoast.showToast(
           msg: "Please enter email and password correctly.",

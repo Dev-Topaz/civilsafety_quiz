@@ -2,6 +2,8 @@ import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/Model/QuizModel.dart';
 import 'package:civilsafety_quiz/Model/UserModel.dart';
 import 'package:civilsafety_quiz/Service/AppService.dart';
+import 'package:civilsafety_quiz/Service/QuizService.dart';
+import 'package:civilsafety_quiz/Service/SqliteService.dart';
 import 'package:civilsafety_quiz/Service/UserService.dart';
 import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
 import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
@@ -23,6 +25,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (c) => QuizModel()),
         Provider(create: (c) => UserService()),
         Provider(create: (c) => AppService()),
+        Provider(create: (c) => SqliteService()),
+        Provider(create: (c) => QuizService()),
       ],
       child: Builder(builder: (context) {
         Commands.init(context);
@@ -42,6 +46,7 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
 
 // class AppScaffold extends StatelessWidget {
 //   const AppScaffold({Key? key}) : super(key: key);

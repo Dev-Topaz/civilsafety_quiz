@@ -5,13 +5,17 @@ class UserCommand extends BaseCommand {
     String loginSuccess = await userService.login(email, password);
 
     print('[UserCommand] loginSuccess $loginSuccess');
+
+    
     appModel.currentUserToken = loginSuccess;
 
     return loginSuccess;
   }
 
-  Future<String> register(String username, String email, String password, String confirmPassword) async {
-    String registerSuccess = await userService.register(username, email, password, confirmPassword);
+  Future<String> register(String username, String email, String password,
+      String confirmPassword) async {
+    String registerSuccess =
+        await userService.register(username, email, password, confirmPassword);
 
     print('[UserCommand] registerSuccess $registerSuccess');
     appModel.currentUserToken = registerSuccess;
