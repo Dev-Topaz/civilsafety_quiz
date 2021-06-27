@@ -20,6 +20,20 @@ class QuizService {
     return quizIndex;
   }
 
+  Future<List> fetchAllQuizIndex(String token) async {
+    final response = await http.get(
+      Uri.parse(API_ROOT_URL + 'get_all_index'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      },
+    );
+    final responseJson = jsonDecode(response.body);
+    List quizIndex = responseJson['data']['data'];
+
+    print('[QuizService] fetchAllQuizIndex $quizIndex');
+    return quizIndex;
+  }
+
   Future<QuizModel> fetchQuiz(String token, int quizId) async {
     final response = await http.get(
       Uri.parse(API_ROOT_URL + 'get_quiz/' + quizId.toString()),

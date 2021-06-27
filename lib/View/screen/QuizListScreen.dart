@@ -83,7 +83,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                               ),
                             ),
                             ButtonBar(
-                              alignment: MainAxisAlignment.start,
+                              alignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextButton(onPressed: () {},
                                   child: Text('Start Quiz',

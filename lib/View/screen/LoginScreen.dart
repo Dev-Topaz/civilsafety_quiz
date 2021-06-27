@@ -52,9 +52,10 @@ class _LoginScreenState extends State<LoginScreen> {
     print('[LoginScreen] $userToken');
 
     if (userToken != '') {
-      await QuizCommand().updateQuiz(userToken).then((value) {
-        this.widget.callback(true, true);
-      });
+      await QuizCommand().downloadQuizList(userToken);
+      await QuizCommand().removeQuizList(userToken);
+      
+      this.widget.callback(true, true);
     } else {
       Fluttertoast.showToast(
           msg: "Please enter email and password correctly.",

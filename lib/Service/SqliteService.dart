@@ -28,6 +28,23 @@ class SqliteService {
         ")");
   }
 
+  Future<List> getQuizIndex() async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    var indexList = await database.rawQuery('SELECT id FROM Quiz');
+
+    List result = [];
+
+    for (var item in indexList.toList()) {
+      result.add(item['id']);
+    }
+
+    return result;
+  }
+
   Future<int> createQuiz(QuizModel quiz) async {
     String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'civilsafety_quiz.db');
@@ -37,8 +54,7 @@ class SqliteService {
     var result = -1;
     try {
       result = await database.insert("Quiz", quiz.toMap());
-    } catch(e) {
-    }
+    } catch (e) {}
     print('[SqliteService] createQuiz completed');
     return result;
   }
@@ -51,5 +67,24 @@ class SqliteService {
 
     var result = await database.rawQuery('SELECT * FROM Quiz');
     return result.toList();
+  }
+
+  Future<int> updateQuiz(QuizModel quiz) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    return await database.update("Quiz", quiz.toMap(),
+        where: "id = ?", whereArgs: [quiz.quizId]);
+  }
+
+  Future<int> deleteQuiz(int id) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    return await database.delete("Quiz", where: 'id = ?', whereArgs: [id]);
   }
 }
