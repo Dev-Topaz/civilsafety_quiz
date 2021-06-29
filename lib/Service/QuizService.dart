@@ -47,4 +47,18 @@ class QuizService {
 
     return QuizModel.fromMap(responseJson['data']['data']);
   }
+
+  Future<List> fetchAllAssetsURL(String token, int id) async {
+    final response = await http.get(
+      Uri.parse(API_ROOT_URL + 'get_quiz_assets_url/' + id.toString()),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      },
+    );
+    final responseJson = jsonDecode(response.body);
+
+    print('[QuizService] fetchQuiz $responseJson');
+
+    return responseJson['data']['data'];
+  }
 }

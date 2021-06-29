@@ -1,12 +1,9 @@
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 import 'package:civilsafety_quiz/Model/QuizModel.dart';
+import 'package:civilsafety_quiz/const.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 class QuizCommand extends BaseCommand {
-  // Future<void> fetchQuizList(String token) async {
-  //   await downloadQuizList(token);
-  //   await removeQuizList();
-  // }
-
   Future downloadQuizList(String token) async {
     await sqliteService.createDatabase();
 
@@ -44,5 +41,15 @@ class QuizCommand extends BaseCommand {
 
   Future<List> getQuizzes() async {
     return await sqliteService.getQuizzes();
+  }
+
+  Future<void> downloadAssets(String token, int id, String localPath) async {
+    List assets_url = await quizService.fetchAllAssetsURL(token, id);
+
+    if (debug) print('[QuizCommand] downloadAssets $localPath');
+
+    for (var url in assets_url) {
+      await FlutterDownloader.enqueue(url: url, savedDir: localPath);
+    }
   }
 }

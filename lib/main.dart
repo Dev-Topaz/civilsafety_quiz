@@ -8,14 +8,20 @@ import 'package:civilsafety_quiz/Service/UserService.dart';
 import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
 import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart' as Commands;
+import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await FlutterDownloader.initialize(debug: debug);
+  
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext _) {
     return MultiProvider(
@@ -46,23 +52,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-
-// class AppScaffold extends StatelessWidget {
-//   const AppScaffold({Key? key}) : super(key: key);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       title: 'Civil Safety Quiz',
-//       theme: ThemeData(
-//         primarySwatch: Colors.blue,
-//       ),
-//       initialRoute: '/',
-//       routes: {
-//         '/': (context) => HomeScreen(),
-//         '/quiz': (context) => QuizScreen(),
-//       },
-//     );
-//   }
-// }

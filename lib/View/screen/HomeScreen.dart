@@ -40,6 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     late bool isOnline;
 
+    final platform = Theme.of(context).platform;
+
     if (!isLoading) {
       isOnline = context.select<AppModel, bool>((value) => value.isOnline);
 
@@ -62,7 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
           )
         : Container(
             child: isLoggedin || !isOnline
-                ? QuizListScreen(this.callback)
+                ? QuizListScreen(
+                  callback: callback,
+                  platform: platform,
+                )
                 : (hasAccount
                     ? LoginScreen(this.callback)
                     : RegisterScreen(this.callback)),
