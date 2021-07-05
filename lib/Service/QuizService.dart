@@ -61,4 +61,18 @@ class QuizService {
 
     return responseJson['data']['data'];
   }
+
+  Future<String> getQuizContent(String token, int id) async {
+    final response = await http.get(
+      Uri.parse(API_ROOT_URL + 'get_quiz_html/' + id.toString()),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      },
+    );
+    final responseJson = jsonDecode(response.body);
+
+    print('[QuizService] fetchQuiz $responseJson');
+
+    return responseJson['data']['data'];
+  }
 }

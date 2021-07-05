@@ -18,7 +18,8 @@ class SqliteService {
         "description TEXT,"
         "passing_score INTEGER,"
         "staff_email TEXT,"
-        "file_path TEXT"
+        "file_path TEXT,"
+        "quiz_content TEXT"
         ")");
 
     await database.execute("CREATE TABLE Record ("
@@ -86,5 +87,16 @@ class SqliteService {
     var database = await openDatabase(dbPath);
 
     return await database.delete("Quiz", where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> updateQuizContent(String quizContent, int id) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    return await database.rawUpdate(
+        'UPDATE Quiz SET quiz_content = ? WHERE id = ?', [quizContent, id]
+    );
   }
 }

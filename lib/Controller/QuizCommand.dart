@@ -1,5 +1,6 @@
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 import 'package:civilsafety_quiz/Model/QuizModel.dart';
+import 'package:civilsafety_quiz/Service/SqliteService.dart';
 import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
@@ -51,5 +52,11 @@ class QuizCommand extends BaseCommand {
     for (var url in assetsURL) {
       await FlutterDownloader.enqueue(url: url, savedDir: localPath);
     }
+
+    String quizContent = await quizService.getQuizContent(token, id);
+    
+    print('[QuizCommand] downloadAssets $quizContent');
+
+    await sqliteService.updateQuizContent(quizContent, id);
   }
 }
