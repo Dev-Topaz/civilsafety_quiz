@@ -174,7 +174,9 @@ class _QuizListScreenState extends State<QuizListScreen> {
                               alignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, '/quiz');
+                                  },
                                   child: Text(
                                     'Start Quiz',
                                     style: TextStyle(

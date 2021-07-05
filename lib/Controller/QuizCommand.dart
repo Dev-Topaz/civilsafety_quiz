@@ -44,11 +44,11 @@ class QuizCommand extends BaseCommand {
   }
 
   Future<void> downloadAssets(String token, int id, String localPath) async {
-    List assets_url = await quizService.fetchAllAssetsURL(token, id);
+    List assetsURL = await quizService.fetchAllAssetsURL(token, id);
 
     if (debug) print('[QuizCommand] downloadAssets $localPath');
 
-    for (var url in assets_url) {
+    for (var url in assetsURL) {
       await FlutterDownloader.enqueue(url: url, savedDir: localPath);
     }
   }
