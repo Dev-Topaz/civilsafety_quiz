@@ -11,18 +11,23 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   String filePath = 'assets/web/index.html';
+  late WebViewPlusController _controller;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        home: Scaffold(
+      home: Scaffold(
           body: WebViewPlus(
-              javascriptMode: JavascriptMode.unrestricted,
-              onWebViewCreated: (controller) {
-                controller.loadUrl(filePath);
-          },
-        )
-      ),
+        javascriptMode: JavascriptMode.unrestricted,
+        onWebViewCreated: (controller) {
+          this._controller = controller;
+          controller.loadUrl(filePath);
+        },
+        onPageFinished: (controller) {
+          _controller.webViewController.evaluateJavascript(
+              'insert_container_html("OKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOKOK TE!");');
+        },
+      )),
     );
   }
 }
