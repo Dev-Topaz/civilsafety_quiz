@@ -44,5 +44,6 @@ class QuizModel extends ChangeNotifier {
         'passing_score': passingScore,
         'stuff_emails': staffEmail,
         'file_path': '',
+        'quiz_content': quizContent,
       };
 }

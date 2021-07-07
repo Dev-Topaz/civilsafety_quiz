@@ -48,18 +48,71 @@ class QuizService {
     return QuizModel.fromMap(responseJson['data']['data']);
   }
 
-  Future<List> fetchAllAssetsURL(String token, int id) async {
-    final response = await http.get(
-      Uri.parse(API_ROOT_URL + 'get_quiz_assets_url/' + id.toString()),
-      headers: {
-        HttpHeaders.authorizationHeader: 'Bearer ' + token,
-      },
-    );
-    final responseJson = jsonDecode(response.body);
+  Future<List> fetchImageAssetsURL(String token, String quizContent) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(API_ROOT_URL + 'get_quiz_image_url'));
 
-    print('[QuizService] fetchQuiz $responseJson');
+    request.fields['quizContent'] = quizContent;
+    request.headers['Authorization'] = 'Bearer ' + token;
 
-    return responseJson['data']['data'];
+    List result = [];
+
+    await request.send().then((response) async {
+      response.stream.transform(utf8.decoder).listen((value) {
+        if (response.statusCode == 200) {
+          var responseJson = json.decode(value);
+
+          print(
+              '[QuizService] fetchImageAssetsURL ${responseJson['data']['data']}');
+
+          result = responseJson['data']['data'];
+        } else {
+          throw Exception("Failed to Load!");
+        }
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return result;
+  }
+
+  Future<String> getBase64(String token, String url) async {
+    http.Response response = await http.get(Uri.parse(url));
+    final bytes = response.bodyBytes;
+    return base64Encode(bytes);
+  }
+
+  Future<List> fetchVideoAudioAssetsURL(
+      String token, String quizContent) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(API_ROOT_URL + 'get_quiz_video_audio_url'));
+
+    request.fields['quizContent'] = quizContent;
+    request.headers['Authorization'] = 'Bearer ' + token;
+
+    List result = [];
+
+    await request.send().then((response) async {
+      response.stream.transform(utf8.decoder).listen((value) {
+        if (response.statusCode == 200) {
+          var responseJson = json.decode(value);
+
+          print(
+              '[QuizService] fetchVideoAudioAssetsURL ${responseJson['data']['data']}');
+
+          responseJson['data']['data'].forEach((k, v) {
+            result.add(v);
+          });
+        } else {
+          throw Exception("Failed to Load!");
+        }
+      });
+    }).catchError((e) {
+      print(e);
+    });
+
+    return result;
   }
 
   Future<String> getQuizContent(String token, int id) async {
@@ -71,7 +124,7 @@ class QuizService {
     );
     final responseJson = jsonDecode(response.body);
 
-    print('[QuizService] fetchQuiz $responseJson');
+    print('[QuizService] getQuizContent $responseJson');
 
     return responseJson['data']['data'];
   }

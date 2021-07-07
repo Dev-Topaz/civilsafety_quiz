@@ -1,6 +1,5 @@
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 import 'package:civilsafety_quiz/Model/QuizModel.dart';
-import 'package:civilsafety_quiz/Service/SqliteService.dart';
 import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 
@@ -44,20 +43,30 @@ class QuizCommand extends BaseCommand {
     return await sqliteService.getQuizzes();
   }
 
-  Future<void> downloadAssets(String token, int id, String localPath) async {
-    List assetsURL = await quizService.fetchAllAssetsURL(token, id);
+  Future<void> downloadAssets(
+      String token, int id, String localPath, String quizContent) async {
+    List videoAudioURL =
+        await quizService.fetchVideoAudioAssetsURL(token, quizContent);
 
     if (debug) print('[QuizCommand] downloadAssets $localPath');
 
-    for (var url in assetsURL) {
+    for (var url in videoAudioURL) {
       await FlutterDownloader.enqueue(url: url, savedDir: localPath);
     }
 
-    String quizContent = await quizService.getQuizContent(token, id);
+    List imageURL = await quizService.fetchImageAssetsURL(token, quizContent);
+      print('[QuizCommand] downloadAssets $imageURL');
 
-    print('[QuizCommand] downloadAssets $quizContent');
+    for (var url in imageURL) {
+      String base64 = await quizService.getBase64(token, url);
+      quizContent.replaceAll(url, base64);
+      print('[QuizCommand] downloadAssets $quizContent');
 
-    await sqliteService.updateQuizContent(quizContent, id);
+      await sqliteService.updateQuizContent(quizContent, id);
+    }
+
+    // String quizContent = await quizService.getQuizContent(token, id);
+
   }
 
   Future<QuizModel?> getQuiz(int? id) async {

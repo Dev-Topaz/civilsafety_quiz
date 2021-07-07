@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 class QuizScreen extends StatefulWidget {
-  final int? quizId;
+  // final int? quizId;
+  final String? quizContent;
   final Key? key;
 
-  QuizScreen({this.key, this.quizId}) : super(key: key);
+  QuizScreen({this.key, this.quizContent}) : super(key: key);
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -21,12 +22,11 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    QuizCommand().getQuiz(this.widget.quizId).then((value) {
-      var quiz = value!;
-      print('[QuizScreen] getQuiz $quiz');
-      setState(() {
-        quizContent = quiz.quizContent.replaceAll('\"', '\\"').replaceAll("'", "\'").replaceAll('\n', '');
-      });
+    setState(() {
+      quizContent = this.widget.quizContent!
+          .replaceAll('\"', '\\"')
+          .replaceAll("'", "\'")
+          .replaceAll('\n', '');
     });
   }
 
@@ -44,11 +44,11 @@ class _QuizScreenState extends State<QuizScreen> {
               controller.loadUrl(filePath);
             },
             onPageFinished: (controller) {
-              _controller.webViewController.evaluateJavascript(
-                  'insert_container_html("$quizContent");');
+              _controller.webViewController
+                  .evaluateJavascript('insert_container_html("$quizContent");');
             },
           ),
-        ), 
+        ),
       ),
     );
   }

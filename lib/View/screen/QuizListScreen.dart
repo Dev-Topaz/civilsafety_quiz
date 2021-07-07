@@ -106,10 +106,17 @@ class _QuizListScreenState extends State<QuizListScreen> {
         openFileFromNotification: true);
   }
 
-  void downloadAssets(int id, String token) async {
+  void downloadAssets(int id, String token, String quizContent) async {
     if (debug) print('[QuizListScreen] download_assets $id');
 
-    await QuizCommand().downloadAssets(token, id, _localPath);
+    await QuizCommand().downloadAssets(token, id, _localPath, quizContent);
+    QuizCommand().getQuizzes().then((value) {
+      print('[QuizListScreen] getQuizzes $value');
+      setState(() {
+        quizList = value;
+        isLoading = false;
+      });
+    });
   }
 
   @override
@@ -180,7 +187,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => QuizScreen(
-                                            quizId: quizList[index]['id']),
+                                            quizContent: quizList[index]['quiz_content']),
                                       ),
                                     );
                                   },
@@ -194,7 +201,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                 IconButton(
                                     onPressed: () {
                                       downloadAssets(quizList[index]['id'],
-                                          currentUserToken);
+                                          currentUserToken, quizList[index]['quiz_content']);
                                       // _requestDownload(TaskInfo(
                                       //     name: 'Civil Safety Image',
                                       //     link:
