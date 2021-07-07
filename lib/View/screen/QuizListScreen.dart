@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/Model/TaskInfo.dart';
+import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
 import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -154,7 +155,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                           children: [
                             ListTile(
                               // leading: Icon(Icons.arrow_drop_down_circle),
-                              title: Text(quizList[index]['title']),
+                              title: Text(quizList[index]['name']),
                               subtitle: Text(
                                 'Passing score: ${quizList[index]['passing_score']}',
                                 style: TextStyle(
@@ -175,7 +176,13 @@ class _QuizListScreenState extends State<QuizListScreen> {
                               children: [
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pushNamed(context, '/quiz');
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => QuizScreen(
+                                            quizId: quizList[index]['id']),
+                                      ),
+                                    );
                                   },
                                   child: Text(
                                     'Start Quiz',

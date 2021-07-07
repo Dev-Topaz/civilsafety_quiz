@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class QuizModel extends ChangeNotifier {
   String quizId;
-  String title;
+  String name;
   String description;
   int passingScore;
   String staffEmail;
@@ -15,7 +15,7 @@ class QuizModel extends ChangeNotifier {
 
   QuizModel({
     this.quizId = 'unknown',
-    this.title = 'Quiz',
+    this.name = 'Quiz',
     this.description = '',
     this.passingScore = 100,
     this.staffEmail = 'rto@civilsafetyonline.com.au',
@@ -29,20 +29,20 @@ class QuizModel extends ChangeNotifier {
 
   factory QuizModel.fromMap(Map<String, dynamic> jsonData) => QuizModel(
         quizId: jsonData['id'].toString(),
-        title: jsonData['name'],
+        name: jsonData['name'],
         description: jsonData['description'] != null ? jsonData['description'] : '',
         passingScore: jsonData['passing_score'],
         staffEmail: jsonData['stuff_emails'],
-        quizContent: jsonData['quizContent'] != null ? jsonData['quizContent'] : '',
+        quizContent: jsonData['quiz_content'] != null ? jsonData['quiz_content'] : '',
         isDownload: jsonData['downloaded'] == 1,
       );
 
   Map<String, dynamic> toMap() => {
         'id': quizId,
-        'title': title,
+        'name': name,
         'description': description,
         'passing_score': passingScore,
-        'staff_email': staffEmail,
+        'stuff_emails': staffEmail,
         'file_path': '',
       };
 }

@@ -14,10 +14,10 @@ class SqliteService {
   void populateDb(Database database, int version) async {
     await database.execute("CREATE TABLE Quiz ("
         "id INTEGER PRIMARY KEY,"
-        "title TEXT,"
+        "name TEXT,"
         "description TEXT,"
         "passing_score INTEGER,"
-        "staff_email TEXT,"
+        "stuff_emails TEXT,"
         "file_path TEXT,"
         "quiz_content TEXT"
         ")");
@@ -96,7 +96,22 @@ class SqliteService {
     var database = await openDatabase(dbPath);
 
     return await database.rawUpdate(
-        'UPDATE Quiz SET quiz_content = ? WHERE id = ?', [quizContent, id]
-    );
+        'UPDATE Quiz SET quiz_content = ? WHERE id = ?', [quizContent, id]);
+  }
+
+  Future<QuizModel?> getQuiz(int? id) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    var results = await database.rawQuery('SELECT * FROM Quiz WHERE id = $id');
+
+    if (results.length > 0) {
+      print('[SqliteService] getQuiz ${results.first}');
+      return new QuizModel.fromMap(results.first);
+    }
+
+    return null;
   }
 }

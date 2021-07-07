@@ -54,9 +54,13 @@ class QuizCommand extends BaseCommand {
     }
 
     String quizContent = await quizService.getQuizContent(token, id);
-    
+
     print('[QuizCommand] downloadAssets $quizContent');
 
     await sqliteService.updateQuizContent(quizContent, id);
+  }
+
+  Future<QuizModel?> getQuiz(int? id) async {
+    return await sqliteService.getQuiz(id);
   }
 }

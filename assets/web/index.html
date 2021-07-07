@@ -47990,6 +47990,11 @@ fabric.util.object.extend(fabric.IText.prototype, /** @lends fabric.IText.protot
     </div>
     <div id="preview_container">
     </div>
+    <script type="text/javascript">
+        function insert_container_html(container_html) {
+            document.getElementById("preview_container").innerHTML = container_html;
+        }
+    </script>
     <script>
         /*
  Copyright (C) Federico Zivolo 2019
@@ -54146,11 +54151,7 @@ function change_email_subject(string) {
         });
     </script>
 
-    <script type="text/javascript">
-        function insert_container_html(container_html) {
-            document.getElementById("preview_container").innerHTML = container_html;
-        }
-    </script>
+   
 </body>
 
 </html>
