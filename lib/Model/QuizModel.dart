@@ -8,7 +8,7 @@ class QuizModel extends ChangeNotifier {
   String description;
   int passingScore;
   String staffEmail;
-  String quizContent;
+  String quizContentPath;
   bool isDownload;
 
   static String get tableName => 'quiz';
@@ -19,7 +19,7 @@ class QuizModel extends ChangeNotifier {
     this.description = '',
     this.passingScore = 100,
     this.staffEmail = 'rto@civilsafetyonline.com.au',
-    this.quizContent = '',
+    this.quizContentPath = '',
     this.isDownload = false,
   });
 
@@ -33,7 +33,7 @@ class QuizModel extends ChangeNotifier {
         description: jsonData['description'] != null ? jsonData['description'] : '',
         passingScore: jsonData['passing_score'],
         staffEmail: jsonData['stuff_emails'],
-        quizContent: jsonData['quiz_content'] != null ? jsonData['quiz_content'] : '',
+        quizContentPath: jsonData['quiz_content_path'] != null ? jsonData['quiz_content_path'] : '',
         isDownload: jsonData['downloaded'] == 1,
       );
 
@@ -44,6 +44,6 @@ class QuizModel extends ChangeNotifier {
         'passing_score': passingScore,
         'stuff_emails': staffEmail,
         'file_path': '',
-        'quiz_content': quizContent,
+        'quiz_content_path': '',
       };
 }

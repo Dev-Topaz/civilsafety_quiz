@@ -13,25 +13,32 @@ class UserService {
 
     String userToken = '';
 
-    await request.send().then((response) async {
-      response.stream.transform(utf8.decoder).listen((value) {
-        if (response.statusCode == 200) {
-          var userData = json.decode(value);
+    var response = await request.send();
+    final String respStr = await response.stream.bytesToString();
+    var userData = json.decode(respStr);
           userToken = userData['data']['token'];
-        } else {
-          throw Exception("Failed to Load!");
-        }
-      });
-    }).catchError((e) {
-      print(e);
-    });
+    // await request.send().then((response) async {
+    //   print('[UserService] response userToken $userToken');
+    //   response.stream.transform(utf8.decoder).listen((value) {
+    //     if (response.statusCode == 200) {
+    //       var userData = json.decode(value);
+    //       userToken = userData['data']['token'];
+    //       print('[UserService] value userToken $userToken');
+    //     } else {
+    //       throw Exception("Failed to Load!");
+    //     }
+    //   });
+    // }).catchError((e) {
+    //   print(e);
+    // });
 
     print('[UserService] login: userToken $userToken');
 
-    return Future.value(userToken);
+    return userToken;
   }
 
-  Future<String> register(String username, String email, String password, String confirmPassword) async {
+  Future<String> register(String username, String email, String password,
+      String confirmPassword) async {
     var request =
         http.MultipartRequest('POST', Uri.parse(API_ROOT_URL + 'register'));
 

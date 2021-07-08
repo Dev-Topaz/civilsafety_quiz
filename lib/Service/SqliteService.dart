@@ -19,7 +19,7 @@ class SqliteService {
         "passing_score INTEGER,"
         "stuff_emails TEXT,"
         "file_path TEXT,"
-        "quiz_content TEXT"
+        "quiz_content_path TEXT"
         ")");
 
     await database.execute("CREATE TABLE Record ("
@@ -47,7 +47,7 @@ class SqliteService {
   }
 
   Future<int> createQuiz(QuizModel quiz) async {
-    String databasesPath = await getDatabasesPath();
+    String databasesPath = await getDatabasesPath();  
     String dbPath = join(databasesPath, 'civilsafety_quiz.db');
 
     var database = await openDatabase(dbPath);
@@ -95,8 +95,14 @@ class SqliteService {
 
     var database = await openDatabase(dbPath);
 
-    return await database.rawUpdate(
+    print('[SqliteService] updateQuizContent id $id quizContent $quizContent');
+
+    int count = await database.rawUpdate(
         'UPDATE Quiz SET quiz_content = ? WHERE id = ?', [quizContent, id]);
+
+    print('[SqliteService] updateQuizContent count $count');
+
+    return count;
   }
 
   Future<QuizModel?> getQuiz(int? id) async {

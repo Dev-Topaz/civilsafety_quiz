@@ -5,10 +5,10 @@ import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 class QuizScreen extends StatefulWidget {
   // final int? quizId;
-  final String? quizContent;
+  final int? id;
   final Key? key;
 
-  QuizScreen({this.key, this.quizContent}) : super(key: key);
+  QuizScreen({this.key, this.id}) : super(key: key);
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -22,11 +22,13 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      quizContent = this.widget.quizContent!
-          .replaceAll('\"', '\\"')
-          .replaceAll("'", "\'")
-          .replaceAll('\n', '');
+    QuizCommand().getQuizContent(this.widget.id!).then((value) {
+      setState(() {
+        quizContent = value
+            .replaceAll('\"', '\\"')
+            .replaceAll("'", "\'")
+            .replaceAll('\n', '');
+      });
     });
   }
 

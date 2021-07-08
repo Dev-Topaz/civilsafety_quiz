@@ -67,6 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? QuizListScreen(
                   callback: callback,
                   platform: platform,
+                  isOnline: isOnline,
                 )
                 : (hasAccount
                     ? LoginScreen(this.callback)

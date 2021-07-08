@@ -16,8 +16,9 @@ import 'package:provider/provider.dart';
 class QuizListScreen extends StatefulWidget {
   Function callback;
   final TargetPlatform? platform;
+  final bool? isOnline;
 
-  QuizListScreen({required this.callback, this.platform});
+  QuizListScreen({required this.callback, this.platform, this.isOnline});
 
   @override
   _QuizListScreenState createState() => _QuizListScreenState();
@@ -34,15 +35,17 @@ class _QuizListScreenState extends State<QuizListScreen> {
   @override
   void initState() {
     super.initState();
-    _bindBackgroundIsolate();
+    if (this.widget.isOnline!) {
+      _bindBackgroundIsolate();
 
-    FlutterDownloader.registerCallback(downloadCallback);
+      FlutterDownloader.registerCallback(downloadCallback);
 
-    _permissionReady = false;
+      _permissionReady = false;
+    }
 
     _prepare();
     QuizCommand().getQuizzes().then((value) {
-      print('[QuizListScreen] getQuizzes $value');
+      print('[QuizListScreen] initState $value');
       setState(() {
         quizList = value;
         isLoading = false;
@@ -106,12 +109,13 @@ class _QuizListScreenState extends State<QuizListScreen> {
         openFileFromNotification: true);
   }
 
-  void downloadAssets(int id, String token, String quizContent) async {
+  void downloadAssets (int id, String token) async {
     if (debug) print('[QuizListScreen] download_assets $id');
 
-    await QuizCommand().downloadAssets(token, id, _localPath, quizContent);
+    await QuizCommand().downloadAssets(token, id, _localPath);
+
     QuizCommand().getQuizzes().then((value) {
-      print('[QuizListScreen] getQuizzes $value');
+      print('[QuizListScreen] initState $value');
       setState(() {
         quizList = value;
         isLoading = false;
@@ -121,8 +125,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String currentUserToken =
-        context.select<AppModel, String>((value) => value.currentUserToken);
+    String? currentUserToken;
+    if (this.widget.isOnline!)
+      currentUserToken =
+          context.select<AppModel, String>((value) => value.currentUserToken);
 
     return isLoading
         ? CircularProgressIndicator(
@@ -187,7 +193,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => QuizScreen(
-                                            quizContent: quizList[index]['quiz_content']),
+                                            id: quizList[index]['id']),
                                       ),
                                     );
                                   },
@@ -198,16 +204,21 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                     ),
                                   ),
                                 ),
-                                IconButton(
-                                    onPressed: () {
-                                      downloadAssets(quizList[index]['id'],
-                                          currentUserToken, quizList[index]['quiz_content']);
-                                      // _requestDownload(TaskInfo(
-                                      //     name: 'Civil Safety Image',
-                                      //     link:
-                                      //         'https://civilsafetyonline.com.au/quizmaker/public/images/upload/60d4f70bd095b.png'));
-                                    },
-                                    icon: Icon(Icons.download)),
+                                this.widget.isOnline!
+                                    ? IconButton(
+                                        onPressed: () {
+                                          downloadAssets(
+                                              quizList[index]['id'],
+                                              currentUserToken!);
+                                          // _requestDownload(TaskInfo(
+                                          //     name: 'Civil Safety Image',
+                                          //     link:
+                                          //         'https://civilsafetyonline.com.au/quizmaker/public/images/upload/60d4f70bd095b.png'));
+                                        },
+                                        icon: Icon(Icons.download))
+                                    : SizedBox(
+                                        width: 0,
+                                      ),
                               ],
                             ),
                           ],

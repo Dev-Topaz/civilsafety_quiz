@@ -48,41 +48,6 @@ class QuizService {
     return QuizModel.fromMap(responseJson['data']['data']);
   }
 
-  Future<List> fetchImageAssetsURL(String token, String quizContent) async {
-    var request = http.MultipartRequest(
-        'POST', Uri.parse(API_ROOT_URL + 'get_quiz_image_url'));
-
-    request.fields['quizContent'] = quizContent;
-    request.headers['Authorization'] = 'Bearer ' + token;
-
-    List result = [];
-
-    await request.send().then((response) async {
-      response.stream.transform(utf8.decoder).listen((value) {
-        if (response.statusCode == 200) {
-          var responseJson = json.decode(value);
-
-          print(
-              '[QuizService] fetchImageAssetsURL ${responseJson['data']['data']}');
-
-          result = responseJson['data']['data'];
-        } else {
-          throw Exception("Failed to Load!");
-        }
-      });
-    }).catchError((e) {
-      print(e);
-    });
-
-    return result;
-  }
-
-  Future<String> getBase64(String token, String url) async {
-    http.Response response = await http.get(Uri.parse(url));
-    final bytes = response.bodyBytes;
-    return base64Encode(bytes);
-  }
-
   Future<List> fetchVideoAudioAssetsURL(
       String token, String quizContent) async {
     var request = http.MultipartRequest(
@@ -101,9 +66,15 @@ class QuizService {
           print(
               '[QuizService] fetchVideoAudioAssetsURL ${responseJson['data']['data']}');
 
-          responseJson['data']['data'].forEach((k, v) {
-            result.add(v);
-          });
+          if (responseJson['data']['data'] is List) {
+            responseJson['data']['data'].forEach((v) {
+              result.add(v);
+            });
+          } else {
+            responseJson['data']['data'].forEach((k, v) {
+              result.add(v);
+            });
+          }
         } else {
           throw Exception("Failed to Load!");
         }
