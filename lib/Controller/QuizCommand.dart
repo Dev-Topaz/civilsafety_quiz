@@ -4,6 +4,7 @@ import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 import 'package:civilsafety_quiz/Model/QuizModel.dart';
 import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 class QuizCommand extends BaseCommand {
@@ -80,8 +81,22 @@ class QuizCommand extends BaseCommand {
     if (debug) print('[QuizCommand] downloadAssets $localPath');
 
     for (var url in videoAudioURL) {
-      await FlutterDownloader.enqueue(url: url, savedDir: localPath);
+      String? fileId =
+          await FlutterDownloader.enqueue(url: url, savedDir: localPath);
+
+      final File _file = new File(url);
+      final _filename = basename(_file.path);
+      if (debug)
+        print('[QuizCommand] downloadAssets filepath $localPath/$_filename');
+
+      String filePath = '$localPath/$_filename';
+
+      await sqliteService.createAsset(fileId!, url, filePath);
     }
+  }
+
+  Future<String> getFileIdWithUrl(String url) async {
+    return await sqliteService.getIdWithUrl(url);
   }
 
   Future<QuizModel?> getQuiz(int? id) async {

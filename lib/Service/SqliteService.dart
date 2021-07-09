@@ -22,11 +22,45 @@ class SqliteService {
         "quiz_content_path TEXT"
         ")");
 
+    await database.execute("CREATE TABLE Asset ("
+        "id TEXT PRIMARY KEY,"
+        "url TEXT,"
+        "file_path TEXT"
+        ")");
+
     await database.execute("CREATE TABLE Record ("
         "id INTEGER PRIMARY KEY,"
         "quizId INTEGER,"
         "score INTEGER"
         ")");
+  }
+
+  Future<int> createAsset(String id, String url, String filePath) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    var result = await database.rawInsert(
+      "INSERT INTO Asset (id, url, file_path)"
+      " VALUES ('$id', '$url', '$filePath')");
+    return result;
+  }
+
+  Future<String> getIdWithUrl(String url) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    var results = await database.rawQuery("SELECT id FROM Asset WHERE url = '$url'");
+
+    if (results.length > 0) {
+      print('[SqliteService] getQuiz ${results.first['id']}');
+      return results.first['id'].toString();
+    }
+
+    return '';
   }
 
   Future<List> getQuizIndex() async {

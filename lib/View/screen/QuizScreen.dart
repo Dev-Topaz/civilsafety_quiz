@@ -1,6 +1,7 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
 class QuizScreen extends StatefulWidget {
@@ -17,6 +18,7 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   String filePath = 'assets/web/index.html';
   String quizContent = '';
+  String videoUrl = '#';
   late WebViewPlusController _controller;
 
   @override
@@ -32,15 +34,31 @@ class _QuizScreenState extends State<QuizScreen> {
     });
   }
 
+  void openVideo(String videoUrl) async {
+    String fileId = await QuizCommand().getFileIdWithUrl(videoUrl);
+    FlutterDownloader.open(taskId: fileId);
+  }
+
   @override
   Widget build(BuildContext context) {
     print('[QuizScreen] quizContent $quizContent');
 
     return MaterialApp(
       home: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Container(
           child: WebViewPlus(
             javascriptMode: JavascriptMode.unrestricted,
+            javascriptChannels: <JavascriptChannel>[
+              JavascriptChannel(
+                  name: 'MessageInvoker',
+                  onMessageReceived: (s) {
+                    print('[QuizScreen] onMessageReceived ${s.message}');
+                    setState(() {
+                      videoUrl = s.message;
+                    });
+                  }),
+            ].toSet(),
             onWebViewCreated: (controller) {
               this._controller = controller;
               controller.loadUrl(filePath);
@@ -51,6 +69,14 @@ class _QuizScreenState extends State<QuizScreen> {
             },
           ),
         ),
+        floatingActionButton: (videoUrl == '#')
+            ? null
+            : IconButton(
+                onPressed: () {
+                  openVideo(videoUrl);
+                },
+                icon: Icon(Icons.video_call_sharp),
+              ),
       ),
     );
   }

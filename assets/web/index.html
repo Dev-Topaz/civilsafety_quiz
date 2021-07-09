@@ -48749,6 +48749,9 @@ function fit_question_list_container_size() {
     var w = window.innerWidth;
     var h = window.innerHeight;
 
+    console.log(w);
+    console.log(h);
+
     const elementHeight = parseInt($('.screen_height').html()) + 50 + 82;
     const elementWidth = parseInt($('.screen_width').html());
 
@@ -48977,6 +48980,8 @@ function rearrange_preview_ui() {
 
     console.log($('.quiz_show .is_limit_time').html());
     console.log($('.quiz_show .limit_time').html());
+
+    invokeNative();
 
     $('#question_time').hide();
     $('#question_list').css('visibility', 'visible');
@@ -50389,6 +50394,15 @@ function start_question_timer() {
 function change_email_subject(string) {
     return string.replaceAll('%FIRST_NAME%', $('#user_first_name').val()).replaceAll('%LAST_NAME%', $('#user_last_name').val()).replaceAll('%EMAIL%', $('#user_email').val()).replaceAll('%COURSE_TYPE%', $('#user_course_type').val()).replaceAll('%LOCATION%', $('#user_location').val()).replaceAll('%COMPANY%', $('#user_company').val()).replaceAll('%DATE%', $('#user_date').val()).replaceAll('%USER_NAME%', $('#user_first_name').val() + ' ' + $('#user_last_name').val()).replaceAll('%QUIZ_TITLE%', $('.quiz_show .quiz_name').html());
 }
+
+        function invokeNative() {
+            console.log('invokeNative');
+            if ($('.quiz_show video source').length > 0) {
+                MessageInvoker.postMessage($('.quiz_show video source').attr('src'));
+            } else {
+                MessageInvoker.postMessage('#');
+            }
+        }
 
     </script>
 
