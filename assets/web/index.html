@@ -50396,11 +50396,16 @@ function change_email_subject(string) {
 }
 
         function invokeNative() {
-            console.log('invokeNative');
             if ($('.quiz_show video source').length > 0) {
-                MessageInvoker.postMessage($('.quiz_show video source').attr('src'));
+                VideoUrl.postMessage($('.quiz_show video source').attr('src'));
             } else {
-                MessageInvoker.postMessage('#');
+                VideoUrl.postMessage('#');
+            }
+
+            if ($('.quiz_show audio source').length > 0) {
+                AudioUrl.postMessage($('.quiz_show audio source').attr('src'));
+            } else {
+                AudioUrl.postMessage('#');
             }
         }
 

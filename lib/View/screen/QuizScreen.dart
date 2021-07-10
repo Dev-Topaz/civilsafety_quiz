@@ -51,12 +51,20 @@ class _QuizScreenState extends State<QuizScreen> {
             javascriptMode: JavascriptMode.unrestricted,
             javascriptChannels: <JavascriptChannel>[
               JavascriptChannel(
-                  name: 'MessageInvoker',
+                  name: 'VideoUrl',
                   onMessageReceived: (s) {
                     print('[QuizScreen] onMessageReceived ${s.message}');
                     setState(() {
                       videoUrl = s.message;
                     });
+                  }),
+              JavascriptChannel(
+                  name: 'AudioUrl',
+                  onMessageReceived: (s) {
+                    print('[QuizScreen] onMessageReceived ${s.message}');
+                    // setState(() {
+                    //   videoUrl = s.message;
+                    // });
                   }),
             ].toSet(),
             onWebViewCreated: (controller) {
