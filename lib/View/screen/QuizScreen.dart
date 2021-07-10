@@ -1,6 +1,7 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 
@@ -44,47 +45,53 @@ class _QuizScreenState extends State<QuizScreen> {
     print('[QuizScreen] quizContent $quizContent');
 
     return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: Container(
-          child: WebViewPlus(
-            javascriptMode: JavascriptMode.unrestricted,
-            javascriptChannels: <JavascriptChannel>[
-              JavascriptChannel(
-                  name: 'VideoUrl',
-                  onMessageReceived: (s) {
-                    print('[QuizScreen] onMessageReceived ${s.message}');
-                    setState(() {
-                      videoUrl = s.message;
-                    });
-                  }),
-              JavascriptChannel(
-                  name: 'AudioUrl',
-                  onMessageReceived: (s) {
-                    print('[QuizScreen] onMessageReceived ${s.message}');
-                    // setState(() {
-                    //   videoUrl = s.message;
-                    // });
-                  }),
-            ].toSet(),
-            onWebViewCreated: (controller) {
-              this._controller = controller;
-              controller.loadUrl(filePath);
-            },
-            onPageFinished: (controller) {
-              _controller.webViewController
-                  .evaluateJavascript('insert_container_html("$quizContent");');
-            },
+      home: WillPopScope(
+        child: Scaffold(
+          resizeToAvoidBottomInset: false,
+          body: Container(
+            child: WebViewPlus(
+              javascriptMode: JavascriptMode.unrestricted,
+              javascriptChannels: <JavascriptChannel>[
+                JavascriptChannel(
+                    name: 'VideoUrl',
+                    onMessageReceived: (s) {
+                      print('[QuizScreen] onMessageReceived ${s.message}');
+                      setState(() {
+                        videoUrl = s.message;
+                      });
+                    }),
+                JavascriptChannel(
+                    name: 'AudioUrl',
+                    onMessageReceived: (s) async {
+                      print('[QuizScreen] onMessageReceived ${s.message}');
+                    }),
+              ].toSet(),
+              onWebViewCreated: (controller) {
+                this._controller = controller;
+                controller.loadUrl(filePath);
+              },
+              onPageFinished: (controller) {
+                _controller.webViewController.evaluateJavascript(
+                    'insert_container_html("$quizContent");');
+              },
+            ),
           ),
+          floatingActionButton: (videoUrl == '#')
+              ? null
+              : IconButton(
+                  onPressed: () {
+                    openVideo(videoUrl);
+                  },
+                  icon: Icon(Icons.video_call_sharp),
+                ),
         ),
-        floatingActionButton: (videoUrl == '#')
-            ? null
-            : IconButton(
-                onPressed: () {
-                  openVideo(videoUrl);
-                },
-                icon: Icon(Icons.video_call_sharp),
-              ),
+        onWillPop: () {
+          if (MediaQuery.of(context).orientation == Orientation.landscape) {
+            SystemChrome.setPreferredOrientations(
+                [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
+          }
+          return Future.value(true);
+        },
       ),
     );
   }

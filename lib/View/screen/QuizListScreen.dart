@@ -109,7 +109,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
         openFileFromNotification: true);
   }
 
-  void downloadAssets (int id, String token) async {
+  void downloadAssets(int id, String token) async {
     if (debug) print('[QuizListScreen] download_assets $id');
 
     await QuizCommand().downloadAssets(token, id, _localPath);
@@ -207,8 +207,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                 this.widget.isOnline!
                                     ? IconButton(
                                         onPressed: () {
-                                          downloadAssets(
-                                              quizList[index]['id'],
+                                          downloadAssets(quizList[index]['id'],
                                               currentUserToken!);
                                           // _requestDownload(TaskInfo(
                                           //     name: 'Civil Safety Image',
