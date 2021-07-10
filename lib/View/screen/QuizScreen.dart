@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class QuizScreen extends StatefulWidget {
   // final int? quizId;
@@ -64,6 +65,13 @@ class _QuizScreenState extends State<QuizScreen> {
                     name: 'AudioUrl',
                     onMessageReceived: (s) async {
                       print('[QuizScreen] onMessageReceived ${s.message}');
+                      String file_path =
+                          await QuizCommand().getFilePathWithUrl(s.message);
+                      print(
+                          '[QuizScreen] onMessageReceived file_path $file_path');
+                      AudioPlayer audioPlayer = AudioPlayer();
+                      if (file_path != '')
+                        await audioPlayer.play(file_path, isLocal: true);
                     }),
               ].toSet(),
               onWebViewCreated: (controller) {

@@ -99,6 +99,10 @@ class QuizCommand extends BaseCommand {
     return await sqliteService.getIdWithUrl(url);
   }
 
+  Future<String> getFilePathWithUrl(String url) async {
+    return await sqliteService.getPathWithUrl(url);
+  }
+
   Future<QuizModel?> getQuiz(int? id) async {
     return await sqliteService.getQuiz(id);
   }

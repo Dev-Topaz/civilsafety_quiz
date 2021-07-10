@@ -41,9 +41,9 @@ class SqliteService {
 
     var database = await openDatabase(dbPath);
 
-    var result = await database.rawInsert(
-      "INSERT INTO Asset (id, url, file_path)"
-      " VALUES ('$id', '$url', '$filePath')");
+    var result =
+        await database.rawInsert("INSERT INTO Asset (id, url, file_path)"
+            " VALUES ('$id', '$url', '$filePath')");
     return result;
   }
 
@@ -53,11 +53,29 @@ class SqliteService {
 
     var database = await openDatabase(dbPath);
 
-    var results = await database.rawQuery("SELECT id FROM Asset WHERE url = '$url'");
+    var results =
+        await database.rawQuery("SELECT id FROM Asset WHERE url = '$url'");
 
     if (results.length > 0) {
       print('[SqliteService] getQuiz ${results.first['id']}');
       return results.first['id'].toString();
+    }
+
+    return '';
+  }
+
+  Future<String> getPathWithUrl(String url) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    var results = await database
+        .rawQuery("SELECT file_path FROM Asset WHERE url = '$url'");
+
+    if (results.length > 0) {
+      print('[SqliteService] getQuiz ${results.first['file_path']}');
+      return results.first['file_path'].toString();
     }
 
     return '';
@@ -81,7 +99,7 @@ class SqliteService {
   }
 
   Future<int> createQuiz(QuizModel quiz) async {
-    String databasesPath = await getDatabasesPath();  
+    String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'civilsafety_quiz.db');
 
     var database = await openDatabase(dbPath);
