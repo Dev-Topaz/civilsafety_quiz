@@ -30,10 +30,13 @@ class QuizModel extends ChangeNotifier {
   factory QuizModel.fromMap(Map<String, dynamic> jsonData) => QuizModel(
         quizId: jsonData['id'].toString(),
         name: jsonData['name'],
-        description: jsonData['description'] != null ? jsonData['description'] : '',
+        description:
+            jsonData['description'] != null ? jsonData['description'] : '',
         passingScore: jsonData['passing_score'],
         staffEmail: jsonData['stuff_emails'],
-        quizContentPath: jsonData['quiz_content_path'] != null ? jsonData['quiz_content_path'] : '',
+        quizContentPath: jsonData['quiz_content_path'] != null
+            ? jsonData['quiz_content_path']
+            : '',
         isDownload: jsonData['downloaded'] == 1,
       );
 
@@ -45,5 +48,6 @@ class QuizModel extends ChangeNotifier {
         'stuff_emails': staffEmail,
         'file_path': '',
         'quiz_content_path': '',
+        'is_download': 'false',
       };
 }

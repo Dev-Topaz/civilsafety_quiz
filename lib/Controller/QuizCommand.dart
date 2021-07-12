@@ -93,6 +93,8 @@ class QuizCommand extends BaseCommand {
 
       await sqliteService.createAsset(fileId!, url, filePath);
     }
+
+    await sqliteService.updateQuizDownload('true', id);
   }
 
   Future<String> getFileIdWithUrl(String url) async {
