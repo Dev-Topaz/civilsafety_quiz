@@ -19,8 +19,8 @@ class SqliteService {
         "passing_score INTEGER,"
         "stuff_emails TEXT,"
         "file_path TEXT,"
-        "is_download TEXT,"
-        "updated_datetime TEXT,"
+        "downloaded TEXT,"
+        "updated_at TEXT,"
         "quiz_content_path TEXT"
         ")");
 
@@ -166,7 +166,7 @@ class SqliteService {
     var database = await openDatabase(dbPath);
 
     int count = await database.rawUpdate(
-        'UPDATE Quiz SET is_download = ? WHERE id = ?', [isDownload, id]);
+        'UPDATE Quiz SET downloaded = ? WHERE id = ?', [isDownload, id]);
 
     print('[SqliteService] updateQuizDownload count $count');
 

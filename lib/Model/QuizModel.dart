@@ -10,6 +10,7 @@ class QuizModel extends ChangeNotifier {
   int passingScore;
   String staffEmail;
   String quizContentPath;
+  String updatedAt;
   bool isDownload;
 
   static String get tableName => 'quiz';
@@ -22,6 +23,7 @@ class QuizModel extends ChangeNotifier {
     this.staffEmail = 'rto@civilsafetyonline.com.au',
     this.quizContentPath = '',
     this.isDownload = false,
+    this.updatedAt = '',
   });
 
   factory QuizModel.fromJson(String str) => QuizModel.fromMap(json.decode(str));
@@ -39,11 +41,12 @@ class QuizModel extends ChangeNotifier {
             ? jsonData['quiz_content_path']
             : '',
         isDownload: jsonData['downloaded'] == 1,
+        updatedAt: jsonData['updated_at'],
       );
 
   Map<String, dynamic> toMap() {
     DateTime now = DateTime.now();
-    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+    String formattedDate = DateFormat('yyyy-MM-ddTkk:mm:ss').format(now);
 
     return {
       'id': quizId,
@@ -53,8 +56,8 @@ class QuizModel extends ChangeNotifier {
       'stuff_emails': staffEmail,
       'file_path': '',
       'quiz_content_path': '',
-      'is_download': 'false',
-      'updated_datetime': formattedDate
+      'downloaded': 'false',
+      'updated_at': formattedDate
     };
   }
 }
