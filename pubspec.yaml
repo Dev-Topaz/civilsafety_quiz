@@ -61,7 +61,6 @@ flutter:
   assets:
     - assets/web/
     - assets/images/
-    - assets/sound/
 
       #   - images/a_dot_ham.jpeg
 

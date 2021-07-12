@@ -14,8 +14,9 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  bool isObscured =
-      true; //for enabling and disabling obscurity in password field
+  bool isObscured = true;
+  bool isLogging =
+      false; //for enabling and disabling obscurity in password field
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -47,6 +48,10 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
+    setState(() {
+      isLogging = true;
+    });
+
     String userToken = await UserCommand().login(email, password);
 
     print('[LoginScreen] $userToken');
@@ -54,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (userToken != '') {
       await QuizCommand().downloadQuizList(userToken);
       await QuizCommand().removeQuizList(userToken);
-      
+
       this.widget.callback(true, true);
     } else {
       Fluttertoast.showToast(
@@ -66,6 +71,10 @@ class _LoginScreenState extends State<LoginScreen> {
           textColor: Colors.white,
           fontSize: 16.0);
     }
+
+    setState(() {
+      isLogging = false;
+    });
 
     return;
   }
@@ -196,10 +205,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           MaterialStateProperty.all(Colors.blueGrey),
                     ),
                     onPressed: () {
-                      login(emailController.text, passwordController.text);
+                      if (!isLogging)
+                        login(emailController.text, passwordController.text);
                     },
-                    child: Text('CONTINUE',
-                        style: TextStyle(color: primaryColor, fontSize: 18)),
+                    child: isLogging
+                        ? CircularProgressIndicator(
+                            color: Colors.white,
+                          )
+                        : Text('CONTINUE',
+                            style:
+                                TextStyle(color: primaryColor, fontSize: 18)),
                     // shape: RoundedRectangleBorder(
                     // borderRadius: BorderRadius.circular(30))
                   ),

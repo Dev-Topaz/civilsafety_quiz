@@ -15,8 +15,14 @@ class UserService {
 
     var response = await request.send();
     final String respStr = await response.stream.bytesToString();
+    print('[UserService] login respStr $respStr');
     var userData = json.decode(respStr);
-          userToken = userData['data']['token'];
+
+    if (userData['success']) {
+      userToken = userData['data']['token'];
+    } else {
+      userToken = '';
+    }
     // await request.send().then((response) async {
     //   print('[UserService] response userToken $userToken');
     //   response.stream.transform(utf8.decoder).listen((value) {

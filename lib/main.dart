@@ -10,6 +10,7 @@ import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart' as Commands;
 import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +18,10 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await FlutterDownloader.initialize(debug: debug);
 
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
