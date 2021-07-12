@@ -23,20 +23,6 @@ class UserService {
     } else {
       userToken = '';
     }
-    // await request.send().then((response) async {
-    //   print('[UserService] response userToken $userToken');
-    //   response.stream.transform(utf8.decoder).listen((value) {
-    //     if (response.statusCode == 200) {
-    //       var userData = json.decode(value);
-    //       userToken = userData['data']['token'];
-    //       print('[UserService] value userToken $userToken');
-    //     } else {
-    //       throw Exception("Failed to Load!");
-    //     }
-    //   });
-    // }).catchError((e) {
-    //   print(e);
-    // });
 
     print('[UserService] login: userToken $userToken');
 
@@ -55,21 +41,19 @@ class UserService {
 
     String userToken = '';
 
-    await request.send().then((response) async {
-      response.stream.transform(utf8.decoder).listen((value) {
-        if (response.statusCode == 200) {
-          var userData = json.decode(value);
-          userToken = userData['data']['token'];
-        } else {
-          throw Exception("Failed to Load!");
-        }
-      });
-    }).catchError((e) {
-      print(e);
-    });
+    var response = await request.send();
+    final String respStr = await response.stream.bytesToString();
+    print('[UserService] login respStr $respStr');
+    var userData = json.decode(respStr);
+
+    if (userData['success']) {
+      userToken = userData['data']['token'];
+    } else {
+      userToken = '';
+    }
 
     print('[UserService] register: userToken $userToken');
 
-    return Future.value(userToken);
+    return userToken;
   }
 }

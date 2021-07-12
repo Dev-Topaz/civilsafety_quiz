@@ -65,10 +65,10 @@ class _HomeScreenState extends State<HomeScreen> {
         : Container(
             child: isLoggedin || !isOnline
                 ? QuizListScreen(
-                  callback: callback,
-                  platform: platform,
-                  isOnline: isOnline,
-                )
+                    callback: callback,
+                    platform: platform,
+                    isOnline: isOnline,
+                  )
                 : (hasAccount
                     ? LoginScreen(this.callback)
                     : RegisterScreen(this.callback)),
