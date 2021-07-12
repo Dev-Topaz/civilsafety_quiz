@@ -11,7 +11,7 @@ class QuizCommand extends BaseCommand {
   Future downloadQuizList(String token) async {
     await sqliteService.createDatabase();
 
-    List remoteQuizIndex = await quizService.fetchQuizIndex(token);
+    List remoteQuizIndex = await quizService.fetchAllQuizIndex(token);
     List localQuizIndex = await sqliteService.getQuizIndex();
 
     print('[QuizCommand] downloadQuizList: $localQuizIndex');

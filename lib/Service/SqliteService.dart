@@ -20,6 +20,7 @@ class SqliteService {
         "stuff_emails TEXT,"
         "file_path TEXT,"
         "is_download TEXT,"
+        "updated_datetime TEXT,"
         "quiz_content_path TEXT"
         ")");
 
@@ -167,7 +168,7 @@ class SqliteService {
     int count = await database.rawUpdate(
         'UPDATE Quiz SET is_download = ? WHERE id = ?', [isDownload, id]);
 
-    print('[SqliteService] updateQuizContent count $count');
+    print('[SqliteService] updateQuizDownload count $count');
 
     return count;
   }

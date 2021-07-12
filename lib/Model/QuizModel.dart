@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 
@@ -40,14 +41,20 @@ class QuizModel extends ChangeNotifier {
         isDownload: jsonData['downloaded'] == 1,
       );
 
-  Map<String, dynamic> toMap() => {
-        'id': quizId,
-        'name': name,
-        'description': description,
-        'passing_score': passingScore,
-        'stuff_emails': staffEmail,
-        'file_path': '',
-        'quiz_content_path': '',
-        'is_download': 'false',
-      };
+  Map<String, dynamic> toMap() {
+    DateTime now = DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd – kk:mm').format(now);
+
+    return {
+      'id': quizId,
+      'name': name,
+      'description': description,
+      'passing_score': passingScore,
+      'stuff_emails': staffEmail,
+      'file_path': '',
+      'quiz_content_path': '',
+      'is_download': 'false',
+      'updated_datetime': formattedDate
+    };
+  }
 }
