@@ -6,6 +6,7 @@ import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/Model/TaskInfo.dart';
 import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
+import 'package:civilsafety_quiz/View/widget/CustomBanner.dart';
 import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -164,63 +165,70 @@ class _QuizListScreenState extends State<QuizListScreen> {
                         clipBehavior: Clip.antiAlias,
                         shadowColor: Colors.grey,
                         margin: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
-                        child: Column(
-                          children: [
-                            ListTile(
-                              // leading: Icon(Icons.arrow_drop_down_circle),
-                              title: Text(quizList[index]['name']),
-                              subtitle: Text(
-                                'Passing score: ${quizList[index]['passing_score']}',
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.6)),
+                        child: CustomBanner(
+                          isBanner: quizList[index]['downloaded'] == 'false',
+                          message: 'UPDATED',
+                          child: Column(
+                            children: [
+                              ListTile(
+                                // leading: Icon(Icons.arrow_drop_down_circle),
+                                title: Text(quizList[index]['name']),
+                                subtitle: Text(
+                                  'Passing score: ${quizList[index]['passing_score']}',
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.6)),
+                                ),
                               ),
-                            ),
-                            // Image.asset('assets/images/quiz_default.jpg'),
-                            Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text(
-                                quizList[index]['description'],
-                                style: TextStyle(
-                                    color: Colors.black.withOpacity(0.6)),
+                              // Image.asset('assets/images/quiz_default.jpg'),
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Text(
+                                  quizList[index]['description'],
+                                  style: TextStyle(
+                                      color: Colors.black.withOpacity(0.6)),
+                                ),
                               ),
-                            ),
-                            ButtonBar(
-                              alignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => QuizScreen(
-                                            id: quizList[index]['id']),
+                              ButtonBar(
+                                alignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => QuizScreen(
+                                              id: quizList[index]['id']),
+                                        ),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Start Quiz',
+                                      style: TextStyle(
+                                        color: Color(0xFF6200EE),
                                       ),
-                                    );
-                                  },
-                                  child: Text(
-                                    'Start Quiz',
-                                    style: TextStyle(
-                                      color: Color(0xFF6200EE),
                                     ),
                                   ),
-                                ),
-                                this.widget.isOnline!
-                                    ? IconButton(
-                                        onPressed: () {
-                                          downloadAssets(quizList[index]['id'],
-                                              currentUserToken!);
-                                          // _requestDownload(TaskInfo(
-                                          //     name: 'Civil Safety Image',
-                                          //     link:
-                                          //         'https://civilsafetyonline.com.au/quizmaker/public/images/upload/60d4f70bd095b.png'));
-                                        },
-                                        icon: Icon(Icons.download))
-                                    : SizedBox(
-                                        width: 0,
-                                      ),
-                              ],
-                            ),
-                          ],
+                                  this.widget.isOnline! &&
+                                          quizList[index]['downloaded'] ==
+                                              'false'
+                                      ? IconButton(
+                                          onPressed: () {
+                                            downloadAssets(
+                                                quizList[index]['id'],
+                                                currentUserToken!);
+                                            // _requestDownload(TaskInfo(
+                                            //     name: 'Civil Safety Image',
+                                            //     link:
+                                            //         'https://civilsafetyonline.com.au/quizmaker/public/images/upload/60d4f70bd095b.png'));
+                                          },
+                                          icon: Icon(Icons.download))
+                                      : SizedBox(
+                                          width: 0,
+                                        ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     }),
