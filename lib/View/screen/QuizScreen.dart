@@ -21,6 +21,7 @@ class _QuizScreenState extends State<QuizScreen> {
   String filePath = 'assets/web/index.html';
   String quizContent = '';
   String videoUrl = '#';
+  bool isLoading = true;
   late WebViewPlusController _controller;
 
   @override
@@ -56,60 +57,65 @@ class _QuizScreenState extends State<QuizScreen> {
     print('[QuizScreen] quizContent $quizContent');
 
     return MaterialApp(
-      home: WillPopScope(
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          body: Container(
-            child: WebViewPlus(
-              javascriptMode: JavascriptMode.unrestricted,
-              javascriptChannels: <JavascriptChannel>[
-                JavascriptChannel(
-                    name: 'VideoUrl',
-                    onMessageReceived: (s) {
-                      print('[QuizScreen] onMessageReceived ${s.message}');
-                      setState(() {
-                        videoUrl = s.message;
-                      });
-                    }),
-                JavascriptChannel(
-                    name: 'AudioUrl',
-                    onMessageReceived: (s) async {
-                      print('[QuizScreen] onMessageReceived ${s.message}');
-                      String file_path =
-                          await QuizCommand().getFilePathWithUrl(s.message);
-                      print(
-                          '[QuizScreen] onMessageReceived file_path $file_path');
-                      AudioPlayer audioPlayer = AudioPlayer();
-                      if (file_path != '')
-                        await audioPlayer.play(file_path, isLocal: true);
-                    }),
-              ].toSet(),
-              onWebViewCreated: (controller) {
-                this._controller = controller;
-                controller.loadUrl(filePath);
-              },
-              onPageFinished: (controller) {
-                _controller.webViewController.evaluateJavascript(
-                    'insert_container_html("$quizContent");');
-              },
-            ),
+      home: Scaffold(
+        resizeToAvoidBottomInset: false,
+        body: Container(
+          child: Stack(
+            children: [
+              WebViewPlus(
+                javascriptMode: JavascriptMode.unrestricted,
+                javascriptChannels: <JavascriptChannel>[
+                  JavascriptChannel(
+                      name: 'VideoUrl',
+                      onMessageReceived: (s) {
+                        print('[QuizScreen] onMessageReceived ${s.message}');
+                        setState(() {
+                          videoUrl = s.message;
+                        });
+                      }),
+                  JavascriptChannel(
+                      name: 'AudioUrl',
+                      onMessageReceived: (s) async {
+                        print('[QuizScreen] onMessageReceived ${s.message}');
+                        String file_path =
+                            await QuizCommand().getFilePathWithUrl(s.message);
+                        print(
+                            '[QuizScreen] onMessageReceived file_path $file_path');
+                        AudioPlayer audioPlayer = AudioPlayer();
+                        if (file_path != '')
+                          await audioPlayer.play(file_path, isLocal: true);
+                      }),
+                ].toSet(),
+                onWebViewCreated: (controller) {
+                  this._controller = controller;
+                  controller.loadUrl(filePath);
+                },
+                onPageFinished: (controller) {
+                  _controller.webViewController.evaluateJavascript(
+                      'insert_container_html("$quizContent");');
+                  setState(() {
+                    isLoading = false;
+                  });
+                },
+              ),
+              isLoading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.black,
+                      ),
+                    )
+                  : Stack(),
+            ],
           ),
-          floatingActionButton: (videoUrl == '#')
-              ? null
-              : IconButton(
-                  onPressed: () {
-                    openVideo(videoUrl);
-                  },
-                  icon: Icon(Icons.video_call_sharp),
-                ),
         ),
-        onWillPop: () {
-          if (MediaQuery.of(context).orientation == Orientation.landscape) {
-            SystemChrome.setPreferredOrientations(
-                [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
-          }
-          return Future.value(true);
-        },
+        floatingActionButton: (videoUrl == '#')
+            ? null
+            : IconButton(
+                onPressed: () {
+                  openVideo(videoUrl);
+                },
+                icon: Icon(Icons.video_call_sharp),
+              ),
       ),
     );
   }
