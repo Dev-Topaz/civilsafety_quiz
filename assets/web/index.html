@@ -48978,6 +48978,8 @@ function get_drag_words_blank_width() {
 
 function rearrange_preview_ui() {
 
+    $('.quiz_show video').hide();
+
     console.log($('.quiz_show .is_limit_time').html());
     console.log($('.quiz_show .limit_time').html());
 
@@ -49312,9 +49314,9 @@ function preview(element) {
 
                 show_result($('.quiz_show .correct_answer').html(), current_show_type_id, current_show_id);
 
-                $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].pause();
-                $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].currentTime = 0;
-                $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].play();
+                // $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].pause();
+                // $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].currentTime = 0;
+                // $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].play();
 
 
                 $('#' + current_show_id).removeClass('quiz_show');
