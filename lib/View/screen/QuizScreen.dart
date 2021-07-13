@@ -23,6 +23,7 @@ class _QuizScreenState extends State<QuizScreen> {
   String videoUrl = '#';
   bool isLoading = true;
   late WebViewPlusController _controller;
+  AudioPlayer audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -81,7 +82,7 @@ class _QuizScreenState extends State<QuizScreen> {
                             await QuizCommand().getFilePathWithUrl(s.message);
                         print(
                             '[QuizScreen] onMessageReceived file_path $file_path');
-                        AudioPlayer audioPlayer = AudioPlayer();
+                        
                         if (file_path != '')
                           await audioPlayer.play(file_path, isLocal: true);
                       }),
