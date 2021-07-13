@@ -25,8 +25,12 @@ class QuizCommand extends BaseCommand {
           //update quiz
           QuizModel? localQuizModel = await sqliteService.getQuiz(id);
 
-          bool isUpdated = DateTime.parse(quizModel.updatedAt)
-              .isAfter(DateTime.parse(localQuizModel!.updatedAt));
+          print('quizmodel updatedate ${DateTime.parse(quizModel.updatedAt)}');
+          print(
+              'quizmodel updatedate ${DateTime.parse(localQuizModel!.updatedAt)}');
+
+          bool isUpdated = DateTime.parse(localQuizModel.updatedAt)
+              .isAfter(DateTime.parse(quizModel.updatedAt));
 
           print('[QuizCommand] downloadQuizList isUpdated $isUpdated');
           print('[QuizCommand] downloadQuizList: update quiz $id');

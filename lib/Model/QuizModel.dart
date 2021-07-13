@@ -45,7 +45,7 @@ class QuizModel extends ChangeNotifier {
       );
 
   Map<String, dynamic> toMap() {
-    DateTime now = DateTime.now();
+    DateTime now = DateTime.now().toUtc();
     String formattedDate = DateFormat('yyyy-MM-ddTkk:mm:ss').format(now);
 
     return {
