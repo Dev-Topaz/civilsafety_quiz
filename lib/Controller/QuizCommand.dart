@@ -30,7 +30,7 @@ class QuizCommand extends BaseCommand {
 
           print('[QuizCommand] downloadQuizList isUpdated $isUpdated');
           print('[QuizCommand] downloadQuizList: update quiz $id');
-          if (isUpdated) await sqliteService.updateQuiz(quizModel);
+          if (!isUpdated) await sqliteService.updateQuiz(quizModel);
         }
       }
     }

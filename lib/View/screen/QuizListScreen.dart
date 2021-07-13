@@ -60,6 +60,29 @@ class _QuizListScreenState extends State<QuizListScreen> {
     super.dispose();
   }
 
+  void _onDownloading() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+            child: Container(
+          padding: EdgeInsets.all(30.0),
+          child: new Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              new CircularProgressIndicator(
+                color: Colors.black,
+              ),
+              SizedBox(width: 10.0),
+              new Text("Downloading"),
+            ],
+          ),
+        ));
+      },
+    );
+  }
+
   void _bindBackgroundIsolate() {
     bool isSuccess = IsolateNameServer.registerPortWithName(
         _port.sendPort, 'downloader_send_port');
@@ -113,6 +136,8 @@ class _QuizListScreenState extends State<QuizListScreen> {
   void downloadAssets(int id, String token) async {
     if (debug) print('[QuizListScreen] download_assets $id');
 
+    _onDownloading();
+
     await QuizCommand().downloadAssets(token, id, _localPath);
 
     QuizCommand().getQuizzes().then((value) {
@@ -122,6 +147,8 @@ class _QuizListScreenState extends State<QuizListScreen> {
         isLoading = false;
       });
     });
+
+    Navigator.pop(context);
   }
 
   @override
