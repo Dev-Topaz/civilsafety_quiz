@@ -26,6 +26,10 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+
     QuizCommand().getQuizContent(this.widget.id!).then((value) {
       setState(() {
         quizContent = value
@@ -39,6 +43,12 @@ class _QuizScreenState extends State<QuizScreen> {
   void openVideo(String videoUrl) async {
     String fileId = await QuizCommand().getFileIdWithUrl(videoUrl);
     FlutterDownloader.open(taskId: fileId);
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    super.dispose();
   }
 
   @override

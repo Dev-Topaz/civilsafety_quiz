@@ -36,6 +36,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
   @override
   void initState() {
     super.initState();
+
     if (this.widget.isOnline!) {
       _bindBackgroundIsolate();
 
