@@ -77,15 +77,23 @@ class _QuizScreenState extends State<QuizScreen> {
                   JavascriptChannel(
                       name: 'AudioUrl',
                       onMessageReceived: (s) async {
-                        await audioPlayer.pause();
-                        print('[QuizScreen] onMessageReceived ${s.message}');
+                        print(
+                            '[QuizScreen] onMessageReceived AudioUrl ${s.message}');
+                        await audioPlayer.stop();
                         String filePath =
                             await QuizCommand().getFilePathWithUrl(s.message);
                         print(
-                            '[QuizScreen] onMessageReceived filePath $filePath');
+                            '[QuizScreen] onMessageReceived AudioUrl filePath $filePath');
 
                         if (filePath != '')
                           await audioPlayer.play(filePath, isLocal: true);
+                      }),
+                  JavascriptChannel(
+                      name: 'AudioStop',
+                      onMessageReceived: (s) async {
+                        print(
+                            '[QuizScreen] onMessageReceived AudioStop ${s.message}');
+                        await audioPlayer.stop();
                       }),
                 ].toSet(),
                 onWebViewCreated: (controller) {
