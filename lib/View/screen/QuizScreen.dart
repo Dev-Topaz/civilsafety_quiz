@@ -63,50 +63,90 @@ class _QuizScreenState extends State<QuizScreen> {
         body: Container(
           child: Stack(
             children: [
-              WebViewPlus(
-                javascriptMode: JavascriptMode.unrestricted,
-                javascriptChannels: <JavascriptChannel>[
-                  JavascriptChannel(
-                      name: 'VideoUrl',
-                      onMessageReceived: (s) {
-                        print('[QuizScreen] onMessageReceived ${s.message}');
-                        setState(() {
-                          videoUrl = s.message;
-                        });
-                      }),
-                  JavascriptChannel(
-                      name: 'AudioUrl',
-                      onMessageReceived: (s) async {
-                        print(
-                            '[QuizScreen] onMessageReceived AudioUrl ${s.message}');
-                        await audioPlayer.stop();
-                        String filePath =
-                            await QuizCommand().getFilePathWithUrl(s.message);
-                        print(
-                            '[QuizScreen] onMessageReceived AudioUrl filePath $filePath');
+              Container(
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: WebViewPlus(
+                        javascriptMode: JavascriptMode.unrestricted,
+                        javascriptChannels: <JavascriptChannel>[
+                          JavascriptChannel(
+                              name: 'VideoUrl',
+                              onMessageReceived: (s) {
+                                print(
+                                    '[QuizScreen] onMessageReceived ${s.message}');
+                                setState(() {
+                                  videoUrl = s.message;
+                                });
+                              }),
+                          JavascriptChannel(
+                              name: 'AudioUrl',
+                              onMessageReceived: (s) async {
+                                print(
+                                    '[QuizScreen] onMessageReceived AudioUrl ${s.message}');
+                                await audioPlayer.stop();
+                                String filePath = await QuizCommand()
+                                    .getFilePathWithUrl(s.message);
+                                print(
+                                    '[QuizScreen] onMessageReceived AudioUrl filePath $filePath');
 
-                        if (filePath != '')
-                          await audioPlayer.play(filePath, isLocal: true);
-                      }),
-                  JavascriptChannel(
-                      name: 'AudioStop',
-                      onMessageReceived: (s) async {
-                        print(
-                            '[QuizScreen] onMessageReceived AudioStop ${s.message}');
-                        await audioPlayer.stop();
-                      }),
-                ].toSet(),
-                onWebViewCreated: (controller) {
-                  this._controller = controller;
-                  controller.loadUrl(filePath);
-                },
-                onPageFinished: (controller) {
-                  _controller.webViewController.evaluateJavascript(
-                      'insert_container_html("$quizContent");');
-                  setState(() {
-                    isLoading = false;
-                  });
-                },
+                                if (filePath != '')
+                                  await audioPlayer.play(filePath,
+                                      isLocal: true);
+                              }),
+                          JavascriptChannel(
+                              name: 'AudioStop',
+                              onMessageReceived: (s) async {
+                                print(
+                                    '[QuizScreen] onMessageReceived AudioStop ${s.message}');
+                                await audioPlayer.stop();
+                              }),
+                        ].toSet(),
+                        onWebViewCreated: (controller) {
+                          this._controller = controller;
+                          controller.loadUrl(filePath);
+                        },
+                        onPageFinished: (controller) {
+                          _controller.webViewController.evaluateJavascript(
+                              'insert_container_html("$quizContent");');
+                          setState(() {
+                            isLoading = false;
+                          });
+                        },
+                      ),
+                    ),
+                    Container(
+                      width: 50.0,
+                      // decoration: BoxDecoration(
+                      //   border: Border(
+                      //     left: BorderSide(
+                      //         width: 3.0, color: Colors.blue),
+                      //   ),
+                      //   color: Colors.white,
+                      // ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          IconButton(
+                              onPressed: () {},
+                              icon: Icon(Icons.list_sharp,
+                                  color: Colors.blue, size: 30.0)),
+                          IconButton(
+                              onPressed: () {
+                                _controller.webViewController
+                                    .evaluateJavascript(
+                                        'click_preview_button();');
+                              },
+                              icon: Icon(
+                                Icons.navigate_next_rounded,
+                                color: Colors.blue,
+                                size: 30.0,
+                              )),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
               isLoading
                   ? Center(
@@ -120,11 +160,17 @@ class _QuizScreenState extends State<QuizScreen> {
         ),
         floatingActionButton: (videoUrl == '#')
             ? null
-            : IconButton(
-                onPressed: () {
-                  openVideo(videoUrl);
-                },
-                icon: Icon(Icons.video_call_sharp),
+            : Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 70.0, 20.0),
+                child: IconButton(
+                  onPressed: () {
+                    openVideo(videoUrl);
+                  },
+                  icon: Icon(Icons.video_call_sharp,
+                    size: 50.0,
+                    color: Colors.blue,
+                  ),
+                ),
               ),
       ),
     );

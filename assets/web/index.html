@@ -48769,11 +48769,15 @@ function fit_question_list_container_size() {
 }
 
 setInterval(function() {
-    if ($('.screen_height').length > 0 && !isFitted) fit_question_list_container_size();
+    if ($('.screen_height').length > 0 && !isFitted) {
+        hide_some_btns_for_mobile();
+        fit_question_list_container_size();
+    }
 }, 500);
 
 $(window).resize(function () {
     console.log('resized');
+    hide_some_btns_for_mobile();
     fit_question_list_container_size();
 });
 
@@ -48976,6 +48980,13 @@ function get_drag_words_blank_width() {
     return width;
 }
 
+function hide_some_btns_for_mobile() {
+
+    $('.question_menu_bar').hide();
+    $('.preview_btn').hide();
+    $('.review_buttons').hide();
+}
+
 function rearrange_preview_ui() {
 
     $('.quiz_show video').hide();
@@ -49155,6 +49166,10 @@ $('#clear_hotspots').click(function () {
     hotspots_points = [];
 });
 
+function click_preview_button() {
+    $('#submit_btn').trigger('click')
+}
+
 /*
 * ********** question Processing **************
 * */
@@ -49247,6 +49262,7 @@ function preview(element) {
                 $('#' + next_show_id).removeClass('quiz_hide');
                 $('#' + next_show_id).addClass('quiz_show');
                 rearrange_preview_ui();
+                hide_some_btns_for_mobile()
                 fit_question_list_container_size();
 
                 if (type_id == 12) {
@@ -49327,6 +49343,7 @@ function preview(element) {
                 $('#' + next_show_id).addClass('quiz_show');
 
                 rearrange_preview_ui();
+                hide_some_btns_for_mobile();
                 fit_question_list_container_size();
 
                 if (type_id == 12) {
@@ -49366,6 +49383,7 @@ function preview(element) {
                     $('#' + next_show_id).addClass('quiz_show');
 
                     rearrange_preview_ui();
+                    hide_some_btns_for_mobile();
                     fit_question_list_container_size();
                 } else {
                     result = 'Pass';
@@ -49385,6 +49403,7 @@ function preview(element) {
                     $('#' + next_show_id).addClass('quiz_show');
 
                     rearrange_preview_ui();
+                    hide_some_btns_for_mobile();
                     fit_question_list_container_size();
                 }
 
@@ -49909,6 +49928,7 @@ function review() {
 
     $('.quiz_list_container').eq(review_Id).removeClass('quiz_hide').addClass('quiz_show');
 
+    hide_some_btns_for_mobile();
     fit_question_list_container_size();
 
     disable_next_and_prev_btn();
@@ -49929,6 +49949,7 @@ function next_review() {
         $('#' + next_show_id).removeClass('quiz_hide');
         $('#' + next_show_id).addClass('quiz_show');
 
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
         disable_next_and_prev_btn();
     }
@@ -49949,6 +49970,7 @@ function preview_review() {
         $('#' + previous_show_id).removeClass('quiz_hide');
         $('#' + previous_show_id).addClass('quiz_show');
 
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
         disable_next_and_prev_btn();
     }
@@ -50234,6 +50256,7 @@ function see_result() {
         $('#' + next_show_id).removeClass('quiz_hide');
         $('#' + next_show_id).addClass('quiz_show');
 
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
 
         return;
@@ -50255,6 +50278,7 @@ function see_result() {
         $('#' + next_show_id).removeClass('quiz_hide');
         $('#' + next_show_id).addClass('quiz_show');
 
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
 
         return;
@@ -50281,6 +50305,7 @@ function see_result() {
             $('#' + next_show_id).addClass('quiz_show');
 
             rearrange_preview_ui();
+            hide_some_btns_for_mobile();
             fit_question_list_container_size();
         } else {
             result = 'Pass';
@@ -50300,6 +50325,7 @@ function see_result() {
             $('#' + next_show_id).addClass('quiz_show');
 
             rearrange_preview_ui();
+            hide_some_btns_for_mobile();
             fit_question_list_container_size();
         }
 
