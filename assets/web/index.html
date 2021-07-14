@@ -49297,6 +49297,7 @@ function preview(element) {
 
             if (next_show_id === undefined || type_id == 14 || type_id == 15) {
                 // rearrange_preview_ui();
+                AudioStop.postMessage('stop');
 
                 if (current_show_type_id == 12) {
                     $('#submit_btn').html('Close');
