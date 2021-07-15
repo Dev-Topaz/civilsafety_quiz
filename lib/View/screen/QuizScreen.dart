@@ -19,9 +19,11 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   String filePath = 'assets/web/index.html';
+  // String filePath = 'assets/web/test.html';
   String quizContent = '';
   String videoUrl = '#';
   bool isLoading = true;
+  bool isReview = false;
   late WebViewPlusController _controller;
   AudioPlayer audioPlayer = AudioPlayer();
 
@@ -127,10 +129,23 @@ class _QuizScreenState extends State<QuizScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
+                          SizedBox(
+                            height: 30.0,
+                          ),
                           IconButton(
                               onPressed: () {},
                               icon: Icon(Icons.list_sharp,
                                   color: Colors.blue, size: 30.0)),
+                          Expanded(child: Container()),
+                          isReview
+                          ? IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.navigate_before_rounded,
+                                color: Colors.blue,
+                                size: 30.0,
+                              ))
+                          : SizedBox(height: 0,),
                           IconButton(
                               onPressed: () {
                                 _controller.webViewController
@@ -142,6 +157,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                 color: Colors.blue,
                                 size: 30.0,
                               )),
+                          SizedBox(
+                            height: 30.0,
+                          ),
                         ],
                       ),
                     ),
@@ -166,7 +184,8 @@ class _QuizScreenState extends State<QuizScreen> {
                   onPressed: () {
                     openVideo(videoUrl);
                   },
-                  icon: Icon(Icons.video_call_sharp,
+                  icon: Icon(
+                    Icons.video_call_sharp,
                     size: 50.0,
                     color: Colors.blue,
                   ),

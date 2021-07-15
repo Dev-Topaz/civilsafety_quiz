@@ -236,9 +236,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                       ),
                                     ),
                                   ),
-                                  this.widget.isOnline! &&
-                                          quizList[index]['downloaded'] ==
-                                              'false'
+                                  // this.widget.isOnline! &&
+                                  //         quizList[index]['downloaded'] ==
+                                  //             'false'
+                                  true
                                       ? IconButton(
                                           onPressed: () {
                                             downloadAssets(
