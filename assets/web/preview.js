@@ -115,30 +115,6 @@ $(function () {
 
     }
 
-    // $('.draggable').on('touchstart', function () {
-    //     $(this).addClass("ui-state-highlight");
-    // if ($(this).attr("isdropped")) {
-    //     $(this).parent().css({'justify-content': 'space-around'});
-    //     $(this).attr("isdropped", false);
-    // }
-    // });
-
-    // $('.draggable').on('touchmove', function (e) {
-    //     var touchLocation = e.targetTouches[0];
-    //     console.log(touchLocation);
-    //
-    //     var pageX = (touchLocation.clientX) + "px";
-    //     var pageY = (touchLocation.clientY) + "px";
-    //     this.style.position = "absolute";
-    //     this.style.left = pageX;
-    //     this.style.top = pageY;
-    //     // activeEvent = 'move';
-    // });
-    //
-    // $('.draggable').on('touchend', function () {
-    //     $(this).removeClass("ui-state-highlight");
-    // });
-
     // for web browser
     $(".draggable").draggable({
 
@@ -276,6 +252,7 @@ function get_drag_words_blank_width() {
 function hide_some_btns_for_mobile() {
 
     $('.question_menu_bar').hide();
+    $('.question_list_modal_close').hide();
     $('.preview_btn').hide();
     $('.review_buttons').hide();
 }
@@ -502,7 +479,17 @@ $('#clear_hotspots').click(function () {
 });
 
 function click_preview_button() {
-    $('#submit_btn').trigger('click')
+    $('#submit_btn').trigger('click');
+}
+
+function hide_list_button() {
+    $('#question_list_modal').hide();
+}
+
+function click_list_button() {
+    console.log('question list clicked');
+//    $('#question_list').trigger('click');
+    $('#question_list_modal').show();
 }
 
 /*

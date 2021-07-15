@@ -19,11 +19,13 @@ class QuizScreen extends StatefulWidget {
 
 class _QuizScreenState extends State<QuizScreen> {
   String filePath = 'assets/web/index.html';
+
   // String filePath = 'assets/web/test.html';
   String quizContent = '';
   String videoUrl = '#';
   bool isLoading = true;
   bool isReview = false;
+  bool isListShow = false;
   late WebViewPlusController _controller;
   AudioPlayer audioPlayer = AudioPlayer();
 
@@ -132,20 +134,41 @@ class _QuizScreenState extends State<QuizScreen> {
                           SizedBox(
                             height: 30.0,
                           ),
-                          IconButton(
-                              onPressed: () {},
+                          isListShow
+                          ? IconButton(
+                              onPressed: () {
+                                _controller.webViewController
+                                    .evaluateJavascript(
+                                        'hide_list_button();');
+                                setState(() {
+                                  isListShow = false;
+                                });
+                              },
+                              icon: Icon(Icons.close,
+                                  color: Colors.blue, size: 30.0))
+                          : IconButton(
+                              onPressed: () {
+                                _controller.webViewController
+                                    .evaluateJavascript(
+                                        'click_list_button();');
+                                setState(() {
+                                  isListShow = true;
+                                });
+                              },
                               icon: Icon(Icons.list_sharp,
                                   color: Colors.blue, size: 30.0)),
                           Expanded(child: Container()),
                           isReview
-                          ? IconButton(
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.navigate_before_rounded,
-                                color: Colors.blue,
-                                size: 30.0,
-                              ))
-                          : SizedBox(height: 0,),
+                              ? IconButton(
+                                  onPressed: () {},
+                                  icon: Icon(
+                                    Icons.navigate_before_rounded,
+                                    color: Colors.blue,
+                                    size: 30.0,
+                                  ))
+                              : SizedBox(
+                                  height: 0,
+                                ),
                           IconButton(
                               onPressed: () {
                                 _controller.webViewController
