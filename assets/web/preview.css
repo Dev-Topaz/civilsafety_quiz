@@ -243,3 +243,25 @@
 .selected_sequence_list {
     border: 1px solid yellow !important;
 }
+
+.matching_list {
+    width: 60%;
+    height: 200px;
+    position: absolute;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background: white;
+    left: 50%;
+    margin-top: -10px;
+    display: none;
+    overflow-y: scroll;
+    z-index: 10;
+    transform: translateX(-50%);
+}
+
+.matching_list_content {
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+    font-size: 18px;
+}

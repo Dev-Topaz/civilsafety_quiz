@@ -19,7 +19,6 @@ $('div.quiz_item_container input').attr('autocomplete', 'off');
 $('#question_list_modal .question_content div').attr('contenteditable', 'false');
 $('.other_slide_view_element_delete_icon').remove();
 
-
 /*
  * ************ Fit Quiz size ********************
  * */
@@ -370,12 +369,23 @@ function rearrange_preview_ui() {
             shuffle(matching_content_items);
 
             var rearrange_matching = [];
+            var matching_list_content = '';
+
             for (let i = 0; i < matching_content_items.length; i++) {
                 rearrange_matching.push($(matching_content_items[i]).html());
+                matching_list_content += '<div class="matching_list_content">' + $(matching_content_items[i]).html() + '</div>';
             }
             for (let i = 0; i < matching_content_items.length; i++) {
                 $('.quiz_show .ui-widget-content').eq(i).html(rearrange_matching[i]);
             }
+
+            $('.quiz_show .col-md-12 div').css('justify-content', 'center');
+            $('.ui-widget-content').css('visibility', 'hidden');
+
+            $('.quiz_show .slide_view_answer_element .col-md-12').css('position', 'relative');
+            $('.quiz_show .slide_view_answer_element .col-md-12').prepend('<div class="matching_list">' + matching_list_content + '</div>');
+
+            click_matching_list();
             break;
 
         case '10':
@@ -950,12 +960,12 @@ function evulate() {
             let matching_answer = '';
 
             // detect matching
-            for (let i = 0; i < matching_items.length; i++) {
-                if (matching_items.eq(i).css('justify-content') != 'center') return false;
+            for (let i = 1; i < matching_items.length; i++) {
+                // if (matching_items.eq(i).css('justify-content') != 'center') return false;
                 matching_answer += matching_items.eq(i).find('.ui-widget-header').eq(0).html() + ';' + matching_items.eq(i).find('.ui-widget-content').eq(0).html() + '@';
             }
-            question_user_answer.push(matching_answer.replaceAll('<p>', '').replaceAll('</p>', ''));
-            question_correct_answer.push($('.quiz_show .correct_answer').html().replaceAll('<p>', '').replaceAll('</p>', ''));
+            question_user_answer.push(matching_answer.split('<p>').join('').split('</p>').join(''));
+            question_correct_answer.push($('.quiz_show .correct_answer').html().split('<p>').join('').split('</p>').join(''));
 
 
             if ($('.quiz_show .partially_correct').html() == '1') {
@@ -1375,8 +1385,7 @@ function show_result(question_correct_answer, question_type_id, question_id) {
             matching_correct_answer_array.pop();
 
             for (let i = 0; i < matching_correct_answer_array.length; i++) {
-                console.log(matching_correct_answer_array[i]);
-                matching_correct_answer_array[i] = matching_correct_answer_array[i].replaceAll('<p>', '').replaceAll('</p>', '');
+                matching_correct_answer_array[i] = matching_correct_answer_array[i].split('<p>').join('').split('</p>').join('');
             }
 
             let matching_content_correct_answer_array = [];
@@ -1391,14 +1400,18 @@ function show_result(question_correct_answer, question_type_id, question_id) {
             let matching_correct_index;
 
             for (let i = 0; i < matching_elements.length; i++) {
-                matching_correct_index = matching_content_correct_answer_array.indexOf(matching_elements.eq(i).find('.ui-widget-content').html().replaceAll('<p>', '').replaceAll('</p>', ''));
 
-                if (matching_correct_index == i) {
-                    matching_elements.eq(i).find('.ui-widget-header').css('border', '1px solid green');
-                    matching_elements.eq(i).find('.ui-widget-content').css('border', '1px solid green');
-                } else {
-                    matching_elements.eq(i).find('.ui-widget-header').css('border', '1px solid red');
-                    matching_elements.eq(i).find('.ui-widget-content').css('border', '1px solid red');
+                console.log(matching_elements.eq(i));
+                if (matching_elements.eq(i).find('.ui-widget-content').html() != undefined) {
+                    matching_correct_index = matching_content_correct_answer_array.indexOf(matching_elements.eq(i).find('.ui-widget-content').html().split('<p>').join('').split('</p>').join(''));
+
+                    if (matching_correct_index == i) {
+                        matching_elements.eq(i).find('.ui-widget-header').css('border', '1px solid green');
+                        matching_elements.eq(i).find('.ui-widget-content').css('border', '1px solid green');
+                    } else {
+                        matching_elements.eq(i).find('.ui-widget-header').css('border', '1px solid red');
+                        matching_elements.eq(i).find('.ui-widget-content').css('border', '1px solid red');
+                    }
                 }
 
                 // matching_elements.eq(i).find('.ui-widget-content').html((matching_correct_index + 1) + '. ' + matching_elements.eq(i).find('.ui-widget-content').html());
@@ -1766,5 +1779,29 @@ function click_sequence_list() {
         if (next_element.length > 0) {
             $('.quiz_show .selected_sequence_list').before(next_element);
         }
+    });
+}
+
+function click_matching_list() {
+    $('.quiz_show .ui-widget-header').click(function () {
+        console.log('ui-widget-header clicked');
+
+        $(this).addClass('selected_matching_list');
+        $('.quiz_show .matching_list').show();
+    });
+
+    $('.quiz_show .matching_list_content').click(function () {
+
+        for (let i = 0; i < $('.quiz_show .ui-widget-content').length; i++) {
+            if ($('.quiz_show .ui-widget-content').eq(i).html() == $(this).html()) {
+                $('.quiz_show .ui-widget-content').eq(i).css('visibility', 'hidden');
+            }
+        }
+
+        $('.quiz_show .selected_matching_list').next().html($(this).html());
+        $('.quiz_show .selected_matching_list').next().css('visibility', 'visible');
+        $('.quiz_show .selected_matching_list').removeClass('selected_matching_list');
+
+        $('.quiz_show .matching_list').hide();
     });
 }
