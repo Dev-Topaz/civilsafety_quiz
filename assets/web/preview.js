@@ -287,6 +287,8 @@ function rearrange_preview_ui() {
     console.log($('.quiz_show .is_limit_time').html());
     console.log($('.quiz_show .limit_time').html());
 
+    $('.quiz_show .up_down_container').hide();
+
     invokeNative();
 
     $('#question_time').hide();
@@ -391,6 +393,29 @@ function rearrange_preview_ui() {
         case '10':
             console.log(get_drag_words_blank_width());
             $('#slide_drag_words_question .blank').css('padding-right', (get_drag_words_blank_width() + 20) + 'px');
+
+            $('.quiz_show #slide_drag_words_answer').hide();
+
+            var drag_word_items = $('.quiz_show #slide_drag_words_answer span');
+            var words = [];
+
+            for (let i = 0; i < drag_word_items.length; i++) {
+                words.push(drag_word_items.eq(i).html());
+            }
+            shuffle(words);
+
+            console.log(words);
+
+            var drag_words_list_content = '';
+
+            for (let i = 0; i < words.length; i++) {
+                drag_words_list_content += '<div class="drag_words_list_content">' + words[i] + '</div>';
+            }
+
+            $('.quiz_show .slide_view_answer_element .col-md-12').css('position', 'relative');
+            $('.quiz_show .slide_view_answer_element .col-md-12').prepend('<div class="drag_words_list">' + drag_words_list_content + '</div>');
+
+            click_drag_words();
             break;
 
         case '11':
@@ -811,12 +836,9 @@ function is_completed_question() {
             break;
 
         case '10':
-            console.log(drag_words_array);
-            console.log($('.quiz_show .slide_view_answer_element .blank').length);
-            if (drag_words_array.length != $('.quiz_show .slide_view_answer_element .blank').length) return false;
 
-            for (let i = 0; i < drag_words_array.length; i++) {
-                if (drag_words_array[i] == undefined) return false;
+            for (let i = 0; i < $('.quiz_show .slide_view_answer_element .blank').length; i++) {
+                if ($('.quiz_show .slide_view_answer_element .blank').eq(i).html() == '') return false;
             }
 
             return true;
@@ -1057,8 +1079,10 @@ function evulate() {
         case '10':
             let drag_words_answer = '';
 
-            for (let i = 0; i < drag_words_array.length; i++) {
-                drag_words_answer += drag_words_array[i] + ';';
+            var drag_words_elements = $('.quiz_show .blank');
+
+            for (let i = 0; i < drag_words_elements.length; i++) {
+                drag_words_answer += drag_words_elements.eq(i).html() + ';';
             }
 
             question_user_answer.push(drag_words_answer);
@@ -1399,7 +1423,7 @@ function show_result(question_correct_answer, question_type_id, question_id) {
 
             let matching_correct_index;
 
-            for (let i = 0; i < matching_elements.length; i++) {
+            for (let i = 1; i < matching_elements.length; i++) {
 
                 console.log(matching_elements.eq(i));
                 if (matching_elements.eq(i).find('.ui-widget-content').html() != undefined) {
@@ -1757,6 +1781,7 @@ function invokeNative() {
 /******* Mobile Device UI ***************/
 function click_sequence_list() {
     $('.quiz_show .ui-state-default').click(function () {
+        if ($('.review_buttons').attr('style') == '') return;
 
         console.log('ui-state-default clicked', $(this));
 
@@ -1784,6 +1809,8 @@ function click_sequence_list() {
 
 function click_matching_list() {
     $('.quiz_show .ui-widget-header').click(function () {
+        if ($('.review_buttons').attr('style') == '') return;
+
         console.log('ui-widget-header clicked');
 
         $(this).addClass('selected_matching_list');
@@ -1803,5 +1830,30 @@ function click_matching_list() {
         $('.quiz_show .selected_matching_list').removeClass('selected_matching_list');
 
         $('.quiz_show .matching_list').hide();
+    });
+}
+
+function click_drag_words() {
+    $('.quiz_show .blank').click(function () {
+        if ($('.review_buttons').attr('style') == '') return;
+
+        console.log('click_drag_words clicked');
+
+        $(this).addClass('selected_drag_word');
+        $('.quiz_show .drag_words_list').show();
+    });
+
+    $('.quiz_show .drag_words_list_content').click(function () {
+
+        for (let i = 0; i < $('.quiz_show .blank').length; i++) {
+            if ($('.quiz_show .blank').eq(i).html() == $(this).html()) {
+                $('.quiz_show .blank').eq(i).html('');
+            }
+        }
+
+        $('.quiz_show .selected_drag_word').html($(this).html());
+        $('.quiz_show .selected_drag_word').removeClass('selected_drag_word');
+
+        $('.quiz_show .drag_words_list').hide();
     });
 }

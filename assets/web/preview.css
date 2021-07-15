@@ -244,7 +244,11 @@
     border: 1px solid yellow !important;
 }
 
-.matching_list {
+ .selected_matching_list, .selected_drag_word {
+     background-color: #eaea1b !important;
+ }
+
+.matching_list, .drag_words_list {
     width: 60%;
     height: 200px;
     position: absolute;
@@ -259,7 +263,7 @@
     transform: translateX(-50%);
 }
 
-.matching_list_content {
+.matching_list_content, .drag_words_list_content {
     width: 100%;
     padding: 10px;
     text-align: center;
