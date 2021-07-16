@@ -219,36 +219,37 @@ class _QuizListScreenState extends State<QuizListScreen> {
                               ButtonBar(
                                 alignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => QuizScreen(
-                                              id: quizList[index]['id']),
+                                  quizList[index]['downloaded'] == 'true'
+                                      ? TextButton(
+                                          onPressed: () {
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    QuizScreen(
+                                                        id: quizList[index]
+                                                            ['id']),
+                                              ),
+                                            );
+                                          },
+                                          child: Text(
+                                            'Start Quiz',
+                                            style: TextStyle(
+                                              color: Color(0xFF6200EE),
+                                            ),
+                                          ),
+                                        )
+                                      : SizedBox(
+                                          width: 0,
                                         ),
-                                      );
-                                    },
-                                    child: Text(
-                                      'Start Quiz',
-                                      style: TextStyle(
-                                        color: Color(0xFF6200EE),
-                                      ),
-                                    ),
-                                  ),
-                                  // this.widget.isOnline! &&
-                                  //         quizList[index]['downloaded'] ==
-                                  //             'false'
-                                  true
+                                  this.widget.isOnline! &&
+                                          quizList[index]['downloaded'] ==
+                                              'false'
                                       ? IconButton(
                                           onPressed: () {
                                             downloadAssets(
                                                 quizList[index]['id'],
                                                 currentUserToken!);
-                                            // _requestDownload(TaskInfo(
-                                            //     name: 'Civil Safety Image',
-                                            //     link:
-                                            //         'https://civilsafetyonline.com.au/quizmaker/public/images/upload/60d4f70bd095b.png'));
                                           },
                                           icon: Icon(Icons.download))
                                       : SizedBox(

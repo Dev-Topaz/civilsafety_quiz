@@ -1,4 +1,5 @@
 import 'package:civilsafety_quiz/Model/QuizModel.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -144,6 +145,11 @@ class SqliteService {
   }
 
   Future<int> updateQuizContent(String quizContent, int id) async {
+    DateTime now = DateTime.now().toUtc();
+    String formattedDate = DateFormat('yyyy-MM-ddTkk:mm:ss').format(now);
+
+    print('[SqliteService] updateQuizContent formattedDate $formattedDate');
+
     String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'civilsafety_quiz.db');
 
@@ -152,7 +158,7 @@ class SqliteService {
     print('[SqliteService] updateQuizContent id $id quizContent $quizContent');
 
     int count = await database.rawUpdate(
-        'UPDATE Quiz SET quiz_content = ? WHERE id = ?', [quizContent, id]);
+        'UPDATE Quiz SET quiz_content = ?, updated_at = ? WHERE id = ?', [quizContent, formattedDate, id]);
 
     print('[SqliteService] updateQuizContent count $count');
 
@@ -160,13 +166,18 @@ class SqliteService {
   }
 
   Future<int> updateQuizDownload(String isDownload, int id) async {
+    DateTime now = DateTime.now().toUtc();
+    String formattedDate = DateFormat('yyyy-MM-ddTkk:mm:ss').format(now);
+
+    print('[SqliteService] updateQuizDownload formattedDate $formattedDate');
+
     String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'civilsafety_quiz.db');
 
     var database = await openDatabase(dbPath);
 
     int count = await database.rawUpdate(
-        'UPDATE Quiz SET downloaded = ? WHERE id = ?', [isDownload, id]);
+        'UPDATE Quiz SET downloaded = ?, updated_at = ? WHERE id = ?', [isDownload, formattedDate, id]);
 
     print('[SqliteService] updateQuizDownload count $count');
 

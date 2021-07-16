@@ -45,8 +45,8 @@ class QuizModel extends ChangeNotifier {
       );
 
   Map<String, dynamic> toMap() {
-    DateTime now = DateTime.now().toUtc();
-    String formattedDate = DateFormat('yyyy-MM-ddTkk:mm:ss').format(now);
+    // DateTime now = DateTime.now().toUtc();
+    // String formattedDate = DateFormat('yyyy-MM-ddTkk:mm:ss').format(now);
 
     return {
       'id': quizId,
@@ -57,7 +57,7 @@ class QuizModel extends ChangeNotifier {
       'file_path': '',
       'quiz_content_path': '',
       'downloaded': 'false',
-      'updated_at': formattedDate
+      // 'updated_at': formattedDate
     };
   }
 }
