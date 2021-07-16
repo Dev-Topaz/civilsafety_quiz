@@ -46,9 +46,9 @@ class QuizCommand extends BaseCommand {
 
           print('quizmodel updatedate ${DateTime.parse(quizModel.updatedAt)}');
           print(
-              'quizmodel updatedate ${DateTime.parse(localQuizModel!.updatedAt)}');
+              'quizmodel updatedate ${DateTime.parse(localQuizModel!.updatedAt + 'Z')}');
 
-          bool isUpdated = DateTime.parse(localQuizModel.updatedAt)
+          bool isUpdated = DateTime.parse(localQuizModel.updatedAt + 'Z')
               .isAfter(DateTime.parse(quizModel.updatedAt));
 
           print('[QuizCommand] downloadQuizList isUpdated $isUpdated');

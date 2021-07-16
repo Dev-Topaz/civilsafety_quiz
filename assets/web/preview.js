@@ -511,7 +511,7 @@ function preview(element) {
                 const user_info_elements = $('.quiz_show').find('#user_info').find('div');
 
                 for (let i = 0; i < user_info_elements.length; i++) {
-                    user_info_field_patterns.push(user_info_elements.eq(i).attr('id').replaceAll('user_', '').replaceAll('_container', ''));
+                    user_info_field_patterns.push(user_info_elements.eq(i).attr('id').split('user_').join('').split('_container').join(''));
                 }
 
                 if (!$('#user_info')[0].checkValidity()) {
@@ -897,7 +897,7 @@ function evulate() {
             numeric_answer_array.pop();
 
             question_user_answer.push($('.quiz_show #answer').val());
-            question_correct_answer.push(correct_answer.replaceAll("&lt;", "<").replaceAll("&lt;", "<").replaceAll("&gt;", ">").replaceAll(';@', ', ').replaceAll('==;', 'Equal to ').replaceAll('<<;', 'Between ').replaceAll('>;', 'Greater than ').replaceAll('>=;', 'Greater than or equal to ').replaceAll('<;', 'Less than ').replaceAll('<=;', 'Less than or equal to ').replaceAll('!=;', 'Not equal to ').replaceAll(';', ' and ').slice(0, -1));
+            question_correct_answer.push(correct_answer.split("&lt;").join("<").split("&lt;").join("<").split("&gt;").join(">").split(';@').join(', ').split('==;').join('Equal to ').split('<<;').join('Between ').split('>;').join('Greater than ').split('>=;').join('Greater than or equal to ').split('<;').join('Less than ').split('<=;').join('Less than or equal to ').split('!=;').join('Not equal to ').split(';').join(' and ').slice(0, -1));
 
             for (let numeric_item of numeric_answer_array) {
                 numeric_item = numeric_item.replace("&lt;", "<").replace("&lt;", "<").replace("&gt;", ">");
@@ -1362,7 +1362,7 @@ function show_result(question_correct_answer, question_type_id, question_id) {
                 $('.quiz_show #answer').parent().append('<div style="position: absolute;right: 0;background: white;color: black;padding: 10px;display: none;border-radius: 5px;z-index: 2;box-shadow: grey 2px 2px 6px 1px;"><div>Correct Answer</div><div class="correct_answer_list_element"></div></div>');
 
                 for (let i = 0; i < numeric_correct_answer_array.length; i++) {
-                    $('.quiz_show .correct_answer_list_element').append('<div style="display: flex"><img src="./green_tick.png" style="height: 20px;width: 20px;">' + numeric_correct_answer_array[i].slice(0, -1).replaceAll('==;', 'Equal to ').replaceAll('&lt;&lt;;', 'Between ').replaceAll('&gt;;', 'Greater than ').replaceAll('&gt;=;', 'Greater than or equal to ').replaceAll('&lt;;', 'Less than ').replaceAll('&lt;=;', 'Less than or equal to ').replaceAll('!=;', 'Not equal to ').replaceAll(';', ' and ') + '</div>');
+                    $('.quiz_show .correct_answer_list_element').append('<div style="display: flex"><img src="./green_tick.png" style="height: 20px;width: 20px;">' + numeric_correct_answer_array[i].slice(0, -1).split('==;').join('Equal to ').split('&lt;&lt;;').join('Between ').split('&gt;;').join('Greater than ').split('&gt;=;').join('Greater than or equal to ').split('&lt;;').join('Less than ').split('&lt;=;').join('Less than or equal to ').split('!=;').join('Not equal to ').split(';').join(' and ') + '</div>');
                 }
             }
             break;

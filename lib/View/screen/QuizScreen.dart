@@ -67,6 +67,8 @@ class _QuizScreenState extends State<QuizScreen> {
     String currentUserToken =
         context.select<AppModel, String>((value) => value.currentUserToken);
 
+    bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
+
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -117,8 +119,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               onMessageReceived: (s) async {
                                 print(
                                     '[QuizScreen] onMessageReceived QuizResult ${s.message}');
-                                bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
 
+                                print('[QuizScreen] isOnline $isOnline');
                                 if (isOnline) {
                                   _controller.webViewController.evaluateJavascript('show_progress_bar();');
                                   await QuizCommand().sendEmail(currentUserToken, s.message);

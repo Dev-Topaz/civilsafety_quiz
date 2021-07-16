@@ -41,7 +41,7 @@ class QuizModel extends ChangeNotifier {
             ? jsonData['quiz_content_path']
             : '',
         isDownload: jsonData['downloaded'] == 1,
-        updatedAt: jsonData['updated_at'],
+        updatedAt: jsonData['updated_at'] ?? '1900-01-01T00:00',
       );
 
   Map<String, dynamic> toMap() {
