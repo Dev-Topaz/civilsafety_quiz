@@ -36,6 +36,50 @@ class SqliteService {
         "quizId INTEGER,"
         "score INTEGER"
         ")");
+
+    await database.execute("CREATE TABLE Result ("
+        "id INTEGER PRIMARY KEY,"
+        "content TEXT"
+        ")");
+  }
+
+  Future<int> createResult(String content) async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    var result =
+        await database.rawInsert("INSERT INTO Result (content)"
+            " VALUES ('$content')");
+    return result;
+  }
+
+  Future<void> dropResult() async {
+
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    await database.execute("DROP TABLE IF EXISTS Result");
+}
+
+  Future<List> getAllResult() async {
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    var indexList = await database.rawQuery('SELECT content FROM Result');
+
+    List result = [];
+
+    for (var item in indexList.toList()) {
+      result.add(item['content']);
+    }
+
+    return result;
   }
 
   Future<int> createAsset(String id, String url, String filePath) async {

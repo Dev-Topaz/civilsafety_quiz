@@ -59,6 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (userToken != '') {
       await QuizCommand().downloadQuizList(userToken);
       await QuizCommand().removeQuizList(userToken);
+      await QuizCommand().sendAllSavedResult(userToken);
 
       this.widget.callback(true, true);
     } else {

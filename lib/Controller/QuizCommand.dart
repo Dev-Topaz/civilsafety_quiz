@@ -8,8 +8,23 @@ import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 
 class QuizCommand extends BaseCommand {
+
+  Future saveResult(String content) async {
+    await sqliteService.createResult(content);
+  }
+
   Future sendEmail(String token, String json) async {
     await quizService.sendEmail(token, json);
+  }
+
+  Future sendAllSavedResult(token) async {
+    List resultList = await sqliteService.getAllResult();
+
+    for (var result in resultList) {
+      await this.sendEmail(token, result);
+    }
+
+    await sqliteService.dropResult();
   }
 
   Future downloadQuizList(String token) async {

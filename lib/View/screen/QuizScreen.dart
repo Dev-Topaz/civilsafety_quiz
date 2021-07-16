@@ -117,12 +117,15 @@ class _QuizScreenState extends State<QuizScreen> {
                               onMessageReceived: (s) async {
                                 print(
                                     '[QuizScreen] onMessageReceived QuizResult ${s.message}');
-                                _controller.webViewController
-                                    .evaluateJavascript('show_progress_bar();');
-                                await QuizCommand()
-                                    .sendEmail(currentUserToken, s.message);
-                                _controller.webViewController
-                                    .evaluateJavascript('hide_progress_bar();');
+                                bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
+
+                                if (isOnline) {
+                                  _controller.webViewController.evaluateJavascript('show_progress_bar();');
+                                  await QuizCommand().sendEmail(currentUserToken, s.message);
+                                  _controller.webViewController.evaluateJavascript('hide_progress_bar();');
+                                } else {
+                                  await QuizCommand().saveResult(s.message);
+                                }
                               }),
                           JavascriptChannel(
                               name: 'Review',
