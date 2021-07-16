@@ -20,9 +20,10 @@ $('div.quiz_item_container input').attr('autocomplete', 'off');
 $('#question_list_modal .question_content div').attr('contenteditable', 'false');
 $('.other_slide_view_element_delete_icon').remove();
 
+let user_info_field_patterns = [];
 /*
- * ************ Fit Quiz size ********************
- * */
+* ************ Fit Quiz size ********************
+* */
 
 let zoomScale;
 let isFitted = false;
@@ -32,20 +33,9 @@ function fit_question_list_container_size() {
     var w = window.innerWidth;
     var h = window.innerHeight;
 
-    //    var w = window.screen.width * window.devicePixelRatio;
-    //    var h = window.screen.height * window.devicePixelRatio;
-
-    console.log(w);
-    console.log(h);
-
-    // const elementHeight = parseInt($('.screen_height').html()) + 50 + 82;
     const elementHeight = parseInt($('.screen_height').html());
     const elementWidth = parseInt($('.screen_width').html());
 
-
-    // let height_zoomScale = (h - 50 - 82 - 40) / elementHeight;
-    // let height_zoomScale = (h - 40) / elementHeight;
-    // let width_zoomScale = (w - 40) / elementWidth;
     let height_zoomScale = h / elementHeight;
     let width_zoomScale = (w - 50) / elementWidth;
 
@@ -59,17 +49,10 @@ function fit_question_list_container_size() {
 
 setInterval(function () {
     if ($('.screen_height').length > 0 && !isFitted) {
-        $('#preview_toast').css('z-index', '100000');
         hide_some_btns_for_mobile();
         fit_question_list_container_size();
     }
 }, 500);
-
-$(window).resize(function () {
-    console.log('resized');
-    hide_some_btns_for_mobile();
-    fit_question_list_container_size();
-});
 
 function fit_drag_with_zoom(ui) {
     var changeLeft = ui.position.left - ui.originalPosition.left;
@@ -82,8 +65,8 @@ function fit_drag_with_zoom(ui) {
 }
 
 /*
- * For Sequence UI
- * */
+* For Sequence UI
+* */
 
 var canvasHeight = $('.slide_view_answer_element .col-md-12 > ul').height();
 var canvasWidth = $('.slide_view_answer_element .col-md-12 > ul').width();
@@ -101,8 +84,8 @@ if ($('.slide_view_answer_element .col-md-12 #sortable').length > 0) {
 
 let drag_and_drop_mobile;
 /*
- * ************ For Matching UI ***********
- * */
+* ************ For Matching UI ***********
+* */
 $(function () {
 
     // for mobile
@@ -122,9 +105,7 @@ $(function () {
         start: function () {
             $(this).addClass("ui-state-highlight");
             if ($(this).attr("isdropped")) {
-                $(this).parent().css({
-                    'justify-content': 'space-around'
-                });
+                $(this).parent().css({'justify-content': 'space-around'});
                 $(this).attr("isdropped", false);
             }
         },
@@ -145,9 +126,7 @@ $(function () {
         },
         drop: function (event, ui) {
             $(this).addClass("ui-state-hover");
-            $(this).parent().css({
-                'justify-content': 'center'
-            });
+            $(this).parent().css({'justify-content': 'center'});
             ui.draggable.attr("isdropped", true);
 
             swap_value(ui.draggable, $(this).next());
@@ -156,8 +135,8 @@ $(function () {
 });
 
 /*
- * ************ For Drag the Words UI ***********
- * */
+* ************ For Drag the Words UI ***********
+* */
 var drag_words_array = [];
 
 function insert_drag_words_array(index, content) {
@@ -220,11 +199,11 @@ function swap_value(a, b) {
 
 
 /*
- * ************** Rearrange Preview UI *************
- * */
+* ************** Rearrange Preview UI *************
+* */
 
-var user_name = $('#user_first_name').val() + ' ' + $('#user_last_name').val();
-var user_email = $('#user_email').val();
+var user_email = $('#user_EMAIL').val();
+var user_name = $('#user_FIRST_NAME').val() + ' ' + $('#user_LAST_NAME').val();
 
 
 
@@ -445,8 +424,7 @@ function rearrange_preview_ui() {
 }
 
 function shuffle(array) {
-    var currentIndex = array.length,
-        temporaryValue, randomIndex;
+    var currentIndex = array.length, temporaryValue, randomIndex;
 
     // While there remain elements to shuffle...
     while (0 !== currentIndex) {
@@ -465,8 +443,8 @@ function shuffle(array) {
 }
 
 /*
- * ************* For Hotspots UI ***************
- * */
+* ************* For Hotspots UI ***************
+* */
 
 function create_hotspots(event) {
     var x = event.offsetX;
@@ -480,8 +458,8 @@ function create_hotspots(event) {
 }
 
 /*
- * ************* Clear Hotspots ****************
- * */
+* ************* Clear Hotspots ****************
+* */
 $('#clear_hotspots').click(function () {
     $('.preview_hotspots').remove();
     hotspots_points = [];
@@ -518,8 +496,8 @@ function hide_progress_bar() {
 }
 
 /*
- * ********** question Processing **************
- * */
+* ********** question Processing **************
+* */
 
 function preview(element) {
     const root_url = $('meta[name=url]').attr('content');
@@ -530,8 +508,13 @@ function preview(element) {
             if ($('.quiz_show').find('.type_id').html() == '16') {
                 console.log('16');
 
+                const user_info_elements = $('.quiz_show').find('#user_info').find('div');
+
+                for (let i = 0; i < user_info_elements.length; i++) {
+                    user_info_field_patterns.push(user_info_elements.eq(i).attr('id').replaceAll('user_', '').replaceAll('_container', ''));
+                }
+
                 if (!$('#user_info')[0].checkValidity()) {
-                    console.log('validation');
                     show_modal('error', 'Warning', 'You must complete the form correctly before submitting.');
                 } else {
                     $('#submit_btn').html('Continue');
@@ -679,9 +662,6 @@ function preview(element) {
 
                 show_result($('.quiz_show .correct_answer').html(), current_show_type_id, current_show_id);
 
-                // $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].pause();
-                // $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].currentTime = 0;
-                // $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].play();
 
 
                 $('#' + current_show_id).removeClass('quiz_show');
@@ -756,8 +736,8 @@ function preview(element) {
                 }
 
 
-                user_email = $('#user_email').val();
-                user_name = $('#user_first_name').val() + ' ' + $('#user_last_name').val();
+                user_email = $('#user_EMAIL').val();
+                user_name = $('#user_FIRST_NAME').val() + ' ' + $('#user_LAST_NAME').val();
 
                 var result_json = {
                     user_name: user_name,
@@ -776,32 +756,7 @@ function preview(element) {
 
                 QuizResult.postMessage(JSON.stringify(result_json));
 
-//                $.ajax({
-//                    url: root_url + '/send-mail',
-//                    type: 'POST',
-//                    data: {
-//                        _token: token,
-//                        user_name: user_name,
-//                        user_email: user_email,
-//                        stuff_emails: $('.quiz_show .stuff_emails').html(),
-//                        email_from: $('.quiz_show .email_from').html(),
-//                        email_subject: change_email_subject($('.quiz_show .email_subject').html()),
-//                        email_comment: $('.quiz_show .email_comment').html(),
-//                        exam_answered: correct_quiz_count,
-//                        exam_question_count: quizId,
-//                        exam_user_score: total_score,
-//                        exam_passing_score: $('.quiz_show .passing_score').html(),
-//                        result: result,
-//                        quizzes: quizzes,
-//                    },
-//                    success: function (data) {
-//                        console.log('success');
-//                        hide_preload();
-//                    }
-//                }).catch((XHttpResponse) => {
-//                    console.log(XHttpResponse);
-//                    hide_preload();
-//                });
+
                 $('#submit_btn').html('Close');
             } else {
                 window.close();
@@ -1163,26 +1118,23 @@ function evulate() {
 }
 
 /*
- * ************* method for hotspot polygen ***********************
- * */
+* ************* method for hotspot polygen ***********************
+* */
 function inside(point, vs) {
     // ray-casting algorithm based on
     // https://wrf.ecse.rpi.edu/Research/Short_Notes/pnpoly.html/pnpoly.html
 
-    var x = point[0],
-        y = point[1];
+    var x = point[0], y = point[1];
 
     console.log(x, y);
 
     var inside = false;
     for (var i = 0, j = vs.length - 1; i < vs.length; j = i++) {
-        var xi = vs[i].x,
-            yi = vs[i].y;
-        var xj = vs[j].x,
-            yj = vs[j].y;
+        var xi = vs[i].x, yi = vs[i].y;
+        var xj = vs[j].x, yj = vs[j].y;
 
-        var intersect = ((yi > y) != (yj > y)) &&
-            (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+        var intersect = ((yi > y) != (yj > y))
+            && (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
         if (intersect) inside = !inside;
     }
 
@@ -1218,8 +1170,8 @@ function incorrect_process() {
 }
 
 /*
- *************** Compare 2 arrays ***************
- */
+*************** Compare 2 arrays ***************
+*/
 function compare_arrays(array1, array2) {
     sorted_array1 = array1.sort(s);
     sorted_array2 = array2.sort(s);
@@ -1245,8 +1197,8 @@ $('.quiz_show .slide_view_media_element').click(function () {
 });
 
 /*
- * ************* Question List Modal ********************
- * */
+* ************* Question List Modal ********************
+* */
 $('#question_list_modal_close').click(function () {
     $('#question_list_modal').hide();
 });
@@ -1275,8 +1227,8 @@ function update_question_list_modal() {
 }
 
 /*
- * ***************** Review Javascript ****************
- * */
+* ***************** Review Javascript ****************
+* */
 var review_Id = 0;
 
 function review() {
@@ -1308,7 +1260,8 @@ function next_review() {
     var next_show_id = $('.quiz_show').next().attr('id');
     var type_id = $('.quiz_show').next().find('.type_id').html();
 
-    if (next_show_id === undefined || type_id == 14 || type_id == 15) {} else {
+    if (next_show_id === undefined || type_id == 14 || type_id == 15) {
+    } else {
 
         $('#' + current_show_id).removeClass('quiz_show');
         $('#' + current_show_id).addClass('quiz_hide');
@@ -1328,7 +1281,8 @@ function preview_review() {
     var previous_show_id = $('.quiz_show').prev().attr('id');
     var type_id = $('.quiz_show').prev().find('.type_id').html();
 
-    if (previous_show_id === undefined || type_id == 14 || type_id == 15) {} else {
+    if (previous_show_id === undefined || type_id == 14 || type_id == 15) {
+    } else {
 
         $('#' + current_show_id).removeClass('quiz_show');
         $('#' + current_show_id).addClass('quiz_hide');
@@ -1681,7 +1635,7 @@ function see_result() {
             result = 'Pass';
             var current_show_id = $('.quiz_show').attr('id');
 
-            var next_show_id = $('.quiz_list_container').eq(length - 2);
+            var next_show_id = $('.quiz_list_container').eq(length - 2).attr('id');
             if (next_show_id === undefined) return;
 
             $('#quiz_list_audio-' + next_show_id.split('-')[1])[0].pause();
@@ -1700,8 +1654,8 @@ function see_result() {
         }
 
 
-        user_email = $('#user_email').val();
-        user_name = $('#user_first_name').val() + ' ' + $('#user_last_name').val();
+        user_email = $('#user_EMAIL').val();
+        user_name = $('#user_FIRST_NAME').val() + ' ' + $('#user_LAST_NAME').val();
 
         show_preload();
         $.ajax({
@@ -1737,8 +1691,8 @@ function see_result() {
 }
 
 /*
- * ************* Limit Time *************
- * */
+* ************* Limit Time *************
+* */
 
 var start_or_end;
 
@@ -1791,7 +1745,15 @@ function start_question_timer() {
 }
 
 function change_email_subject(string) {
-    return string.split('%FIRST_NAME%').join($('#user_first_name').val()).split('%LAST_NAME%').join($('#user_last_name').val()).split('%EMAIL%').join($('#user_email').val()).split('%COURSE_TYPE%').join($('#user_course_type').val()).split('%LOCATION%').join($('#user_location').val()).split('%COMPANY%').join($('#user_company').val()).split('%DATE%').join($('#user_date').val()).split('%USER_NAME%').join($('#user_first_name').val() + ' ' + $('#user_last_name').val()).split('%QUIZ_TITLE%').join($('.quiz_show .quiz_name').html());
+    string = string_replaceAll(string, '%QUIZ_TITLE%', $('.quiz_show .quiz_name').html());
+    string = string_replaceAll(string, '%QUIZ_STATUS%', result);
+    for (let i = 0; i < user_info_field_patterns.length; i++) {
+        string = string_replaceAll(string, '%' + user_info_field_patterns[i] + '%', $('#user_' + user_info_field_patterns[i]).val());
+    }
+
+    console.log(string);
+
+    return string;
 }
 
 function invokeNative() {
@@ -1886,4 +1848,13 @@ function click_drag_words() {
 
         $('.quiz_show .drag_words_list').hide();
     });
+}
+
+function eachWordUpperCase(str) {
+    var splitStr = str.toLowerCase().split(' ');
+    for (var i = 0; i < splitStr.length; i++) {
+        splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+    }
+
+    return splitStr.join(' ');
 }
