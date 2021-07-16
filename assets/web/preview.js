@@ -11,6 +11,7 @@ let result = '';
 let total_score = 0;
 let correct_quiz_count = 0;
 let hotspots_points = [];
+let isReview = false;
 
 var question_timer;
 $('div.quiz_item_container .slide_view_question_element').attr('contenteditable', 'false');
@@ -1279,6 +1280,7 @@ function update_question_list_modal() {
 var review_Id = 0;
 
 function review() {
+    isReview = true;
     Review.postMessage('review');
 
     show_result($('.quiz_show .correct_answer').html(), $('.quiz_show .type_id').html(), $('.quiz_show').attr('id'));
@@ -1809,7 +1811,7 @@ function invokeNative() {
 /******* Mobile Device UI ***************/
 function click_sequence_list() {
     $('.quiz_show .ui-state-default').click(function () {
-        if ($('.review_buttons').attr('style') == '') return;
+        if (isReview) return;
 
         console.log('ui-state-default clicked', $(this));
 
@@ -1837,7 +1839,7 @@ function click_sequence_list() {
 
 function click_matching_list() {
     $('.quiz_show .ui-widget-header').click(function () {
-        if ($('.review_buttons').attr('style') == '') return;
+        if (isReview) return;
 
         console.log('ui-widget-header clicked');
 
@@ -1863,7 +1865,7 @@ function click_matching_list() {
 
 function click_drag_words() {
     $('.quiz_show .blank').click(function () {
-        if ($('.review_buttons').attr('style') == '') return;
+        if (isReview) return;
 
         console.log('click_drag_words clicked');
 
