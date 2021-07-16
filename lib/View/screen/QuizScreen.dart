@@ -1,6 +1,7 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
@@ -75,8 +76,16 @@ class _QuizScreenState extends State<QuizScreen> {
               Container(
                 child: Row(
                   children: [
-                    Expanded(
+                    Container(
+                      width: MediaQuery.of(context).size.width - 50,
+                      height: MediaQuery.of(context).size.height,
                       child: WebViewPlus(
+                        gestureRecognizers: Set()
+                        ..add(
+                          Factory<DragGestureRecognizer>(
+                            () => VerticalDragGestureRecognizer(),
+                          ),
+                        ),
                         javascriptMode: JavascriptMode.unrestricted,
                         javascriptChannels: <JavascriptChannel>[
                           JavascriptChannel(

@@ -130,49 +130,49 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
 
-    return Material(
-      color: primaryColor,
-      child: Column(
-        children: <Widget>[
-          Container(
-              decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                      begin: Alignment.topRight,
-                      end: Alignment.bottomLeft,
-                      colors: [
-                    Colors.amberAccent,
-                    Colors.deepOrangeAccent,
-                  ])),
-              height: height * 0.2,
-              width: width,
-              child: Stack(
-                children: <Widget>[
-                  CustomPaint(painter: CurvePainter(height * 0.2, width)),
-                  Padding(
-                    padding:
-                        EdgeInsets.only(top: height * 0.075, left: width * 0.1),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text('SIGN UP',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600)),
-                      ],
-                    ),
-                  )
-                ],
-              )),
-          Container(
-              height: height * 0.15,
-              width: width,
-              child: Image(
-                image: AssetImage('assets/images/login_logo.png'),
-                fit: BoxFit.fitWidth,
-              )),
-          Expanded(
-            child: Container(
+    return Scaffold(
+      backgroundColor: primaryColor,
+      body: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            Container(
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                      Colors.amberAccent,
+                      Colors.deepOrangeAccent,
+                    ])),
+                height: height * 0.2,
+                width: width,
+                child: Stack(
+                  children: <Widget>[
+                    CustomPaint(painter: CurvePainter(height * 0.2, width)),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          top: height * 0.075, left: width * 0.1),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Text('SIGN UP',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w600)),
+                        ],
+                      ),
+                    )
+                  ],
+                )),
+            Container(
+                height: height * 0.15,
+                width: width,
+                child: Image(
+                  image: AssetImage('assets/images/login_logo.png'),
+                  fit: BoxFit.fitWidth,
+                )),
+            Container(
               margin: EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: <Widget>[
@@ -314,45 +314,46 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ],
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 20),
-            height: height * 0.12,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Divider(
-                  color: lightColor,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("ALREADY HAVE YOUR ACCOUNT?",
-                        style: TextStyle(color: lightColor[400], fontSize: 13)),
-                    SizedBox(
-                      width: 5,
-                    ),
-                    InkWell(
-                        onTap: () {
-                          this.widget.callback(true, false);
-                        },
-                        child: Text('SIGN IN',
-                            style: TextStyle(
-                                color: Colors.deepOrangeAccent[200],
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold)))
-                  ],
-                ),
-                SizedBox(
-                  height: 30,
-                ),
-              ],
-            ),
-          )
-        ],
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              height: height * 0.12,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Divider(
+                    color: lightColor,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text("ALREADY HAVE YOUR ACCOUNT?",
+                          style:
+                              TextStyle(color: lightColor[400], fontSize: 13)),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            this.widget.callback(true, false);
+                          },
+                          child: Text('SIGN IN',
+                              style: TextStyle(
+                                  color: Colors.deepOrangeAccent[200],
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold)))
+                    ],
+                  ),
+                  SizedBox(
+                    height: 30,
+                  ),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
