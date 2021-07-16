@@ -1,10 +1,12 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
+import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:provider/provider.dart';
 
 class QuizScreen extends StatefulWidget {
   // final int? quizId;
@@ -61,6 +63,9 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     print('[QuizScreen] quizContent $quizContent');
 
+    String currentUserToken =
+        context.select<AppModel, String>((value) => value.currentUserToken);
+
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
@@ -99,6 +104,27 @@ class _QuizScreenState extends State<QuizScreen> {
                                       isLocal: true);
                               }),
                           JavascriptChannel(
+                              name: 'QuizResult',
+                              onMessageReceived: (s) async {
+                                print(
+                                    '[QuizScreen] onMessageReceived QuizResult ${s.message}');
+                                _controller.webViewController
+                                    .evaluateJavascript('show_progress_bar();');
+                                await QuizCommand()
+                                    .sendEmail(currentUserToken, s.message);
+                                _controller.webViewController
+                                    .evaluateJavascript('hide_progress_bar();');
+                              }),
+                          JavascriptChannel(
+                              name: 'Review',
+                              onMessageReceived: (s) async {
+                                print(
+                                    '[QuizScreen] onMessageReceived Review ${s.message}');
+                                setState(() {
+                                  isReview = true;
+                                });
+                              }),
+                          JavascriptChannel(
                               name: 'AudioStop',
                               onMessageReceived: (s) async {
                                 print(
@@ -135,32 +161,36 @@ class _QuizScreenState extends State<QuizScreen> {
                             height: 30.0,
                           ),
                           isListShow
-                          ? IconButton(
-                              onPressed: () {
-                                _controller.webViewController
-                                    .evaluateJavascript(
-                                        'hide_list_button();');
-                                setState(() {
-                                  isListShow = false;
-                                });
-                              },
-                              icon: Icon(Icons.close,
-                                  color: Colors.blue, size: 30.0))
-                          : IconButton(
-                              onPressed: () {
-                                _controller.webViewController
-                                    .evaluateJavascript(
-                                        'click_list_button();');
-                                setState(() {
-                                  isListShow = true;
-                                });
-                              },
-                              icon: Icon(Icons.list_sharp,
-                                  color: Colors.blue, size: 30.0)),
+                              ? IconButton(
+                                  onPressed: () {
+                                    _controller.webViewController
+                                        .evaluateJavascript(
+                                            'hide_list_button();');
+                                    setState(() {
+                                      isListShow = false;
+                                    });
+                                  },
+                                  icon: Icon(Icons.close,
+                                      color: Colors.blue, size: 30.0))
+                              : IconButton(
+                                  onPressed: () {
+                                    _controller.webViewController
+                                        .evaluateJavascript(
+                                            'click_list_button();');
+                                    setState(() {
+                                      isListShow = true;
+                                    });
+                                  },
+                                  icon: Icon(Icons.list_sharp,
+                                      color: Colors.blue, size: 30.0)),
                           Expanded(child: Container()),
                           isReview
                               ? IconButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    _controller.webViewController
+                                      .evaluateJavascript(
+                                          'review_prev_button();');
+                                  },
                                   icon: Icon(
                                     Icons.navigate_before_rounded,
                                     color: Colors.blue,
@@ -171,9 +201,15 @@ class _QuizScreenState extends State<QuizScreen> {
                                 ),
                           IconButton(
                               onPressed: () {
-                                _controller.webViewController
-                                    .evaluateJavascript(
-                                        'click_preview_button();');
+                                if (isReview) {
+                                  _controller.webViewController
+                                      .evaluateJavascript(
+                                          'review_next_button();');
+                                } else {
+                                  _controller.webViewController
+                                      .evaluateJavascript(
+                                          'click_preview_button();');
+                                }
                               },
                               icon: Icon(
                                 Icons.navigate_next_rounded,

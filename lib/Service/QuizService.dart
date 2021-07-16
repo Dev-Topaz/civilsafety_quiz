@@ -6,6 +6,31 @@ import 'package:civilsafety_quiz/const.dart';
 import 'package:http/http.dart' as http;
 
 class QuizService {
+  Future<bool> sendEmail(
+      String token, String json) async {
+    var request = http.MultipartRequest(
+        'POST', Uri.parse(API_ROOT_URL + 'send_email'));
+
+    request.fields['json'] = json;
+    request.headers['Authorization'] = 'Bearer ' + token;
+
+    bool result = true;
+
+    await request.send().then((response) async {
+      response.stream.transform(utf8.decoder).listen((value) {
+        if (response.statusCode == 200) {
+          result = true;
+        } else {
+          result = false;
+        }
+      });
+    }).catchError((e) {
+      return false;
+    });
+
+    return result;
+  }
+
   Future<List> fetchQuizIndex(String token) async {
     final response = await http.get(
       Uri.parse(API_ROOT_URL + 'get_downloading_quizzes_index'),

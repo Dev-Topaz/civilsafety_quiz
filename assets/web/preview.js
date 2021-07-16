@@ -251,9 +251,17 @@ function get_drag_words_blank_width() {
 
 function hide_some_btns_for_mobile() {
 
+    console.log($('.quiz_show .type_id').html());
+    const type_id = $('.quiz_show .type_id').html();
+
     $('.question_menu_bar').hide();
     $('.question_list_modal_close').hide();
-    $('.preview_btn').hide();
+    if (type_id == '14' || type_id == '15') {
+        $('.preview_btn').show();
+        $('#submit_btn').hide();
+    } else {
+        $('.preview_btn').hide();
+    }
     $('.review_buttons').hide();
 }
 
@@ -478,6 +486,14 @@ $('#clear_hotspots').click(function () {
     hotspots_points = [];
 });
 
+function review_prev_button() {
+    $('.review_buttons > div button:nth-child(1)').trigger('click');
+}
+
+function review_next_button() {
+    $('.review_buttons > div button:nth-child(2)').trigger('click');
+}
+
 function click_preview_button() {
     $('#submit_btn').trigger('click');
 }
@@ -490,6 +506,14 @@ function click_list_button() {
     console.log('question list clicked');
 //    $('#question_list').trigger('click');
     $('#question_list_modal').show();
+}
+
+function show_progress_bar() {
+    $('#progress_bar_container').show();
+}
+
+function hide_progress_bar() {
+    $('#progress_bar_container').hide();
 }
 
 /*
@@ -585,7 +609,7 @@ function preview(element) {
                 $('#' + next_show_id).removeClass('quiz_hide');
                 $('#' + next_show_id).addClass('quiz_show');
                 rearrange_preview_ui();
-                hide_some_btns_for_mobile()
+                hide_some_btns_for_mobile();
                 fit_question_list_container_size();
 
                 if (type_id == 12) {
@@ -731,37 +755,52 @@ function preview(element) {
                 }
 
 
-                show_preload();
-
                 user_email = $('#user_email').val();
                 user_name = $('#user_first_name').val() + ' ' + $('#user_last_name').val();
 
-                $.ajax({
-                    url: root_url + '/send-mail',
-                    type: 'POST',
-                    data: {
-                        _token: token,
-                        user_name: user_name,
-                        user_email: user_email,
-                        stuff_emails: $('.quiz_show .stuff_emails').html(),
-                        email_from: $('.quiz_show .email_from').html(),
-                        email_subject: change_email_subject($('.quiz_show .email_subject').html()),
-                        email_comment: $('.quiz_show .email_comment').html(),
-                        exam_answered: correct_quiz_count,
-                        exam_question_count: quizId,
-                        exam_user_score: total_score,
-                        exam_passing_score: $('.quiz_show .passing_score').html(),
-                        result: result,
-                        quizzes: quizzes,
-                    },
-                    success: function (data) {
-                        console.log('success');
-                        hide_preload();
-                    }
-                }).catch((XHttpResponse) => {
-                    console.log(XHttpResponse);
-                    hide_preload();
-                });
+                var result_json = {
+                    user_name: user_name,
+                    user_email: user_email,
+                    stuff_emails: $('.quiz_show .stuff_emails').html(),
+                    email_from: $('.quiz_show .email_from').html(),
+                    email_subject: change_email_subject($('.quiz_show .email_subject').html()),
+                    email_comment: $('.quiz_show .email_comment').html(),
+                    exam_answered: correct_quiz_count,
+                    exam_question_count: quizId,
+                    exam_user_score: total_score,
+                    exam_passing_score: $('.quiz_show .passing_score').html(),
+                    result: result,
+                    quizzes: quizzes,
+                };
+
+                QuizResult.postMessage(JSON.stringify(result_json));
+
+//                $.ajax({
+//                    url: root_url + '/send-mail',
+//                    type: 'POST',
+//                    data: {
+//                        _token: token,
+//                        user_name: user_name,
+//                        user_email: user_email,
+//                        stuff_emails: $('.quiz_show .stuff_emails').html(),
+//                        email_from: $('.quiz_show .email_from').html(),
+//                        email_subject: change_email_subject($('.quiz_show .email_subject').html()),
+//                        email_comment: $('.quiz_show .email_comment').html(),
+//                        exam_answered: correct_quiz_count,
+//                        exam_question_count: quizId,
+//                        exam_user_score: total_score,
+//                        exam_passing_score: $('.quiz_show .passing_score').html(),
+//                        result: result,
+//                        quizzes: quizzes,
+//                    },
+//                    success: function (data) {
+//                        console.log('success');
+//                        hide_preload();
+//                    }
+//                }).catch((XHttpResponse) => {
+//                    console.log(XHttpResponse);
+//                    hide_preload();
+//                });
                 $('#submit_btn').html('Close');
             } else {
                 window.close();
@@ -1240,6 +1279,8 @@ function update_question_list_modal() {
 var review_Id = 0;
 
 function review() {
+    Review.postMessage('review');
+
     show_result($('.quiz_show .correct_answer').html(), $('.quiz_show .type_id').html(), $('.quiz_show').attr('id'));
 
     if ($('#is_quiz').html() == '0') {
@@ -1748,7 +1789,7 @@ function start_question_timer() {
 }
 
 function change_email_subject(string) {
-    return string.replaceAll('%FIRST_NAME%', $('#user_first_name').val()).replaceAll('%LAST_NAME%', $('#user_last_name').val()).replaceAll('%EMAIL%', $('#user_email').val()).replaceAll('%COURSE_TYPE%', $('#user_course_type').val()).replaceAll('%LOCATION%', $('#user_location').val()).replaceAll('%COMPANY%', $('#user_company').val()).replaceAll('%DATE%', $('#user_date').val()).replaceAll('%USER_NAME%', $('#user_first_name').val() + ' ' + $('#user_last_name').val()).replaceAll('%QUIZ_TITLE%', $('.quiz_show .quiz_name').html());
+    return string.split('%FIRST_NAME%').join($('#user_first_name').val()).split('%LAST_NAME%').join($('#user_last_name').val()).split('%EMAIL%').join($('#user_email').val()).split('%COURSE_TYPE%').join($('#user_course_type').val()).split('%LOCATION%').join($('#user_location').val()).split('%COMPANY%').join($('#user_company').val()).split('%DATE%').join($('#user_date').val()).split('%USER_NAME%').join($('#user_first_name').val() + ' ' + $('#user_last_name').val()).split('%QUIZ_TITLE%').join($('.quiz_show .quiz_name').html());
 }
 
 function invokeNative() {
