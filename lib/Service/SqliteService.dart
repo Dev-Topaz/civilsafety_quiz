@@ -63,6 +63,10 @@ class SqliteService {
     var database = await openDatabase(dbPath);
 
     await database.execute("DROP TABLE IF EXISTS Result");
+    await database.execute("CREATE TABLE Result ("
+        "id INTEGER PRIMARY KEY,"
+        "content TEXT"
+        ")");
 }
 
   Future<List> getAllResult() async {

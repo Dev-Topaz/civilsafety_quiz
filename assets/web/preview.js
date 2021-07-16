@@ -1850,6 +1850,10 @@ function click_drag_words() {
     });
 }
 
+function string_replaceAll(str, str1, str2) {
+    return str.split(str1).join(str2);
+}
+
 function eachWordUpperCase(str) {
     var splitStr = str.toLowerCase().split(' ');
     for (var i = 0; i < splitStr.length; i++) {
