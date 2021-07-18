@@ -326,7 +326,7 @@ function rearrange_preview_ui() {
             $('.quiz_show #sortable').html(rearrange_sequence_sortable);
 
             $('.quiz_show .slide_view_answer_element .col-md-12').css('position', 'relative');
-            $('.quiz_show .slide_view_answer_element .col-md-12').prepend('<div class="up_down_container"><div class="up_container">UP</div><div class="down_container">DOWN</div></div>');
+            $('.quiz_show .slide_view_answer_element .col-md-12').prepend('<div class="up_down_container"><div class="up_container"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="enable-background:new 0 0 490 490;" xml:space="preserve"><g><g> <polygon points="0,332.668 245.004,82.631 490,332.668 413.507,407.369 245.004,235.402 76.493,407.369"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></div><div class="down_container" style="transform: rotate(180deg);"><svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 490 490" style="enable-background:new 0 0 490 490;" xml:space="preserve"><g><g><polygon points="0,332.668 245.004,82.631 490,332.668 413.507,407.369 245.004,235.402 76.493,407.369"/></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g><g></g></svg></div></div>');  
             click_sequence_list();
 
             break;
@@ -1774,29 +1774,62 @@ function invokeNative() {
 function click_sequence_list() {
     $('.quiz_show .ui-state-default').click(function () {
         if (isReview) return;
+        enable_arrow_container();   
 
         console.log('ui-state-default clicked', $(this));
 
         $('.quiz_show .up_down_container').css('display', 'flex');
         $('.quiz_show .ui-state-default').removeClass('selected_sequence_list');
         $(this).addClass('selected_sequence_list');
+
+        disable_down_arrow();
+        disable_up_arrow();
     });
 
     $('.quiz_show .up_container').click(function () {
-        console.log('up_container', $('.quiz_show .selected_sequence_list').prev('.ui-state-default'));
-        const prev_element = $('.quiz_show .selected_sequence_list').prev('.ui-state-default');
+        enable_arrow_container();
+
+        let prev_element = $('.quiz_show .selected_sequence_list').prev('.ui-state-default');
         if (prev_element.length > 0) {
             $('.quiz_show .selected_sequence_list').after(prev_element);
         }
-    });
 
+        disable_up_arrow();
+    });
+    
     $('.quiz_show .down_container').click(function () {
-        console.log('down_container', $('.quiz_show .selected_sequence_list'));
-        const next_element = $('.quiz_show .selected_sequence_list').next('.ui-state-default');
+        enable_arrow_container();
+
+        let next_element = $('.quiz_show .selected_sequence_list').next('.ui-state-default');
         if (next_element.length > 0) {
             $('.quiz_show .selected_sequence_list').before(next_element);
         }
+
+        disable_down_arrow();
     });
+}
+
+function enable_arrow_container() {
+    $('.up_container').removeClass('disable_arrow_container');
+    $('.down_container').removeClass('disable_arrow_container');
+}
+
+function disable_up_arrow() {
+    let prev_element = $('.quiz_show .selected_sequence_list').prev('.ui-state-default');
+
+    if (prev_element.length == 0) {
+        $('.quiz_show .up_container').addClass('disable_arrow_container');
+    }
+}
+
+function disable_down_arrow() {
+    let next_element = $('.quiz_show .selected_sequence_list').next('.ui-state-default');
+
+    console.log(next_element.length);
+
+    if (next_element.length == 0) {
+        $('.quiz_show .down_container').addClass('disable_arrow_container');
+    }
 }
 
 function click_matching_list() {
