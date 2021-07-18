@@ -336,7 +336,7 @@ function rearrange_preview_ui() {
             shuffle(matching_content_items);
 
             var rearrange_matching = [];
-            var matching_list_content = '';
+            var matching_list_content = '<div class="matching_close_container"><span>&times;</span></div>';
 
             for (let i = 0; i < matching_content_items.length; i++) {
                 rearrange_matching.push($(matching_content_items[i]).html());
@@ -371,7 +371,7 @@ function rearrange_preview_ui() {
 
             console.log(words);
 
-            var drag_words_list_content = '';
+            var drag_words_list_content = '<div class="drag_words_close_container"><span>&times;</span></div>';
 
             for (let i = 0; i < words.length; i++) {
                 drag_words_list_content += '<div class="drag_words_list_content">' + words[i] + '</div>';
@@ -1835,11 +1835,17 @@ function disable_down_arrow() {
 function click_matching_list() {
     $('.quiz_show .ui-widget-header').click(function () {
         if (isReview) return;
+        if ($('.quiz_show .selected_matching_list').length > 0) return;
 
         console.log('ui-widget-header clicked');
 
         $(this).addClass('selected_matching_list');
         $('.quiz_show .matching_list').show();
+    });
+
+    $('.quiz_show .matching_close_container span').click(function () {
+        $('.quiz_show .matching_list').hide();
+        $('.quiz_show .selected_matching_list').removeClass('selected_matching_list');
     });
 
     $('.quiz_show .matching_list_content').click(function () {
@@ -1861,6 +1867,7 @@ function click_matching_list() {
 function click_drag_words() {
     $('.quiz_show .blank').click(function () {
         if (isReview) return;
+        if($('.quiz_show .selected_drag_word').length > 0) return;
 
         console.log('click_drag_words clicked');
 
@@ -1868,15 +1875,22 @@ function click_drag_words() {
         $('.quiz_show .drag_words_list').show();
     });
 
+    $('.quiz_show .drag_words_close_container span').click(function () {
+        $('.quiz_show .drag_words_list').hide();
+        $('.quiz_show .selected_drag_word').removeClass('selected_drag_word');
+    });
+
     $('.quiz_show .drag_words_list_content').click(function () {
 
         for (let i = 0; i < $('.quiz_show .blank').length; i++) {
             if ($('.quiz_show .blank').eq(i).html() == $(this).html()) {
                 $('.quiz_show .blank').eq(i).html('');
+                $('.quiz_show .blank').eq(i).css('padding', '0px 64px 0px 0px');
             }
         }
 
         $('.quiz_show .selected_drag_word').html($(this).html());
+        $('.quiz_show .selected_drag_word').css('padding', '5px 10px');
         $('.quiz_show .selected_drag_word').removeClass('selected_drag_word');
 
         $('.quiz_show .drag_words_list').hide();

@@ -253,16 +253,39 @@
     fill: white;
 }
 
-.selected_sequence_list {
+.selected_sequence_list, .selected_matching_list, .selected_drag_word {
     border: 2px solid #3FA1E1 !important;
     background-color: #E0EDF5 !important;
 }
 
- .selected_matching_list, .selected_drag_word {
+ /* .selected_matching_list, .selected_drag_word {
      background-color: #eaea1b !important;
- }
+ } */
 
-.matching_list, .drag_words_list {
+.matching_list {
+    width: 49%;
+    height: 200px;
+    position: absolute;
+    border: 1px solid gray;
+    border-radius: 5px;
+    background: white;
+    /* left: 50%; */
+    margin-top: -10px;
+    display: none;
+    overflow-y: scroll;
+    z-index: 10;
+    /* transform: translateX(-50%); */
+    right: 0;
+}
+
+.matching_close_container, .drag_words_close_container {
+    display: flex;
+    justify-content: flex-end;
+    padding-right: 15px;
+    font-size: 25px;
+}
+
+.drag_words_list {
     width: 60%;
     height: 200px;
     position: absolute;
