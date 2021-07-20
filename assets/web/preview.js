@@ -241,10 +241,12 @@ function hide_some_btns_for_mobile() {
     $('.question_menu_bar').hide();
     $('.question_list_modal_close').hide();
     if (type_id == '14' || type_id == '15') {
-        $('.preview_btn').show();
+        $('.preview_btn').hide();
         $('#submit_btn').hide();
+        ReviewButtonShow.postMessage('true');
     } else {
         $('.preview_btn').hide();
+        ReviewButtonShow.postMessage('false');
     }
     $('.review_buttons').hide();
 }
@@ -468,6 +470,10 @@ $('#clear_hotspots').click(function () {
     $('.preview_hotspots').remove();
     hotspots_points = [];
 });
+
+function review_button() {
+    $('#review_btn').trigger('click');
+}
 
 function review_prev_button() {
     $('.review_buttons > div button:nth-child(1)').trigger('click');

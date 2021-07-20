@@ -28,6 +28,7 @@ class _QuizScreenState extends State<QuizScreen> {
   String videoUrl = '#';
   bool isLoading = true;
   bool isReview = false;
+  bool isReviewButtonShow = false;
   bool isListShow = false;
   late WebViewPlusController _controller;
   AudioPlayer audioPlayer = AudioPlayer();
@@ -97,6 +98,13 @@ class _QuizScreenState extends State<QuizScreen> {
                                     '[QuizScreen] onMessageReceived ${s.message}');
                                 setState(() {
                                   videoUrl = s.message;
+                                });
+                              }),
+                          JavascriptChannel(
+                              name: 'ReviewButtonShow',
+                              onMessageReceived: (s) {
+                                setState(() {
+                                  isReviewButtonShow = s.message == 'true';
                                 });
                               }),
                           JavascriptChannel(
@@ -174,6 +182,14 @@ class _QuizScreenState extends State<QuizScreen> {
                           SizedBox(
                             height: 30.0,
                           ),
+                          IconButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }, 
+                          icon: Icon(Icons.arrow_back,
+                            color: Colors.blue,
+                            size: 30.0,
+                          )),
                           isListShow
                               ? IconButton(
                                   onPressed: () {
@@ -197,6 +213,19 @@ class _QuizScreenState extends State<QuizScreen> {
                                   },
                                   icon: Icon(Icons.list_sharp,
                                       color: Colors.blue, size: 30.0)),
+                          isReviewButtonShow
+                          ? IconButton(
+                            onPressed: () {
+                              _controller.webViewController
+                                      .evaluateJavascript(
+                                          'review_button();');
+                            }, 
+                            icon: Icon(Icons.rate_review_sharp,
+                              color:Colors.blue,
+                              size: 30.0
+                            )
+                          )
+                          :SizedBox(height: 0),
                           Expanded(child: Container()),
                           isReview
                               ? IconButton(
