@@ -33,11 +33,15 @@ function fit_question_list_container_size() {
     var w = window.innerWidth;
     var h = window.innerHeight;
 
+    console.log(w);
+    console.log(h);
+
     const elementHeight = parseInt($('.screen_height').html());
     const elementWidth = parseInt($('.screen_width').html());
 
     let height_zoomScale = h / elementHeight;
-    let width_zoomScale = (w - 50) / elementWidth;
+    // let width_zoomScale = (w - 50) / elementWidth;
+    let width_zoomScale = (w) / elementWidth;
 
     zoomScale = Math.min(height_zoomScale, width_zoomScale);
 
@@ -49,7 +53,7 @@ function fit_question_list_container_size() {
 
 setInterval(function () {
     if ($('.screen_height').length > 0 && !isFitted) {
-        // hide_some_btns_for_mobile();
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
     }
 }, 500);
@@ -521,6 +525,12 @@ function preview(element) {
                 }
                 return;
             }
+
+            if ($('.quiz_show').find('.type_id').html() == '13') {
+                $('#submit_btn').html('Continue');
+                return;
+            }
+
             if (!is_completed_question()) {
                 show_modal('error', 'Warning', 'You must complete the question before submitting.');
                 return;
@@ -593,7 +603,7 @@ function preview(element) {
                 $('#' + next_show_id).removeClass('quiz_hide');
                 $('#' + next_show_id).addClass('quiz_show');
                 rearrange_preview_ui();
-                // hide_some_btns_for_mobile();
+                hide_some_btns_for_mobile();
                 fit_question_list_container_size();
 
                 if (type_id == 12) {
@@ -671,7 +681,7 @@ function preview(element) {
                 $('#' + next_show_id).addClass('quiz_show');
 
                 rearrange_preview_ui();
-                // hide_some_btns_for_mobile();
+                hide_some_btns_for_mobile();
                 fit_question_list_container_size();
 
                 if (type_id == 12) {
@@ -711,7 +721,7 @@ function preview(element) {
                     $('#' + next_show_id).addClass('quiz_show');
 
                     rearrange_preview_ui();
-                    // hide_some_btns_for_mobile();
+                    hide_some_btns_for_mobile();
                     fit_question_list_container_size();
                 } else {
                     result = 'Pass';
@@ -731,7 +741,7 @@ function preview(element) {
                     $('#' + next_show_id).addClass('quiz_show');
 
                     rearrange_preview_ui();
-                    // hide_some_btns_for_mobile();
+                    hide_some_btns_for_mobile();
                     fit_question_list_container_size();
                 }
 
@@ -1248,7 +1258,7 @@ function review() {
 
     $('.quiz_list_container').eq(review_Id).removeClass('quiz_hide').addClass('quiz_show');
 
-    // hide_some_btns_for_mobile();
+    hide_some_btns_for_mobile();
     fit_question_list_container_size();
 
     disable_next_and_prev_btn();
@@ -1269,7 +1279,7 @@ function next_review() {
         $('#' + next_show_id).removeClass('quiz_hide');
         $('#' + next_show_id).addClass('quiz_show');
 
-        // hide_some_btns_for_mobile();
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
         disable_next_and_prev_btn();
     }
@@ -1290,7 +1300,7 @@ function preview_review() {
         $('#' + previous_show_id).removeClass('quiz_hide');
         $('#' + previous_show_id).addClass('quiz_show');
 
-        // hide_some_btns_for_mobile();
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
         disable_next_and_prev_btn();
     }
@@ -1580,7 +1590,7 @@ function see_result() {
         $('#' + next_show_id).removeClass('quiz_hide');
         $('#' + next_show_id).addClass('quiz_show');
 
-        // hide_some_btns_for_mobile();
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
 
         return;
@@ -1602,7 +1612,7 @@ function see_result() {
         $('#' + next_show_id).removeClass('quiz_hide');
         $('#' + next_show_id).addClass('quiz_show');
 
-        // hide_some_btns_for_mobile();
+        hide_some_btns_for_mobile();
         fit_question_list_container_size();
 
         return;
@@ -1629,7 +1639,7 @@ function see_result() {
             $('#' + next_show_id).addClass('quiz_show');
 
             rearrange_preview_ui();
-            // hide_some_btns_for_mobile();
+            hide_some_btns_for_mobile();
             fit_question_list_container_size();
         } else {
             result = 'Pass';
@@ -1649,7 +1659,7 @@ function see_result() {
             $('#' + next_show_id).addClass('quiz_show');
 
             rearrange_preview_ui();
-            // hide_some_btns_for_mobile();
+            hide_some_btns_for_mobile();
             fit_question_list_container_size();
         }
 
@@ -1758,15 +1768,15 @@ function change_email_subject(string) {
 
 function invokeNative() {
     if ($('.quiz_show video source').length > 0) {
-        // VideoUrl.postMessage($('.quiz_show video source').attr('src'));
+        VideoUrl.postMessage($('.quiz_show video source').attr('src'));
     } else {
-        // VideoUrl.postMessage('#');
+        VideoUrl.postMessage('#');
     }
 
     if ($('.quiz_show audio source').length > 0) {
-        // AudioUrl.postMessage($('.quiz_show audio source').attr('src'));
+        AudioUrl.postMessage($('.quiz_show audio source').attr('src'));
     } else {
-        // AudioUrl.postMessage('#');
+        AudioUrl.postMessage('#');
     }
 }
 
