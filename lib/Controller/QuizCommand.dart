@@ -91,6 +91,17 @@ class QuizCommand extends BaseCommand {
     return contents;
   }
 
+  Future<void> deleteAssets(String token, int id, String localPath) async {
+    final directory = await getApplicationDocumentsDirectory();
+    final path = directory.path;
+
+    final file = File('$path/$id.txt');
+
+    await file.delete();
+
+    await sqliteService.updateQuizDownload('false', id);
+  }
+
   Future<void> downloadAssets(String token, int id, String localPath) async {
     String quizContent = await quizService.getQuizContent(token, id);
 

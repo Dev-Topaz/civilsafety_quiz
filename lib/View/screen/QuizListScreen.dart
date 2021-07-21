@@ -33,6 +33,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
   late String _localPath;
   ReceivePort _port = ReceivePort();
 
+
   @override
   void initState() {
     super.initState();
@@ -142,7 +143,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
     await QuizCommand().downloadAssets(token, id, _localPath);
 
     QuizCommand().getQuizzes().then((value) {
-      print('[QuizListScreen] initState $value');
+      print('[QuizListScreen] downloadAssets $value');
       setState(() {
         quizList = value;
         isLoading = false;
@@ -150,6 +151,46 @@ class _QuizListScreenState extends State<QuizListScreen> {
     });
 
     Navigator.pop(context);
+  }
+
+  void _delete(int id, String token) {
+    showDialog(
+        context: context,
+        builder: (BuildContext ctx) {
+          return AlertDialog(
+            title: Text('Please Confirm'),
+            content: Text('Are you sure to remove assets?'),
+            actions: [
+              // The "Yes" button
+              TextButton(
+                  onPressed: () {
+                    deleteAssets(id, token);
+
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('Yes')),
+              TextButton(
+                  onPressed: () {
+                    // Close the dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('No'))
+            ],
+          );
+        });
+  }
+
+  void deleteAssets(int id, String token) async {
+    await QuizCommand().deleteAssets(token, id, _localPath);
+
+    QuizCommand().getQuizzes().then((value) {
+      print('[QuizListScreen] deleteAssets $value');
+      setState(() {
+        quizList = value;
+        isLoading = false;
+      });
+    });
   }
 
   @override
@@ -252,8 +293,11 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                                 currentUserToken!);
                                           },
                                           icon: Icon(Icons.download))
-                                      : SizedBox(
-                                          width: 0,
+                                      : IconButton(
+                                          onPressed: () {
+                                            _delete(quizList[index]['id'], currentUserToken!);
+                                          },
+                                          icon: Icon(Icons.delete)
                                         ),
                                 ],
                               ),
