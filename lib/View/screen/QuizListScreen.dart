@@ -224,11 +224,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
   Widget build(BuildContext context) {
     
 
-    return isLoading
-        ? CircularProgressIndicator(
-            color: Colors.grey,
-          )
-        : Scaffold(
+    return Scaffold(
             appBar: AppBar(
               actions: [
                 IconButton(
@@ -253,7 +249,11 @@ class _QuizListScreenState extends State<QuizListScreen> {
               ),
             ),
             body: Center(
-              child: Container(
+              child: isLoading
+              ? CircularProgressIndicator(
+                  color: Colors.grey,
+                )
+              : Container(
                 child: ListView.builder(
                     itemCount: quizList.length,
                     itemBuilder: (BuildContext context, int index) {
