@@ -281,7 +281,8 @@ class _QuizScreenState extends State<QuizScreen> {
                               : SizedBox(
                                   height: 0,
                                 ),
-                          IconButton(
+                          isReview || !isReviewButtonShow
+                          ? IconButton(
                               onPressed: () {
                                 if (isReview) {
                                   _controller.webViewController
@@ -297,7 +298,8 @@ class _QuizScreenState extends State<QuizScreen> {
                                 Icons.navigate_next_rounded,
                                 color: Colors.blue,
                                 size: 30.0,
-                              )),
+                              ))
+                          : SizedBox(height: 0),
                           SizedBox(
                             height: 30.0,
                           ),

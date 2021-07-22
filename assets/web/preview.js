@@ -239,7 +239,7 @@ function hide_some_btns_for_mobile() {
     const type_id = $('.quiz_show .type_id').html();
 
     $('.question_menu_bar').hide();
-    $('.question_list_modal_close').hide();
+    $('#question_list_modal_close').hide();
     if (type_id == '14' || type_id == '15') {
         $('.preview_btn').hide();
         $('#submit_btn').hide();
