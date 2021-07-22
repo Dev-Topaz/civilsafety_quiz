@@ -138,6 +138,22 @@ class _QuizScreenState extends State<QuizScreen> {
                                 }
                               }),
                           JavascriptChannel(
+                              name: 'Result',
+                              onMessageReceived: (s) async {
+                                print(
+                                    '[QuizScreen] onMessageReceived Result ${s.message}');
+
+                                await QuizCommand().updateQuizResult(s.message, this.widget.id!);
+                              }),
+                          JavascriptChannel(
+                              name: 'Score',
+                              onMessageReceived: (s) async {
+                                print(
+                                    '[QuizScreen] onMessageReceived Score ${s.message}');
+
+                                await QuizCommand().updateQuizScore(int.parse(s.message), this.widget.id!);
+                              }),
+                          JavascriptChannel(
                               name: 'Review',
                               onMessageReceived: (s) async {
                                 print(

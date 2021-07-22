@@ -12,6 +12,8 @@ class QuizModel extends ChangeNotifier {
   String quizContentPath;
   String updatedAt;
   bool isDownload;
+  String result;
+  int score;
 
   static String get tableName => 'quiz';
 
@@ -24,6 +26,8 @@ class QuizModel extends ChangeNotifier {
     this.quizContentPath = '',
     this.isDownload = false,
     this.updatedAt = '',
+    this.result = 'none',
+    this.score = 0,
   });
 
   factory QuizModel.fromJson(String str) => QuizModel.fromMap(json.decode(str));
@@ -42,6 +46,8 @@ class QuizModel extends ChangeNotifier {
             : '',
         isDownload: jsonData['downloaded'] == 1,
         updatedAt: jsonData['updated_at'] ?? '1900-01-01T00:00',
+        result: jsonData['result'] ?? 'none',
+        score: jsonData['score'] ?? 0,
       );
 
   Map<String, dynamic> toMap() {

@@ -241,13 +241,26 @@ class _QuizListScreenState extends State<QuizListScreen> {
                             children: [
                               ListTile(
                                 // leading: Icon(Icons.arrow_drop_down_circle),
-                                title: Text(quizList[index]['name']),
+                                title: Row(
+                                  children: [
+                                    Text(quizList[index]['name']),
+                                    SizedBox(width: 10.0),
+                                    Text(quizList[index]['result'] ?? '',
+                                      style: TextStyle(
+                                        color: quizList[index]['result'] == 'Pass' ? Colors.green : Colors.red,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12.0,
+                                      ),
+                                    ),
+                                  ],
+                                ), 
                                 subtitle: Text(
                                   'Passing score: ${quizList[index]['passing_score']}',
                                   style: TextStyle(
                                       color: Colors.black.withOpacity(0.6)),
                                 ),
                               ),
+                              Text((quizList[index]['score'] ?? 0).toString()),
                               // Image.asset('assets/images/quiz_default.jpg'),
                               Padding(
                                 padding: const EdgeInsets.all(16.0),

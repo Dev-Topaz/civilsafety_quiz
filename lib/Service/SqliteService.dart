@@ -22,6 +22,8 @@ class SqliteService {
         "file_path TEXT,"
         "downloaded TEXT,"
         "updated_at TEXT,"
+        "result TEXT,"
+        "score INTEGER,"
         "quiz_content_path TEXT"
         ")");
 
@@ -228,6 +230,36 @@ class SqliteService {
         'UPDATE Quiz SET downloaded = ?, updated_at = ? WHERE id = ?', [isDownload, formattedDate, id]);
 
     print('[SqliteService] updateQuizDownload count $count');
+
+    return count;
+  }
+
+  Future<int> updateQuizResult(String result, int id) async {
+
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    int count = await database.rawUpdate(
+        'UPDATE Quiz SET result = ? WHERE id = ?', [result, id]);
+
+    print('[SqliteService] updateQuizResult count $count');
+
+    return count;
+  }
+
+  Future<int> updateQuizScore(int score, int id) async {
+
+    String databasesPath = await getDatabasesPath();
+    String dbPath = join(databasesPath, 'civilsafety_quiz.db');
+
+    var database = await openDatabase(dbPath);
+
+    int count = await database.rawUpdate(
+        'UPDATE Quiz SET score = ? WHERE id = ?', [score, id]);
+
+    print('[SqliteService] updateQuizScore count $count');
 
     return count;
   }

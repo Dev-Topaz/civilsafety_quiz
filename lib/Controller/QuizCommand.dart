@@ -102,6 +102,14 @@ class QuizCommand extends BaseCommand {
     await sqliteService.updateQuizDownload('false', id);
   }
 
+  Future<void> updateQuizResult(String result, int id) async {
+    await sqliteService.updateQuizResult(result, id);
+  }
+
+  Future<void> updateQuizScore(int score, int id) async {
+    await sqliteService.updateQuizScore(score, id);
+  }
+
   Future<void> downloadAssets(String token, int id, String localPath) async {
     String quizContent = await quizService.getQuizContent(token, id);
 

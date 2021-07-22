@@ -771,6 +771,8 @@ function preview(element) {
                 };
 
                 QuizResult.postMessage(JSON.stringify(result_json));
+                Result.postMessage(result);
+                Score.postMessage(total_score);
 
 
                 $('#submit_btn').html('Close');
