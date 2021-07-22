@@ -4,8 +4,10 @@ import 'package:civilsafety_quiz/View/screen/LoginScreen.dart';
 import 'package:civilsafety_quiz/View/screen/QuizListScreen.dart';
 import 'package:civilsafety_quiz/View/screen/RegisterScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -22,17 +24,34 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+
+    SystemChrome.setPreferredOrientations(
+        [DeviceOrientation.portraitUp]);
+
     UserCommand().isOnlineCheck().then((value) {
       setState(() {
         isLoading = false;
       });
     });
+
+    getUserToken();
   }
 
   void callback(bool hasAccount, bool isLoggedin) {
     setState(() {
       this.hasAccount = hasAccount;
       this.isLoggedin = isLoggedin;
+    });
+  }
+
+
+  void getUserToken() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userToken = prefs.getString('userToken') ?? '';
+
+    setState(() {
+      isLoggedin = userToken != '';
     });
   }
 
@@ -57,6 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
       }
       print('[HomeScreen] isOnline $isOnline');
     }
+
+
 
     return isLoading
         ? CircularProgressIndicator(

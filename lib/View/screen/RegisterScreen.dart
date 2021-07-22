@@ -3,6 +3,7 @@ import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/View/widget/CurvePointer.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterScreen extends StatefulWidget {
   Function callback;
@@ -100,6 +101,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     print('[RegisterScreen] $userToken');
 
     if (userToken != '') {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+
+      await prefs.setString('userToken', userToken);
+
       await QuizCommand().downloadQuizList(userToken);
       await QuizCommand().removeQuizList(userToken);
       await QuizCommand().sendAllSavedResult(userToken);

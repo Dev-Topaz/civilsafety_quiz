@@ -10,9 +10,11 @@ import 'package:civilsafety_quiz/View/widget/CustomBanner.dart';
 import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizListScreen extends StatefulWidget {
   Function callback;
@@ -61,6 +63,18 @@ class _QuizListScreenState extends State<QuizListScreen> {
     _unbindBackgroundIsolate();
     super.dispose();
   }
+
+  // void updateResult(int id, String result) {
+  //   setState(() {
+  //     quizList[id]['result'] = result;
+  //   });
+  // }
+
+  // void updateScore(int id, int score) {
+  //   setState(() {
+  //     quizList[id]['score'] = score;
+  //   });
+  // }
 
   void _onDownloading() {
     showDialog(
@@ -208,8 +222,11 @@ class _QuizListScreenState extends State<QuizListScreen> {
             appBar: AppBar(
               actions: [
                 IconButton(
-                    onPressed: () {
+                    onPressed: () async {
                       widget.callback(true, false);
+
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('userToken', '');
                     },
                     icon: Icon(
                       Icons.logout,
@@ -230,6 +247,9 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 child: ListView.builder(
                     itemCount: quizList.length,
                     itemBuilder: (BuildContext context, int index) {
+
+                      double rating = (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] < 1 ? (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] * 5 : 5;
+
                       return Card(
                         clipBehavior: Clip.antiAlias,
                         shadowColor: Colors.grey,
@@ -260,7 +280,30 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                       color: Colors.black.withOpacity(0.6)),
                                 ),
                               ),
-                              Text((quizList[index]['score'] ?? 0).toString()),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text('Score: ' + (quizList[index]['score'] ?? 0).toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  RatingBar.builder(
+                                    initialRating: rating,
+                                    minRating: rating,
+                                    maxRating: rating,
+                                    itemSize: 24.0,
+                                    allowHalfRating: true,
+                                    itemBuilder: (context, _) => Icon(
+                                      Icons.star,
+                                      color: Colors.amber,
+                                    ),
+                                    onRatingUpdate: (rating) {
+                                      print(rating);
+                                    },
+                                  ),
+                                ],
+                              ),
                               // Image.asset('assets/images/quiz_default.jpg'),
                               Padding(
                                 padding: const EdgeInsets.all(16.0),
@@ -281,8 +324,8 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                               MaterialPageRoute(
                                                 builder: (context) =>
                                                     QuizScreen(
-                                                        id: quizList[index]
-                                                            ['id']),
+                                                        id: quizList[index]['id'],
+                                                        ),
                                               ),
                                             );
                                           },

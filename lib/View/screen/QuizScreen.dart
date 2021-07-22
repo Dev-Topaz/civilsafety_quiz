@@ -1,5 +1,6 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
+import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,15 @@ class QuizScreen extends StatefulWidget {
   // final int? quizId;
   final int? id;
   final Key? key;
+  // Function? updateResult;
+  // Function? updateScore;
 
-  QuizScreen({this.key, this.id}) : super(key: key);
+  QuizScreen({
+    this.key, 
+    this.id, 
+    // this.updateResult, 
+    // this.updateScore
+    }) : super(key: key);
 
   @override
   _QuizScreenState createState() => _QuizScreenState();
@@ -144,6 +152,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                     '[QuizScreen] onMessageReceived Result ${s.message}');
 
                                 await QuizCommand().updateQuizResult(s.message, this.widget.id!);
+                                // this.widget.updateResult!(this.widget.id!, s.message);
                               }),
                           JavascriptChannel(
                               name: 'Score',
@@ -152,6 +161,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                     '[QuizScreen] onMessageReceived Score ${s.message}');
 
                                 await QuizCommand().updateQuizScore(int.parse(s.message), this.widget.id!);
+                                // this.widget.updateScore!(this.widget.id!, int.parse(s.message));
                               }),
                           JavascriptChannel(
                               name: 'Review',
@@ -200,7 +210,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           ),
                           IconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+                              Navigator.push(context,MaterialPageRoute(builder: (context) =>HomeScreen()));
                             }, 
                           icon: Icon(Icons.arrow_back,
                             color: Colors.blue,
