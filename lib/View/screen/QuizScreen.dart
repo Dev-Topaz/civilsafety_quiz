@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:provider/provider.dart';
@@ -38,6 +39,7 @@ class _QuizScreenState extends State<QuizScreen> {
   bool isReview = false;
   bool isReviewButtonShow = false;
   bool isListShow = false;
+  String currentUserToken = '';
   late WebViewPlusController _controller;
   AudioPlayer audioPlayer = AudioPlayer();
 
@@ -47,6 +49,8 @@ class _QuizScreenState extends State<QuizScreen> {
 
     SystemChrome.setPreferredOrientations(
         [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+
+    getUserToken();
 
     QuizCommand().getQuizContent(this.widget.id!).then((value) {
       setState(() {
@@ -69,12 +73,21 @@ class _QuizScreenState extends State<QuizScreen> {
     super.dispose();
   }
 
+  void getUserToken() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userToken = prefs.getString('userToken') ?? '';
+
+    setState(() {
+      currentUserToken = userToken;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     print('[QuizScreen] quizContent $quizContent');
 
-    String currentUserToken =
-        context.select<AppModel, String>((value) => value.currentUserToken);
+    
 
     bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
 

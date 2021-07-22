@@ -34,7 +34,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
   late bool _permissionReady;
   late String _localPath;
   ReceivePort _port = ReceivePort();
-
+  String? currentUserToken;
 
   @override
   void initState() {
@@ -49,6 +49,9 @@ class _QuizListScreenState extends State<QuizListScreen> {
     }
 
     _prepare();
+
+    getUserToken();
+
     QuizCommand().getQuizzes().then((value) {
       print('[QuizListScreen] initState $value');
       setState(() {
@@ -62,6 +65,16 @@ class _QuizListScreenState extends State<QuizListScreen> {
   void dispose() {
     _unbindBackgroundIsolate();
     super.dispose();
+  }
+
+  void getUserToken() async {
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String userToken = prefs.getString('userToken') ?? '';
+
+    setState(() {
+      currentUserToken = userToken;
+    });
   }
 
   // void updateResult(int id, String result) {
@@ -209,10 +222,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    String? currentUserToken;
-    if (this.widget.isOnline!)
-      currentUserToken =
-          context.select<AppModel, String>((value) => value.currentUserToken);
+    
 
     return isLoading
         ? CircularProgressIndicator(
