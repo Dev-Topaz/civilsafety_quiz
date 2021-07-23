@@ -15,12 +15,14 @@ class QuizScreen extends StatefulWidget {
   // final int? quizId;
   final int? id;
   final Key? key;
+  final String? name;
   // Function? updateResult;
   // Function? updateScore;
 
   QuizScreen({
     this.key, 
     this.id, 
+    this.name,
     // this.updateResult, 
     // this.updateScore
     }) : super(key: key);
@@ -92,6 +94,21 @@ class _QuizScreenState extends State<QuizScreen> {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          centerTitle: true,
+          leading: IconButton(
+            onPressed: () {
+              Navigator.push(context,MaterialPageRoute(builder: (context) =>HomeScreen()));
+            }, 
+          icon: Icon(Icons.arrow_back,
+            color: Colors.blue,
+            size: 30.0,
+          )),
+          title: Text(this.widget.name!,
+            style: TextStyle(color: Colors.blue),
+          ),
+          backgroundColor: Colors.white,
+        ),
         body: Container(
           child: Stack(
             children: [
@@ -100,7 +117,7 @@ class _QuizScreenState extends State<QuizScreen> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height - 50,
+                      height: MediaQuery.of(context).size.height - 169,
                       child: WebViewPlus(
                         gestureRecognizers: [
                               Factory(() => EagerGestureRecognizer()),
@@ -211,78 +228,58 @@ class _QuizScreenState extends State<QuizScreen> {
                       //   color: Colors.white,
                       // ),
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          SizedBox(
-                            width: 30.0,
-                          ),
-                          IconButton(
+                          TextButton.icon(
                             onPressed: () {
-                              Navigator.push(context,MaterialPageRoute(builder: (context) =>HomeScreen()));
-                            }, 
-                          icon: Icon(Icons.arrow_back,
-                            color: Colors.blue,
-                            size: 30.0,
-                          )),
-                          isListShow
-                              ? IconButton(
-                                  onPressed: () {
-                                    _controller.webViewController.evaluateJavascript('hide_list_button();');
-                                    setState(() {
-                                      isListShow = false;
-                                    });
-                                  },
-                                  icon: Icon(Icons.close,
-                                      color: Colors.blue, size: 30.0))
-                              : IconButton(
-                                  onPressed: () {
+                              if (isListShow) {
+                                _controller.webViewController.evaluateJavascript('hide_list_button();');
+                              } else {
                                     _controller.webViewController.evaluateJavascript('click_list_button();');
-                                    setState(() {
-                                      isListShow = true;
-                                    });
-                                  },
-                                  icon: Icon(Icons.list_sharp,
-                                      color: Colors.blue, size: 30.0)),
-                          isReviewButtonShow
-                          ? IconButton(
-                            onPressed: () {
-                              _controller.webViewController.evaluateJavascript('review_button();');
+                              }
                             }, 
+                            icon: isListShow ? Icon(Icons.close, color: Colors.blue) : Icon(Icons.list_sharp, color: Colors.blue,), 
+                            label: Text('Quiz List', style: TextStyle(color: Colors.blue),)
+                          ),
+                          TextButton.icon(
+                            onPressed: () {
+                              if (isReviewButtonShow) _controller.webViewController.evaluateJavascript('review_button();');
+                            },
                             icon: Icon(Icons.rate_review_sharp,
-                              color:Colors.blue,
-                              size: 30.0
-                            )
-                          )
-                          :SizedBox(width: 0),
-                          Expanded(child: Container()),
-                          isReview
-                              ? IconButton(
-                                  onPressed: () {
-                                    _controller.webViewController.evaluateJavascript('review_prev_button();');
-                                  },
-                                  icon: Icon(
-                                    Icons.navigate_before_rounded,
-                                    color: Colors.blue,
-                                    size: 30.0,
-                                  ))
-                              : SizedBox(width: 0,),
-                          isReview || !isReviewButtonShow
-                          ? IconButton(
-                              onPressed: () {
-                                if (isReview) {
-                                  _controller.webViewController.evaluateJavascript('review_next_button();');
-                                } else {
-                                  _controller.webViewController.evaluateJavascript('click_preview_button();');
-                                }
-                              },
-                              icon: Icon(
-                                Icons.navigate_next_rounded,
-                                color: Colors.blue,
-                                size: 30.0,
-                              ))
-                          : SizedBox(width: 0),
-                          SizedBox(
-                            width: 30.0,
+                              color: isReviewButtonShow ? Colors.blue : Colors.white,
+                            ), 
+                            label: Text('Review',
+                              style: TextStyle(color: isReviewButtonShow ? Colors.blue : Colors.white),
+                            )),
+                          TextButton.icon(
+                            onPressed: () {
+                              if (isReview) _controller.webViewController.evaluateJavascript('review_prev_button();');
+                            },
+                            icon: Icon(
+                              Icons.navigate_before_rounded,
+                              color: isReview ? Colors.blue : Colors.white,
+                              size: 30.0,
+                            ),
+                            label: Text('Previous',
+                              style: TextStyle(color: isReview ? Colors.blue : Colors.white),
+                            ),
+                          ),
+                          TextButton.icon(
+                            onPressed: () {
+                              if (isReview) {
+                                _controller.webViewController.evaluateJavascript('review_next_button();');
+                              } else {
+                                _controller.webViewController.evaluateJavascript('click_preview_button();');
+                              }
+                            },
+                            icon: Icon(
+                              Icons.navigate_next_rounded,
+                              color: Colors.blue,
+                              size: 30.0,
+                            ),
+                            label: Text('Next',
+                              style: TextStyle(color: Colors.blue),
+                            ),
                           ),
                         ],
                       ),

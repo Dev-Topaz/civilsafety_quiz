@@ -14,11 +14,11 @@ let hotspots_points = [];
 let isReview = false;
 
 var question_timer;
-$('div.quiz_item_container .slide_view_question_element').attr('contenteditable', 'false');
-$('div.quiz_item_container .cancel_drag').attr('contenteditable', 'false');
-$('div.quiz_item_container input').attr('autocomplete', 'off');
-$('#question_list_modal .question_content div').attr('contenteditable', 'false');
-$('.other_slide_view_element_delete_icon').remove();
+// $('div.quiz_item_container .slide_view_question_element').attr('contenteditable', 'false');
+// $('div.quiz_item_container .cancel_drag').attr('contenteditable', 'false');
+// $('div.quiz_item_container input').attr('autocomplete', 'off');
+// $('#question_list_modal .question_content div').attr('contenteditable', 'false');
+// $('.other_slide_view_element_delete_icon').remove();
 
 let user_info_field_patterns = [];
 /*
@@ -250,11 +250,17 @@ function hide_some_btns_for_mobile() {
         ReviewButtonShow.postMessage('false');
     }
     $('.review_buttons').hide();
+
+    $('div.quiz_item_container .slide_view_question_element').attr('contenteditable', 'false');
+    $('div.quiz_item_container .cancel_drag').attr('contenteditable', 'false');
+    $('div.quiz_item_container input').attr('autocomplete', 'off');
+    $('#question_list_modal .question_content div').attr('contenteditable', 'false');
+    $('.other_slide_view_element_delete_icon').remove();
 }
 
 function set_mobile_style() {
 
-    $('#preview_container').attr('style', '');
+    $('#preview_container').attr('style', 'position: unset !important; left: 0; top: 0; transform: unset;');
     $('.quiz_show').attr('style', '');
     $('.quiz_show .quiz_item_container').attr('style', 'font-size: 20px !important;');
     $('font').css("cssText", "font-size: 20px !important;");
@@ -263,6 +269,7 @@ function set_mobile_style() {
     $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%;padding: 40px !important;border-radius: 15px;margin: auto;box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);');
     $('.quiz_show .quiz_item_container .slide_view_answer_element').attr('style', 'padding-bottom: 20px !important;padding-top: 20px !important;');
     $('.quiz_show .quiz_item_container .slide_view_media_element').attr('style', 'padding-bottom: 20px !important;border-radius: 20px;');
+    $('#preview_toast').attr('style', 'display:none; width: 80%; margin-left: 0; transform: translateX(-50%);');
     
     $('.quiz_show .slide_view_video_element').hide();
     if ($('.quiz_show .slide_view_media_element img').attr('src') == '#') $('.quiz_show .slide_view_media_element').hide();

@@ -345,7 +345,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
                                   onPressed: () {
                                     if (quizList[index]['downloaded'] == 'true') Navigator.push(context,
                                       MaterialPageRoute(builder: (context) =>
-                                        QuizScreen(id: quizList[index]['id'],),
+                                        QuizScreen(
+                                          id: quizList[index]['id'],
+                                          name: quizList[index]['name'],
+                                        ),
                                       ),
                                     );
                                   },
