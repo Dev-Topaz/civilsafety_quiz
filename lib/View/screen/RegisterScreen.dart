@@ -136,6 +136,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
 
+    double ratio;
+
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      ratio = width / 360;
+    } else {
+      ratio = height / 640;
+    }
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: SingleChildScrollView(
@@ -164,7 +172,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           Text('SIGN UP',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 24,
+                                  fontSize: 24 * ratio,
                                   fontWeight: FontWeight.w600)),
                         ],
                       ),
@@ -179,13 +187,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   fit: BoxFit.fitWidth,
                 )),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20 * ratio),
               child: Column(
                 children: <Widget>[
                   TextField(
                       controller: userNameController,
                       cursorColor: color,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18 * ratio),
                       decoration: InputDecoration(
                         prefixIcon:
                             Icon(Icons.person_outline, color: lightColor[400]),
@@ -193,7 +201,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelStyle: TextStyle(
                             color: Colors.deepOrangeAccent,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14),
+                            fontSize: 14 * ratio),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.zero,
                             borderSide: BorderSide(color: lightColor)),
@@ -201,11 +209,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             borderRadius: BorderRadius.zero,
                             borderSide: BorderSide(color: Colors.amberAccent)),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 10 * ratio),
                   TextField(
                       controller: emailController,
                       cursorColor: color,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18 * ratio),
                       decoration: InputDecoration(
                         prefixIcon:
                             Icon(Icons.email_outlined, color: lightColor[400]),
@@ -213,7 +221,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelStyle: TextStyle(
                             color: Colors.deepOrangeAccent,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14),
+                            fontSize: 14 * ratio),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.zero,
                             borderSide: BorderSide(color: lightColor)),
@@ -221,11 +229,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             borderRadius: BorderRadius.zero,
                             borderSide: BorderSide(color: Colors.amberAccent)),
                       )),
-                  SizedBox(height: 10),
+                  SizedBox(height: 10 * ratio),
                   TextField(
                       controller: passwordController,
                       cursorColor: color,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18 * ratio),
                       obscureText: isPasswordObscured,
                       decoration: InputDecoration(
                         prefixIcon:
@@ -243,7 +251,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelStyle: TextStyle(
                           color: Colors.deepOrangeAccent,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          fontSize: 14 * ratio,
                         ),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.zero,
@@ -253,12 +261,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             borderSide: BorderSide(color: Colors.amberAccent)),
                       )),
                   SizedBox(
-                    height: 10,
+                    height: 10 * ratio,
                   ),
                   TextField(
                       controller: confirmPasswordController,
                       cursorColor: color,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18 * ratio),
                       obscureText: isConfirmPasswordObscured,
                       decoration: InputDecoration(
                         prefixIcon:
@@ -277,7 +285,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         labelStyle: TextStyle(
                           color: Colors.deepOrangeAccent,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          fontSize: 14 * ratio,
                         ),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.zero,
@@ -287,10 +295,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             borderSide: BorderSide(color: Colors.amberAccent)),
                       )),
                   SizedBox(
-                    height: 10,
+                    height: 10 * ratio,
                   ),
                   Container(
-                    height: 55,
+                    height: 55 * ratio,
                     width: width,
                     child: TextButton(
                       // color: Colors.blueGrey,
@@ -312,7 +320,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             )
                           : Text('CONTINUE',
                               style:
-                                  TextStyle(color: primaryColor, fontSize: 18)),
+                                  TextStyle(color: primaryColor, fontSize: 18 * ratio)),
                       // shape: RoundedRectangleBorder(
                       // borderRadius: BorderRadius.circular(30))
                     ),
@@ -321,7 +329,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20 * ratio),
               height: height * 0.12,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -330,16 +338,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: lightColor,
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 10 * ratio,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text("ALREADY HAVE YOUR ACCOUNT?",
                           style:
-                              TextStyle(color: lightColor[400], fontSize: 13)),
+                              TextStyle(color: lightColor[400], fontSize: 13 * ratio)),
                       SizedBox(
-                        width: 5,
+                        width: 5 * ratio,
                       ),
                       InkWell(
                           onTap: () {
@@ -348,12 +356,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           child: Text('SIGN IN',
                               style: TextStyle(
                                   color: Colors.deepOrangeAccent[200],
-                                  fontSize: 14,
+                                  fontSize: 14 * ratio,
                                   fontWeight: FontWeight.bold)))
                     ],
                   ),
                   SizedBox(
-                    height: 30,
+                    height: 30 * ratio,
                   ),
                 ],
               ),

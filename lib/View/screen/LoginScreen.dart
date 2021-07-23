@@ -16,13 +16,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool isObscured = true;
-  bool isLogging =
-      false; //for enabling and disabling obscurity in password field
+  bool isLogging = false; //for enabling and disabling obscurity in password field
 
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
 
-  void login(String email, String password) async {
+  void login(String email, String password, double ratio) async {
     print('[LoginScreen] login');
 
     if (email == '') {
@@ -33,7 +32,7 @@ class _LoginScreenState extends State<LoginScreen> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.black,
           textColor: Colors.white,
-          fontSize: 16.0);
+          fontSize: 16.0 * ratio);
       return;
     }
 
@@ -45,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.black,
           textColor: Colors.white,
-          fontSize: 16.0);
+          fontSize: 16.0 * ratio);
       return;
     }
 
@@ -76,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
           timeInSecForIosWeb: 1,
           backgroundColor: Colors.black,
           textColor: Colors.white,
-          fontSize: 16.0);
+          fontSize: 16.0 * ratio);
     }
 
     setState(() {
@@ -93,6 +92,15 @@ class _LoginScreenState extends State<LoginScreen> {
     final primaryColor = Colors.white;
     final double width = MediaQuery.of(context).size.width;
     final double height = MediaQuery.of(context).size.height;
+
+    double ratio;
+
+    if (MediaQuery.of(context).orientation == Orientation.portrait) {
+      ratio = width / 360;
+    } else {
+      ratio = height / 640;
+    }
+
     return Scaffold(
       backgroundColor: primaryColor,
       body: SingleChildScrollView(
@@ -121,7 +129,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           Text('SIGN IN',
                               style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 24,
+                                  fontSize: 24 * ratio,
                                   fontWeight: FontWeight.w600)),
                         ],
                       ),
@@ -136,14 +144,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   fit: BoxFit.fitWidth,
                 )),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20 * ratio),
               height: height * 0.4,
               child: Column(
                 children: <Widget>[
                   TextField(
                       controller: emailController,
                       cursorColor: color,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18 * ratio),
                       decoration: InputDecoration(
                         prefixIcon:
                             Icon(Icons.email_outlined, color: lightColor[400]),
@@ -151,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelStyle: TextStyle(
                             color: Colors.deepOrangeAccent,
                             fontWeight: FontWeight.w600,
-                            fontSize: 14),
+                            fontSize: 14 * ratio),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.zero,
                             borderSide: BorderSide(color: lightColor)),
@@ -159,11 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.zero,
                             borderSide: BorderSide(color: Colors.amberAccent)),
                       )),
-                  SizedBox(height: 30),
+                  SizedBox(height: 30 * ratio),
                   TextField(
                       controller: passwordController,
                       cursorColor: color,
-                      style: TextStyle(fontSize: 18),
+                      style: TextStyle(fontSize: 18 * ratio),
                       obscureText: isObscured,
                       decoration: InputDecoration(
                         prefixIcon:
@@ -181,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         labelStyle: TextStyle(
                           color: Colors.deepOrangeAccent,
                           fontWeight: FontWeight.w600,
-                          fontSize: 14,
+                          fontSize: 14 * ratio,
                         ),
                         enabledBorder: OutlineInputBorder(
                             borderRadius: BorderRadius.zero,
@@ -190,7 +198,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             borderRadius: BorderRadius.zero,
                             borderSide: BorderSide(color: Colors.amberAccent)),
                       )),
-                  SizedBox(height: 15),
+                  SizedBox(height: 15 * ratio),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.end,
                   //   children: <Widget>[
@@ -202,10 +210,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   //   ],
                   // ),
                   SizedBox(
-                    height: 20,
+                    height: 20 * ratio,
                   ),
                   Container(
-                    height: 55,
+                    height: 55 * ratio,
                     width: width,
                     child: TextButton(
                       // color: Colors.blueGrey,
@@ -215,7 +223,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       onPressed: () {
                         if (!isLogging)
-                          login(emailController.text, passwordController.text);
+                          login(emailController.text, passwordController.text, ratio);
                       },
                       child: isLogging
                           ? CircularProgressIndicator(
@@ -223,7 +231,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             )
                           : Text('CONTINUE',
                               style:
-                                  TextStyle(color: primaryColor, fontSize: 18)),
+                                  TextStyle(color: primaryColor, fontSize: 18 * ratio)),
                       // shape: RoundedRectangleBorder(
                       // borderRadius: BorderRadius.circular(30))
                     ),
@@ -232,7 +240,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
             Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
+              margin: EdgeInsets.symmetric(horizontal: 20 * ratio),
               height: height * 0.1,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -241,16 +249,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: lightColor,
                   ),
                   SizedBox(
-                    height: 10,
+                    height: 10 * ratio,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text("DON'T HAVE AN ACCOUNT?",
                           style:
-                              TextStyle(color: lightColor[400], fontSize: 13)),
+                              TextStyle(color: lightColor[400], fontSize: 13 * ratio)),
                       SizedBox(
-                        width: 5,
+                        width: 5 * ratio,
                       ),
                       InkWell(
                           onTap: () {
@@ -259,7 +267,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           child: Text('CREATE',
                               style: TextStyle(
                                   color: Colors.deepOrangeAccent[200],
-                                  fontSize: 14,
+                                  fontSize: 14 * ratio,
                                   fontWeight: FontWeight.bold)))
                     ],
                   )
