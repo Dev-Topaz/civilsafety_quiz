@@ -8,6 +8,7 @@ import 'package:civilsafety_quiz/Model/TaskInfo.dart';
 import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
 import 'package:civilsafety_quiz/View/widget/CustomBanner.dart';
 import 'package:civilsafety_quiz/const.dart';
+import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -142,8 +143,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
 
-  static void downloadCallback(
-      String id, DownloadTaskStatus status, int progress) {
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
     if (debug) {
       print(
           'Background Isolate Callback: task ($id) is in status ($status) and process ($progress)');
@@ -222,7 +222,6 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
 
     return Scaffold(
             appBar: AppBar(
@@ -260,117 +259,270 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
                       double rating = (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] < 1 ? (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] * 5 : 5;
 
-                      return Card(
-                        clipBehavior: Clip.antiAlias,
-                        shadowColor: Colors.grey,
-                        margin: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
-                        child: CustomBanner(
-                          isBanner: quizList[index]['downloaded'] == 'false',
-                          message: 'UPDATED',
-                          child: Column(
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
+                        child: ExpansionTileCard(
+                          baseColor: Colors.cyan[50],
+                          expandedColor: Colors.red[50],
+                          leading: CircleAvatar(
+                            child: Text(quizList[index]['name'][0].toUpperCase())),
+                          title: Row(
                             children: [
-                              ListTile(
-                                // leading: Icon(Icons.arrow_drop_down_circle),
-                                title: Row(
-                                  children: [
-                                    Text(quizList[index]['name']),
-                                    SizedBox(width: 10.0),
-                                    Text(quizList[index]['result'] ?? '',
-                                      style: TextStyle(
-                                        color: quizList[index]['result'] == 'Pass' ? Colors.green : Colors.red,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12.0,
-                                      ),
-                                    ),
-                                  ],
-                                ), 
-                                subtitle: Text(
-                                  'Passing score: ${quizList[index]['passing_score']}',
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(0.6)),
+                              Text(quizList[index]['name']),
+                              SizedBox(width: 10.0),
+                              Text(quizList[index]['result'] ?? '',
+                                style: TextStyle(
+                                  color: quizList[index]['result'] == 'Pass' ? Colors.green : Colors.red,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 12.0,
                                 ),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: [
-                                  Text('Score: ' + (quizList[index]['score'] ?? 0).toString(),
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  RatingBar.builder(
-                                    initialRating: rating,
-                                    minRating: rating,
-                                    maxRating: rating,
-                                    itemSize: 24.0,
-                                    allowHalfRating: true,
-                                    itemBuilder: (context, _) => Icon(
-                                      Icons.star,
-                                      color: Colors.amber,
-                                    ),
-                                    onRatingUpdate: (rating) {
-                                      print(rating);
-                                    },
-                                  ),
-                                ],
-                              ),
-                              // Image.asset('assets/images/quiz_default.jpg'),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text(
-                                  quizList[index]['description'],
-                                  style: TextStyle(
-                                      color: Colors.black.withOpacity(0.6)),
-                                ),
-                              ),
-                              ButtonBar(
-                                alignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  quizList[index]['downloaded'] == 'true'
-                                      ? TextButton(
-                                          onPressed: () {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    QuizScreen(
-                                                        id: quizList[index]['id'],
-                                                        ),
-                                              ),
-                                            );
-                                          },
-                                          child: Text(
-                                            'Start Quiz',
-                                            style: TextStyle(
-                                              color: Color(0xFF6200EE),
-                                            ),
-                                          ),
-                                        )
-                                      : SizedBox(
-                                          width: 0,
-                                        ),
-                                  this.widget.isOnline! &&
-                                          quizList[index]['downloaded'] ==
-                                              'false'
-                                      ? IconButton(
-                                          onPressed: () {
-                                            downloadAssets(
-                                                quizList[index]['id'],
-                                                currentUserToken!);
-                                          },
-                                          icon: Icon(Icons.download))
-                                      : IconButton(
-                                          onPressed: () {
-                                            _delete(quizList[index]['id'], currentUserToken!);
-                                          },
-                                          icon: Icon(Icons.delete)
-                                        ),
-                                ],
                               ),
                             ],
                           ),
+                          subtitle: Text('Passing score: ${quizList[index]['passing_score']}'),
+                          children: <Widget>[
+                            Divider(
+                              thickness: 1.0,
+                              height: 1.0,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Text(
+                                  quizList[index]['description'],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2!
+                                      .copyWith(fontSize: 16),
+                                ),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0,
+                                  vertical: 8.0,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text('Score: ' + (quizList[index]['score'] ?? 0).toString(),
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    RatingBar.builder(
+                                      initialRating: rating,
+                                      ignoreGestures: true,
+                                      unratedColor: Colors.white,
+                                      itemSize: 24.0,
+                                      allowHalfRating: true,
+                                      itemBuilder: (context, _) => Icon(
+                                        Icons.star,
+                                        color: Colors.amber,
+                                      ),
+                                      onRatingUpdate: (rating) {
+                                        print(rating);
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            ButtonBar(
+                              alignment: MainAxisAlignment.spaceAround,
+                              buttonHeight: 52.0,
+                              buttonMinWidth: 90.0,
+                              children: <Widget>[
+                                FlatButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4.0)),
+                                  onPressed: () {
+                                    if (quizList[index]['downloaded'] == 'true') Navigator.push(context,
+                                      MaterialPageRoute(builder: (context) =>
+                                        QuizScreen(id: quizList[index]['id'],),
+                                      ),
+                                    );
+                                  },
+                                  child: Column(
+                                    children: <Widget>[
+                                      Icon(Icons.play_arrow,
+                                        color: quizList[index]['downloaded'] == 'true' ? Colors.blue : Colors.grey,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                      ),
+                                      Text('Start',
+                                        style: TextStyle(
+                                          color: quizList[index]['downloaded'] == 'true' ? Colors.blue : Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                FlatButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4.0)),
+                                  onPressed: () {
+                                    if (this.widget.isOnline! && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
+                                  },
+                                  child: Column(
+                                    children: <Widget>[
+                                      Icon(Icons.download,
+                                        color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.blue : Colors.grey,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                      ),
+                                      Text('Download',
+                                        style: TextStyle(color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.blue : Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                FlatButton(
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4.0)),
+                                  onPressed: () {
+                                    if (!(this.widget.isOnline! && quizList[index]['downloaded'] == 'false')) _delete(quizList[index]['id'], currentUserToken!);
+                                  },
+                                  child: Column(
+                                    children: <Widget>[
+                                      Icon(Icons.delete_sweep_sharp,
+                                        color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.grey : Colors.blue,
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                      ),
+                                      Text('Delete',
+                                        style: TextStyle(
+                                          color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.grey : Colors.blue,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
                       );
+                      // Card(
+                      //   clipBehavior: Clip.antiAlias,
+                      //   shadowColor: Colors.grey,
+                      //   margin: EdgeInsets.fromLTRB(15.0, 15.0, 15.0, 0),
+                      //   child: CustomBanner(
+                      //     isBanner: quizList[index]['downloaded'] == 'false',
+                      //     message: 'UPDATED',
+                      //     child: Column(
+                      //       children: [
+                      //         ListTile(
+                      //           // leading: Icon(Icons.arrow_drop_down_circle),
+                      //           title: Row(
+                      //             children: [
+                      //               Text(quizList[index]['name']),
+                      //               SizedBox(width: 10.0),
+                      //               Text(quizList[index]['result'] ?? '',
+                      //                 style: TextStyle(
+                      //                   color: quizList[index]['result'] == 'Pass' ? Colors.green : Colors.red,
+                      //                   fontWeight: FontWeight.bold,
+                      //                   fontSize: 12.0,
+                      //                 ),
+                      //               ),
+                      //             ],
+                      //           ), 
+                      //           subtitle: Text(
+                      //             'Passing score: ${quizList[index]['passing_score']}',
+                      //             style: TextStyle(
+                      //                 color: Colors.black.withOpacity(0.6)),
+                      //           ),
+                      //         ),
+                      //         Row(
+                      //           mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      //           children: [
+                      //             Text('Score: ' + (quizList[index]['score'] ?? 0).toString(),
+                      //               style: TextStyle(
+                      //                 fontWeight: FontWeight.bold,
+                      //               ),
+                      //             ),
+                      //             RatingBar.builder(
+                      //               initialRating: rating,
+                      //               minRating: rating,
+                      //               maxRating: rating,
+                      //               itemSize: 24.0,
+                      //               allowHalfRating: true,
+                      //               itemBuilder: (context, _) => Icon(
+                      //                 Icons.star,
+                      //                 color: Colors.amber,
+                      //               ),
+                      //               onRatingUpdate: (rating) {
+                      //                 print(rating);
+                      //               },
+                      //             ),
+                      //           ],
+                      //         ),
+                      //         // Image.asset('assets/images/quiz_default.jpg'),
+                      //         Padding(
+                      //           padding: const EdgeInsets.all(16.0),
+                      //           child: Text(
+                      //             quizList[index]['description'],
+                      //             style: TextStyle(
+                      //                 color: Colors.black.withOpacity(0.6)),
+                      //           ),
+                      //         ),
+                      //         ButtonBar(
+                      //           alignment: MainAxisAlignment.spaceBetween,
+                      //           children: [
+                      //             quizList[index]['downloaded'] == 'true'
+                      //                 ? TextButton(
+                      //                     onPressed: () {
+                      //                       Navigator.push(
+                      //                         context,
+                      //                         MaterialPageRoute(
+                      //                           builder: (context) =>
+                      //                               QuizScreen(
+                      //                                   id: quizList[index]['id'],
+                      //                                   ),
+                      //                         ),
+                      //                       );
+                      //                     },
+                      //                     child: Text(
+                      //                       'Start Quiz',
+                      //                       style: TextStyle(
+                      //                         color: Color(0xFF6200EE),
+                      //                       ),
+                      //                     ),
+                      //                   )
+                      //                 : SizedBox(
+                      //                     width: 0,
+                      //                   ),
+                      //             this.widget.isOnline! &&
+                      //                     quizList[index]['downloaded'] ==
+                      //                         'false'
+                      //                 ? IconButton(
+                      //                     onPressed: () {
+                      //                       downloadAssets(
+                      //                           quizList[index]['id'],
+                      //                           currentUserToken!);
+                      //                     },
+                      //                     icon: Icon(Icons.download))
+                      //                 : IconButton(
+                      //                     onPressed: () {
+                      //                       _delete(quizList[index]['id'], currentUserToken!);
+                      //                     },
+                      //                     icon: Icon(Icons.delete)
+                      //                   ),
+                      //           ],
+                      //         ),
+                      //       ],
+                      //     ),
+                      //   ),
+                      // );
                     }),
               ),
             ),
