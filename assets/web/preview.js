@@ -55,6 +55,7 @@ setInterval(function () {
     if ($('.screen_height').length > 0 && !isFitted) {
         hide_some_btns_for_mobile();
         fit_question_list_container_size();
+        set_mobile_style();
     }
 }, 500);
 
@@ -249,6 +250,22 @@ function hide_some_btns_for_mobile() {
         ReviewButtonShow.postMessage('false');
     }
     $('.review_buttons').hide();
+}
+
+function set_mobile_style() {
+
+    $('#preview_container').attr('style', '');
+    $('.quiz_show').attr('style', '');
+    $('.quiz_show .quiz_item_container').attr('style', 'font-size: 20px !important;');
+    $('font').css("cssText", "font-size: 20px !important;");
+    $('span').css("cssText", "font-size: 20px !important;");
+    // $('.quiz_show .quiz_item_container .slide_view_group').attr('style', 'padding-bottom: 20px !important;');
+    $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%;padding: 40px !important;border-radius: 15px;margin: auto;box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);');
+    $('.quiz_show .quiz_item_container .slide_view_answer_element').attr('style', 'padding-bottom: 20px !important;padding-top: 20px !important;');
+    $('.quiz_show .quiz_item_container .slide_view_media_element').attr('style', 'padding-bottom: 20px !important;border-radius: 20px;');
+    
+    $('.quiz_show .slide_view_video_element').hide();
+    if ($('.quiz_show .slide_view_media_element img').attr('src') == '#') $('.quiz_show .slide_view_media_element').hide();
 }
 
 function rearrange_preview_ui() {
@@ -611,6 +628,7 @@ function preview(element) {
                 rearrange_preview_ui();
                 hide_some_btns_for_mobile();
                 fit_question_list_container_size();
+                set_mobile_style();
 
                 if (type_id == 12) {
                     $('#submit_btn').html('Continue');
@@ -689,6 +707,7 @@ function preview(element) {
                 rearrange_preview_ui();
                 hide_some_btns_for_mobile();
                 fit_question_list_container_size();
+                set_mobile_style();
 
                 if (type_id == 12) {
                     $('#submit_btn').html('Continue');
@@ -729,6 +748,7 @@ function preview(element) {
                     rearrange_preview_ui();
                     hide_some_btns_for_mobile();
                     fit_question_list_container_size();
+                    set_mobile_style();
                 } else {
                     result = 'Pass';
                     var current_show_id = $('.quiz_show').attr('id');
@@ -749,6 +769,7 @@ function preview(element) {
                     rearrange_preview_ui();
                     hide_some_btns_for_mobile();
                     fit_question_list_container_size();
+                    set_mobile_style();
                 }
 
 
@@ -1268,6 +1289,7 @@ function review() {
 
     hide_some_btns_for_mobile();
     fit_question_list_container_size();
+    set_mobile_style();
 
     disable_next_and_prev_btn();
 }
@@ -1289,6 +1311,7 @@ function next_review() {
 
         hide_some_btns_for_mobile();
         fit_question_list_container_size();
+        set_mobile_style();
         disable_next_and_prev_btn();
     }
 }
@@ -1310,6 +1333,7 @@ function preview_review() {
 
         hide_some_btns_for_mobile();
         fit_question_list_container_size();
+        set_mobile_style();
         disable_next_and_prev_btn();
     }
 }
@@ -1600,6 +1624,7 @@ function see_result() {
 
         hide_some_btns_for_mobile();
         fit_question_list_container_size();
+        set_mobile_style();
 
         return;
     }
@@ -1622,6 +1647,7 @@ function see_result() {
 
         hide_some_btns_for_mobile();
         fit_question_list_container_size();
+        set_mobile_style();
 
         return;
     }
@@ -1649,6 +1675,7 @@ function see_result() {
             rearrange_preview_ui();
             hide_some_btns_for_mobile();
             fit_question_list_container_size();
+            set_mobile_style();
         } else {
             result = 'Pass';
             var current_show_id = $('.quiz_show').attr('id');
@@ -1669,6 +1696,7 @@ function see_result() {
             rearrange_preview_ui();
             hide_some_btns_for_mobile();
             fit_question_list_container_size();
+            set_mobile_style();
         }
 
 

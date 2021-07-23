@@ -48,7 +48,7 @@ class _QuizScreenState extends State<QuizScreen> {
     super.initState();
 
     SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.landscapeRight, DeviceOrientation.landscapeLeft]);
+        [DeviceOrientation.landscapeRight, DeviceOrientation.portraitUp, DeviceOrientation.landscapeLeft]);
 
     getUserToken();
 
@@ -86,9 +86,7 @@ class _QuizScreenState extends State<QuizScreen> {
   @override
   Widget build(BuildContext context) {
     print('[QuizScreen] quizContent $quizContent');
-
     
-
     bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
 
     return MaterialApp(
@@ -98,18 +96,15 @@ class _QuizScreenState extends State<QuizScreen> {
           child: Stack(
             children: [
               Container(
-                child: Row(
+                child: Column(
                   children: [
                     Container(
-                      width: MediaQuery.of(context).size.width - 50,
-                      height: MediaQuery.of(context).size.height,
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height - 50,
                       child: WebViewPlus(
-                        gestureRecognizers: Set()
-                        ..add(
-                          Factory<DragGestureRecognizer>(
-                            () => VerticalDragGestureRecognizer(),
-                          ),
-                        ),
+                        gestureRecognizers: [
+                              Factory(() => EagerGestureRecognizer()),
+                          ].toSet(),
                         javascriptMode: JavascriptMode.unrestricted,
                         javascriptChannels: <JavascriptChannel>[
                           JavascriptChannel(
@@ -207,7 +202,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       ),
                     ),
                     Container(
-                      width: 50.0,
+                      height: 50.0,
                       // decoration: BoxDecoration(
                       //   border: Border(
                       //     left: BorderSide(
@@ -215,11 +210,11 @@ class _QuizScreenState extends State<QuizScreen> {
                       //   ),
                       //   color: Colors.white,
                       // ),
-                      child: Column(
+                      child: Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           SizedBox(
-                            height: 30.0,
+                            width: 30.0,
                           ),
                           IconButton(
                             onPressed: () {
@@ -232,9 +227,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           isListShow
                               ? IconButton(
                                   onPressed: () {
-                                    _controller.webViewController
-                                        .evaluateJavascript(
-                                            'hide_list_button();');
+                                    _controller.webViewController.evaluateJavascript('hide_list_button();');
                                     setState(() {
                                       isListShow = false;
                                     });
@@ -243,9 +236,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                       color: Colors.blue, size: 30.0))
                               : IconButton(
                                   onPressed: () {
-                                    _controller.webViewController
-                                        .evaluateJavascript(
-                                            'click_list_button();');
+                                    _controller.webViewController.evaluateJavascript('click_list_button();');
                                     setState(() {
                                       isListShow = true;
                                     });
@@ -255,43 +246,33 @@ class _QuizScreenState extends State<QuizScreen> {
                           isReviewButtonShow
                           ? IconButton(
                             onPressed: () {
-                              _controller.webViewController
-                                      .evaluateJavascript(
-                                          'review_button();');
+                              _controller.webViewController.evaluateJavascript('review_button();');
                             }, 
                             icon: Icon(Icons.rate_review_sharp,
                               color:Colors.blue,
                               size: 30.0
                             )
                           )
-                          :SizedBox(height: 0),
+                          :SizedBox(width: 0),
                           Expanded(child: Container()),
                           isReview
                               ? IconButton(
                                   onPressed: () {
-                                    _controller.webViewController
-                                      .evaluateJavascript(
-                                          'review_prev_button();');
+                                    _controller.webViewController.evaluateJavascript('review_prev_button();');
                                   },
                                   icon: Icon(
                                     Icons.navigate_before_rounded,
                                     color: Colors.blue,
                                     size: 30.0,
                                   ))
-                              : SizedBox(
-                                  height: 0,
-                                ),
+                              : SizedBox(width: 0,),
                           isReview || !isReviewButtonShow
                           ? IconButton(
                               onPressed: () {
                                 if (isReview) {
-                                  _controller.webViewController
-                                      .evaluateJavascript(
-                                          'review_next_button();');
+                                  _controller.webViewController.evaluateJavascript('review_next_button();');
                                 } else {
-                                  _controller.webViewController
-                                      .evaluateJavascript(
-                                          'click_preview_button();');
+                                  _controller.webViewController.evaluateJavascript('click_preview_button();');
                                 }
                               },
                               icon: Icon(
@@ -299,9 +280,9 @@ class _QuizScreenState extends State<QuizScreen> {
                                 color: Colors.blue,
                                 size: 30.0,
                               ))
-                          : SizedBox(height: 0),
+                          : SizedBox(width: 0),
                           SizedBox(
-                            height: 30.0,
+                            width: 30.0,
                           ),
                         ],
                       ),
