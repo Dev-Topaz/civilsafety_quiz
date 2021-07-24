@@ -12,6 +12,8 @@ let total_score = 0;
 let correct_quiz_count = 0;
 let hotspots_points = [];
 let isReview = false;
+let isPortrait = 'true';
+let isSetPortrait = false;
 
 var question_timer;
 // $('div.quiz_item_container .slide_view_question_element').attr('contenteditable', 'false');
@@ -52,7 +54,7 @@ function fit_question_list_container_size() {
 }
 
 setInterval(function () {
-    if ($('.screen_height').length > 0 && !isFitted) {
+    if ($('.screen_height').length > 0 && !isFitted && isSetPortrait) {
         hide_some_btns_for_mobile();
         fit_question_list_container_size();
         set_mobile_style();
@@ -260,6 +262,9 @@ function hide_some_btns_for_mobile() {
 
 function set_mobile_style() {
 
+    console.log(isPortrait);
+    if (isPortrait != 'true') return;
+
     $('#preview_container').attr('style', 'position: unset !important; left: 0; top: 0; transform: unset;');
     $('.quiz_show').attr('style', '');
     $('.quiz_show .quiz_item_container').attr('style', 'font-size: 20px !important;');
@@ -269,7 +274,7 @@ function set_mobile_style() {
     $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%;padding: 40px !important;border-radius: 15px;margin: auto;box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);');
     $('.quiz_show .quiz_item_container .slide_view_answer_element').attr('style', 'padding-bottom: 20px !important;padding-top: 20px !important;');
     $('.quiz_show .quiz_item_container .slide_view_media_element').attr('style', 'padding-bottom: 20px !important;border-radius: 20px;');
-    $('#preview_toast').attr('style', 'display:none; width: 80%; margin-left: 0; transform: translateX(-50%);');
+    $('#preview_toast').attr('style', 'display:none; width: 90%; margin-left: 0; transform: translateX(-50%);');
     
     $('.quiz_show .slide_view_video_element').hide();
     if ($('.quiz_show .slide_view_media_element img').attr('src') == '#') $('.quiz_show .slide_view_media_element').hide();
@@ -494,6 +499,11 @@ $('#clear_hotspots').click(function () {
     $('.preview_hotspots').remove();
     hotspots_points = [];
 });
+
+function set_portrait(isPortrait) {
+    isPortrait = isPortrait;
+    isSetPortrait = true;
+}
 
 function review_button() {
     $('#review_btn').trigger('click');
