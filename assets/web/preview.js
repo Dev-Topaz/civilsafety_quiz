@@ -12,7 +12,7 @@ let total_score = 0;
 let correct_quiz_count = 0;
 let hotspots_points = [];
 let isReview = false;
-let isPortrait = 'true';
+var isPortrait = 'false';
 let isSetPortrait = false;
 
 var question_timer;
@@ -29,6 +29,14 @@ let user_info_field_patterns = [];
 
 let zoomScale;
 let isFitted = false;
+
+function set_portrait(portrait) {
+    console.log(portrait);
+
+    isPortrait = portrait;
+    isSetPortrait = true;
+}
+
 
 function fit_question_list_container_size() {
 
@@ -500,10 +508,6 @@ $('#clear_hotspots').click(function () {
     hotspots_points = [];
 });
 
-function set_portrait(isPortrait) {
-    isPortrait = isPortrait;
-    isSetPortrait = true;
-}
 
 function review_button() {
     $('#review_btn').trigger('click');
