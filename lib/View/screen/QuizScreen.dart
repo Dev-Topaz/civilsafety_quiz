@@ -44,6 +44,7 @@ class _QuizScreenState extends State<QuizScreen> {
   bool isReviewButtonShow = false;
   bool isListShow = false;
   String currentUserToken = '';
+  String quizStatus = '[]';
   late WebViewPlusController _controller;
   AudioPlayer audioPlayer = AudioPlayer();
 
@@ -92,7 +93,8 @@ class _QuizScreenState extends State<QuizScreen> {
     print('[QuizScreen] quizContent $quizContent');
     
     bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
-    String isPortrait = MediaQuery.of(context).orientation == Orientation.portrait ? 'true' : 'false';
+    // String isPortrait = MediaQuery.of(context).orientation == Orientation.portrait ? 'true' : 'false';
+    String isPortrait = 'true';
 
     print('[QuizScreen] isPortrait $isPortrait');
 
@@ -122,9 +124,9 @@ class _QuizScreenState extends State<QuizScreen> {
               CustomLayout(
                 layout: isPortrait == 'true' ? 'column' : 'row',
                 children: [
-                  Container(
-                    width: isPortrait == 'true' ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width - 50,
-                    height: isPortrait == 'true' ? MediaQuery.of(context).size.height - 169 : MediaQuery.of(context).size.height,
+                  Expanded(
+                    // width: isPortrait == 'true' ? MediaQuery.of(context).size.width : MediaQuery.of(context).size.width - 50,
+                    // height: isPortrait == 'true' ? MediaQuery.of(context).size.height - 169 : MediaQuery.of(context).size.height,
                     child: WebViewPlus(
                       gestureRecognizers: [
                             Factory(() => EagerGestureRecognizer()),
@@ -216,10 +218,11 @@ class _QuizScreenState extends State<QuizScreen> {
                         this._controller = controller;
                         controller.loadUrl(filePath);
                       },
-                      onPageFinished: (controller) {
+                      onPageFinished: (controller) async {
                         _controller.webViewController.evaluateJavascript(
                             'insert_container_html("$quizContent");');
-                        _controller.webViewController.evaluateJavascript('set_portrait("$isPortrait");');
+                        // _controller.webViewController.evaluateJavascript('set_portrait("$isPortrait");');
+                        
                         setState(() {
                           isLoading = false;
                         });

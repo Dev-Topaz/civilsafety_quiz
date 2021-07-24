@@ -52,6 +52,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
     _prepare();
 
     getUserToken();
+    // clearQuizStatus();
 
     QuizCommand().getQuizzes().then((value) {
       print('[QuizListScreen] initState $value');
@@ -67,6 +68,11 @@ class _QuizListScreenState extends State<QuizListScreen> {
     _unbindBackgroundIsolate();
     super.dispose();
   }
+
+  // void clearQuizStatus() async {
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   prefs.setString('quizStatus', '[]');
+  // }
 
   void getUserToken() async {
 
