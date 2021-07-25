@@ -229,6 +229,8 @@ class _QuizListScreenState extends State<QuizListScreen> {
   @override
   Widget build(BuildContext context) {
 
+    bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
+
     return Scaffold(
             appBar: AppBar(
               actions: [
@@ -268,10 +270,12 @@ class _QuizListScreenState extends State<QuizListScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
                         child: ExpansionTileCard(
-                          baseColor: Colors.cyan[50],
-                          expandedColor: Colors.red[50],
+                          baseColor: Colors.cyan[300],
+                          expandedColor: Colors.cyan[50],
                           leading: CircleAvatar(
-                            child: Text(quizList[index]['name'][0].toUpperCase())),
+                            child: isOnline && quizList[index]['exam_icon'] != ''
+                            ? Image.network(quizList[index]['exam_icon'])
+                            : Text(quizList[index]['name'][0].toUpperCase())),
                           title: Row(
                             children: [
                               Text(quizList[index]['name']),

@@ -14,6 +14,7 @@ class QuizModel extends ChangeNotifier {
   bool isDownload;
   String result;
   int score;
+  String examIcon;
 
   static String get tableName => 'quiz';
 
@@ -28,6 +29,7 @@ class QuizModel extends ChangeNotifier {
     this.updatedAt = '',
     this.result = 'none',
     this.score = 0,
+    this.examIcon = '',
   });
 
   factory QuizModel.fromJson(String str) => QuizModel.fromMap(json.decode(str));
@@ -48,6 +50,7 @@ class QuizModel extends ChangeNotifier {
         updatedAt: jsonData['updated_at'] ?? '1900-01-01T00:00',
         result: jsonData['result'] ?? 'none',
         score: jsonData['score'] ?? 0,
+        examIcon: jsonData['exam_icon'] ?? '',
       );
 
   Map<String, dynamic> toMap() {
@@ -63,6 +66,7 @@ class QuizModel extends ChangeNotifier {
       'file_path': '',
       'quiz_content_path': '',
       'downloaded': 'false',
+      'exam_icon': examIcon,
       // 'updated_at': formattedDate
     };
   }

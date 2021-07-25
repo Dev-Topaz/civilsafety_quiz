@@ -219,8 +219,8 @@ class _QuizScreenState extends State<QuizScreen> {
                         controller.loadUrl(filePath);
                       },
                       onPageFinished: (controller) async {
-                        _controller.webViewController.evaluateJavascript(
-                            'insert_container_html("$quizContent");');
+                        _controller.webViewController.evaluateJavascript('insert_container_html("$quizContent");');
+                        // _controller.webViewController.evaluateJavascript('insert_container_html("$quizContent");');
                         // _controller.webViewController.evaluateJavascript('set_portrait("$isPortrait");');
                         
                         setState(() {
@@ -234,16 +234,20 @@ class _QuizScreenState extends State<QuizScreen> {
                     size: 50.0,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      CustomTextIconButton(
+                      isListShow
+                      ? CustomTextIconButton(
                         onPressed: () {
-                          if (isListShow) {
-                            _controller.webViewController.evaluateJavascript('hide_list_button();');
-                          } else {
-                            _controller.webViewController.evaluateJavascript('click_list_button();');
-                          }
-                        }, 
-                        icon: isListShow ? Icon(Icons.close, color: Colors.blue) : Icon(Icons.list_sharp, color: Colors.blue,), 
-                        label: Text('Quiz List', style: TextStyle(color: Colors.blue, fontSize: 8.0),)
+                          _controller.webViewController.evaluateJavascript('hide_list_button();');
+                        },
+                        icon: Icon(Icons.close, color: Colors.blue),
+                        label: Text('Close List', style: TextStyle(fontSize: 8.0, color: Colors.blue),),
+                      )
+                      : CustomTextIconButton(
+                        onPressed: () {
+                          _controller.webViewController.evaluateJavascript('click_list_button();');
+                        },
+                        icon: Icon(Icons.list_sharp, color: Colors.blue),
+                        label: Text('Quiz List', style: TextStyle(fontSize: 8.0, color: Colors.blue)),
                       ),
                       CustomTextIconButton(
                         onPressed: () {

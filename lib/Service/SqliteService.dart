@@ -22,6 +22,7 @@ class SqliteService {
         "file_path TEXT,"
         "downloaded TEXT,"
         "updated_at TEXT,"
+        "exam_icon TEXT,"
         "result TEXT,"
         "score INTEGER,"
         "quiz_content_path TEXT"
