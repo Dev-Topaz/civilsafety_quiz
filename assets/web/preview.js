@@ -48,6 +48,8 @@ window.addEventListener("orientationchange", function() {
 
 function fit_question_list_container_size() {
 
+    console.log('fit question list container size')
+
     // var w = window.innerWidth;
     // var h = window.innerHeight;
     var h = screen_width > screen_height ? screen_height : screen_width;
@@ -61,7 +63,7 @@ function fit_question_list_container_size() {
     const elementHeight = parseInt($('.screen_height').html());
     const elementWidth = parseInt($('.screen_width').html());
 
-    let height_zoomScale = (h - 50 - 56)/ elementHeight;
+    let height_zoomScale = (h - 50)/ elementHeight;
     // let width_zoomScale = (w - 50) / elementWidth;
     let width_zoomScale = (w) / elementWidth;
 
@@ -71,9 +73,6 @@ function fit_question_list_container_size() {
     $('#preview_container').attr('style', '');
     $('#preview_container').css('transform', 'translate(-50%, -50%) matrix(' + zoomScale + ', 0, 0, ' + zoomScale + ', 0, 0)');
 
-    console.log($('#preview_container').offset().top);
-
-    // if (screen.availHeight < screen.availWidth) window.scrollTo({top: $('#preview_container').offset().top});
 
     isFitted = true;
 }

@@ -105,12 +105,12 @@ class _QuizScreenState extends State<QuizScreen> {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: isPortrait == 'true'
+        appBar: MediaQuery.of(context).orientation == Orientation.portrait
         ? AppBar(
           centerTitle: true,
           leading: IconButton(
             onPressed: () {
-              Navigator.push(context,MaterialPageRoute(builder: (context) =>HomeScreen()));
+              Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
             }, 
           icon: Icon(Icons.arrow_back,
             color: Colors.blue,
@@ -238,6 +238,15 @@ class _QuizScreenState extends State<QuizScreen> {
                     size: 50.0,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      MediaQuery.of(context).orientation != Orientation.portrait
+                      ? CustomTextIconButton(
+                        onPressed: () {
+                          Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
+                        },
+                        icon: Icon(Icons.arrow_back, color: Colors.blue),
+                        label: Text('Back', style: TextStyle(fontSize: 8.0, color: Colors.blue),),
+                      )
+                      : Container(),
                       isListShow
                       ? CustomTextIconButton(
                         onPressed: () {
