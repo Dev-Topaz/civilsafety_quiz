@@ -6,6 +6,8 @@ let attempts = 0;
 let question_feedback;
 let question_user_answer = [];
 let question_correct_answer = [];
+let screen_width = 0;
+let screen_height = 0;
 
 let result = '';
 let total_score = 0;
@@ -35,9 +37,11 @@ window.addEventListener("orientationchange", function() {
     isPortrait = window.orientation == '0';
 
     if(isPortrait) {
+        console.log('portrait');
         hide_some_btns_for_mobile();
         set_mobile_portrait_style();
     } else {
+        console.log('landscope');
         set_mobile_landscope_style();
         fit_question_list_container_size();
     }
@@ -45,8 +49,10 @@ window.addEventListener("orientationchange", function() {
 
 function fit_question_list_container_size() {
 
-    var w = window.innerWidth;
-    var h = window.innerHeight;
+    // var w = window.innerWidth;
+    // var h = window.innerHeight;
+    var h = screen_width > screen_height ? screen_height : screen_width;
+    var w = screen_width < screen_height ? screen_height : screen_width;
 
     console.log(w);
     console.log(h);
@@ -54,13 +60,14 @@ function fit_question_list_container_size() {
     const elementHeight = parseInt($('.screen_height').html());
     const elementWidth = parseInt($('.screen_width').html());
 
-    let height_zoomScale = h / elementHeight;
+    let height_zoomScale = (h - 50 - 56)/ elementHeight;
     // let width_zoomScale = (w - 50) / elementWidth;
     let width_zoomScale = (w) / elementWidth;
 
     zoomScale = Math.min(height_zoomScale, width_zoomScale);
 
     $('.quiz_list_container').css('zoom', 1);
+    $('#preview_container').attr('style', '');
     $('#preview_container').css('transform', 'translate(-50%, -50%) matrix(' + zoomScale + ', 0, 0, ' + zoomScale + ', 0, 0)');
 
     isFitted = true;
@@ -298,6 +305,7 @@ function get_mobile_style() {
 }
 
 function set_mobile_landscope_style() {
+
     $('#preview_container').attr('style', mobile_landscope_style.preview_container_style);
     $('.quiz_show').attr('style', mobile_landscope_style.quiz_show_style);
     $('.quiz_show').html(mobile_landscope_style.quiz_show_html);
@@ -563,6 +571,16 @@ function review_next_button() {
     $('.review_buttons > div button:nth-child(2)').trigger('click');
 }
 
+function set_screen_size(w, h) {
+    isPortrait = screen.availHeight > screen.availWidth;
+    console.log(isPortrait);
+
+    screen_width = w;
+    screen_height = h;
+    console.log(screen_width);
+    console.log(screen_height);
+}
+
 function click_preview_button() {
     $('#submit_btn').trigger('click');
 }
@@ -759,7 +777,8 @@ function preview(element) {
 
                 show_result($('.quiz_show .correct_answer').html(), current_show_type_id, current_show_id);
 
-
+                set_mobile_landscope_style();
+                fit_question_list_container_size();
 
                 $('#' + current_show_id).removeClass('quiz_show');
                 $('#' + current_show_id).addClass('quiz_hide');
