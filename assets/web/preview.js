@@ -293,6 +293,7 @@ function hide_some_btns_for_mobile() {
     $('div.quiz_item_container input').attr('autocomplete', 'off');
     $('#question_list_modal .question_content div').attr('contenteditable', 'false');
     $('.other_slide_view_element_delete_icon').remove();
+    $('.slide_view_group').removeClass('ui-draggable-handle');
 }
 
 function get_mobile_style() {
