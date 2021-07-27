@@ -78,7 +78,7 @@ function fit_question_list_container_size() {
 }
 
 setInterval(function () {
-    if ($('.screen_height').length > 0 && !isFitted) {
+    if ($('.screen_height').length > 0 && !isFitted)  {
         // $('.quiz_list_container').removeClass('quiz_show');
         // $('.quiz_list_container').addClass('quiz_hide');
         // if ($('.quiz_list_container').eq(quizzes.length) != undefined) {
@@ -585,10 +585,10 @@ function set_screen_size(w, h) {
 
     if (isSetScreenSize) return;
 
-    isPortrait = screen.availHeight > screen.availWidth;
-    console.log(isPortrait);
+    // isPortrait = screen.availHeight > screen.availWidth;
+    // console.log(isPortrait);
 
-    if (isPortrait) return;
+    // if (isPortrait) return;
 
     screen_width = w;
     screen_height = h;
