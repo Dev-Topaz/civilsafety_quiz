@@ -1,6 +1,7 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/View/widget/CurvePointer.dart';
+import 'package:civilsafety_quiz/global.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -65,6 +66,8 @@ class _LoginScreenState extends State<LoginScreen> {
       await QuizCommand().downloadQuizList(loginResponse['userToken']);
       await QuizCommand().removeQuizList(loginResponse['userToken']);
       await QuizCommand().sendAllSavedResult(loginResponse['userToken']);
+
+      global.isFirst = false;
 
       this.widget.callback(true, true);
     } else {

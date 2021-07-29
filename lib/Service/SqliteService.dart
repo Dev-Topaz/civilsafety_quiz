@@ -42,19 +42,20 @@ class SqliteService {
 
     await database.execute("CREATE TABLE Result ("
         "id INTEGER PRIMARY KEY,"
+        "quizId TEXT,"
         "content TEXT"
         ")");
   }
 
-  Future<int> createResult(String content) async {
+  Future<int> createResult(String content, String quizId) async {
     String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'civilsafety_quiz.db');
 
     var database = await openDatabase(dbPath);
 
     var result =
-        await database.rawInsert("INSERT INTO Result (content)"
-            " VALUES ('$content')");
+        await database.rawInsert("INSERT INTO Result (quizId, content)"
+            " VALUES ('$quizId', '$content')");
     return result;
   }
 
@@ -68,6 +69,7 @@ class SqliteService {
     await database.execute("DROP TABLE IF EXISTS Result");
     await database.execute("CREATE TABLE Result ("
         "id INTEGER PRIMARY KEY,"
+        "quizId TEXT,"
         "content TEXT"
         ")");
 }
@@ -78,12 +80,15 @@ class SqliteService {
 
     var database = await openDatabase(dbPath);
 
-    var indexList = await database.rawQuery('SELECT content FROM Result');
+    var indexList = await database.rawQuery('SELECT quizId, content FROM Result');
 
     List result = [];
 
     for (var item in indexList.toList()) {
-      result.add(item['content']);
+      result.add({
+        'content': item['content'],
+        'quizId': item['quizId'],
+        });
     }
 
     return result;

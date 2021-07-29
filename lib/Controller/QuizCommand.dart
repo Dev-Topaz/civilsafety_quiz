@@ -9,8 +9,8 @@ import 'package:path_provider/path_provider.dart';
 
 class QuizCommand extends BaseCommand {
 
-  Future saveResult(String content) async {
-    await sqliteService.createResult(content);
+  Future saveResult(String content, String quizId) async {
+    await sqliteService.createResult(content, quizId);
   }
 
   Future sendEmail(String token, String json) async {
@@ -26,7 +26,8 @@ class QuizCommand extends BaseCommand {
     List resultList = await sqliteService.getAllResult();
 
     for (var result in resultList) {
-      await this.sendEmail(token, result);
+      await this.sendEmail(token, result['content']);
+      await this.saveResultAtServer(token, result['content'], result['quizId']);
     }
 
     await sqliteService.dropResult();

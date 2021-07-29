@@ -182,7 +182,7 @@ class _QuizScreenState extends State<QuizScreen> {
                                 await QuizCommand().saveResultAtServer(currentUserToken, s.message, this.widget.id.toString());
                                 _controller.webViewController.evaluateJavascript('hide_progress_bar();');
                               } else {
-                                await QuizCommand().saveResult(s.message);
+                                await QuizCommand().saveResult(s.message, this.widget.id.toString());
                               }
                             }),
                         JavascriptChannel(

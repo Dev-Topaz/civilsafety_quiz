@@ -3,6 +3,7 @@ import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/View/screen/LoginScreen.dart';
 import 'package:civilsafety_quiz/View/screen/QuizListScreen.dart';
 import 'package:civilsafety_quiz/View/screen/RegisterScreen.dart';
+import 'package:civilsafety_quiz/global.dart' as global;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -20,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedin = false;
   bool hasAccount = true;
   bool isLoading = true;
+  final bool isFirst = global.isFirst; 
 
   @override
   void initState() {
@@ -51,7 +53,11 @@ class _HomeScreenState extends State<HomeScreen> {
     String userToken = prefs.getString('userToken') ?? '';
 
     setState(() {
-      isLoggedin = userToken != '';
+      if (isFirst) {
+        isLoggedin = false;
+      } else {
+        isLoggedin = userToken != '';
+      }
     });
   }
 
