@@ -4,7 +4,8 @@ import 'package:civilsafety_quiz/const.dart';
 import 'package:http/http.dart' as http;
 
 class UserService {
-  Future<String> login(String email, String password) async {
+  Future<Map> login(String email, String password) async {
+    Map result;
     var request =
         http.MultipartRequest('POST', Uri.parse(API_ROOT_URL + 'login'));
 
@@ -20,13 +21,20 @@ class UserService {
 
     if (userData['success']) {
       userToken = userData['data']['token'];
+      result = {
+        'success': 'success',
+        'userToken': userToken,
+      };
     } else {
-      userToken = '';
+      result = {
+        'success': 'error',
+        'message': userData['message'],
+      };
     }
 
-    print('[UserService] login: userToken $userToken');
+    print('[UserService] login: result $result');
 
-    return userToken;
+    return result;
   }
 
   Future<String> register(String username, String email, String password,

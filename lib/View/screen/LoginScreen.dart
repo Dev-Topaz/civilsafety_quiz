@@ -52,24 +52,25 @@ class _LoginScreenState extends State<LoginScreen> {
       isLogging = true;
     });
 
-    String userToken = await UserCommand().login(email, password);
+    Map loginResponse = await UserCommand().login(email, password);
 
-    print('[LoginScreen] $userToken');
+    print('[LoginScreen] $loginResponse');
 
 
-    if (userToken != '') {
+    if (loginResponse['success'] == 'success') {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      await prefs.setString('userToken', userToken);
+      await prefs.setString('userToken', loginResponse['userToken']);
 
-      await QuizCommand().downloadQuizList(userToken);
-      await QuizCommand().removeQuizList(userToken);
-      await QuizCommand().sendAllSavedResult(userToken);
+      await QuizCommand().downloadQuizList(loginResponse['userToken']);
+      await QuizCommand().removeQuizList(loginResponse['userToken']);
+      await QuizCommand().sendAllSavedResult(loginResponse['userToken']);
 
       this.widget.callback(true, true);
     } else {
       Fluttertoast.showToast(
-          msg: "Please enter email and password correctly.",
+          msg: loginResponse['message'],
+          // msg: "Please enter email and password correctly.",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.BOTTOM,
           timeInSecForIosWeb: 1,

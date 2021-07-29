@@ -47,13 +47,14 @@ class QuizService {
 
   Future<List> fetchAllQuizIndex(String token) async {
     final response = await http.get(
-      Uri.parse(API_ROOT_URL + 'get_all_index'),
+      Uri.parse(API_ROOT_URL + 'user'),
       headers: {
         HttpHeaders.authorizationHeader: 'Bearer ' + token,
       },
     );
     final responseJson = jsonDecode(response.body);
-    List quizIndex = responseJson['data']['data'];
+    List quizIndex = responseJson['approved_exams'].split('@');
+    quizIndex.removeLast();
 
     print('[QuizService] fetchAllQuizIndex $quizIndex');
     return quizIndex;

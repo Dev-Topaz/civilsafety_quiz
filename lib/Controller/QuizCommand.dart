@@ -35,6 +35,10 @@ class QuizCommand extends BaseCommand {
 
     print('[QuizCommand] downloadQuizList: $localQuizIndex');
     for (var id in remoteQuizIndex) {
+      id = int.parse(id);
+      print('[QuizCommand] id $id');
+      print('[QuizCommand] ${localQuizIndex.indexOf(id)}');
+      
       if (id != 1) {
         QuizModel quizModel = await quizService.fetchQuiz(token, id);
         if (localQuizIndex.indexOf(id) == -1) {
@@ -66,6 +70,7 @@ class QuizCommand extends BaseCommand {
     List localQuizIndex = await sqliteService.getQuizIndex();
 
     for (var id in localQuizIndex) {
+      id = id.toString();
       if (remoteQuizIndex.indexOf(id) == -1) {
         await sqliteService.deleteQuiz(id);
       }

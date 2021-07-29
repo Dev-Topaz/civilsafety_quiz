@@ -161,8 +161,10 @@ class SqliteService {
     var result = -1;
     try {
       result = await database.insert("Quiz", quiz.toMap());
-    } catch (e) {}
-    print('[SqliteService] createQuiz completed');
+      print('[SqliteService] createQuiz completed');
+    } catch (e) {
+      print('[SqliteService] error $e');
+    }
     return result;
   }
 
