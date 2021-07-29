@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:civilsafety_quiz/const.dart';
 import 'package:http/http.dart' as http;
@@ -35,6 +36,20 @@ class UserService {
     print('[UserService] login: result $result');
 
     return result;
+  }
+
+  Future<String> gerUserId(String token) async {
+    final response = await http.get(
+      Uri.parse(API_ROOT_URL + 'user'),
+      headers: {
+        HttpHeaders.authorizationHeader: 'Bearer ' + token,
+      },
+    );
+    final responseJson = jsonDecode(response.body);
+    String userId = responseJson['id'].toString();
+
+    print('[UserService] getUserId $userId');
+    return userId;
   }
 
   Future<String> register(String username, String email, String password,

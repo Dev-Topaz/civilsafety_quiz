@@ -176,8 +176,10 @@ class _QuizScreenState extends State<QuizScreen> {
 
                               print('[QuizScreen] isOnline $isOnline');
                               if (isOnline) {
+                                print('[QuizScreen] currentUserToken $currentUserToken');
                                 _controller.webViewController.evaluateJavascript('show_progress_bar();');
                                 await QuizCommand().sendEmail(currentUserToken, s.message);
+                                await QuizCommand().saveResultAtServer(currentUserToken, s.message, this.widget.id.toString());
                                 _controller.webViewController.evaluateJavascript('hide_progress_bar();');
                               } else {
                                 await QuizCommand().saveResult(s.message);

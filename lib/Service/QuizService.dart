@@ -6,8 +6,7 @@ import 'package:civilsafety_quiz/const.dart';
 import 'package:http/http.dart' as http;
 
 class QuizService {
-  Future<bool> sendEmail(
-      String token, String json) async {
+  Future<bool> sendEmail(String token, String json) async {
     var request = http.MultipartRequest(
         'POST', Uri.parse(API_ROOT_URL + 'send_email'));
 
@@ -27,6 +26,31 @@ class QuizService {
     }).catchError((e) {
       return false;
     });
+
+    return result;
+  }
+
+  Future<bool> saveResult(String token, String json, String userId, String quizId) async {
+    var request = http.MultipartRequest('POST', Uri.parse(API_ROOT_URL + 'save_result'));
+
+    request.fields['json'] = json;
+    request.fields['user_id'] = userId;
+    request.fields['exam_id'] = quizId;
+    request.headers['Authorization'] = 'Bearer ' + token;
+
+    bool result = true;
+
+    var response = await request.send();
+    final String respStr = await response.stream.bytesToString();
+    print('[QuizService] saveResult respStr $respStr');
+
+    var resultData = jsonDecode(respStr);
+
+    if (resultData['success']) {
+      result = true;
+    } else {
+      result = false;
+    }
 
     return result;
   }

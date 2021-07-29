@@ -17,6 +17,11 @@ class QuizCommand extends BaseCommand {
     await quizService.sendEmail(token, json);
   }
 
+  Future saveResultAtServer(String token, String json, String quizId) async {
+    String userId = await userService.gerUserId(token);
+    await quizService.saveResult(token, json, userId, quizId);
+  }
+
   Future sendAllSavedResult(token) async {
     List resultList = await sqliteService.getAllResult();
 
