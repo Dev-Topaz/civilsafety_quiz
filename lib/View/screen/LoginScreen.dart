@@ -239,41 +239,41 @@ class _LoginScreenState extends State<LoginScreen> {
                 ],
               ),
             ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20 * ratio),
-              height: height * 0.1,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Divider(
-                    color: lightColor,
-                  ),
-                  SizedBox(
-                    height: 10 * ratio,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text("DON'T HAVE AN ACCOUNT?",
-                          style:
-                              TextStyle(color: lightColor[400], fontSize: 13 * ratio)),
-                      SizedBox(
-                        width: 5 * ratio,
-                      ),
-                      InkWell(
-                          onTap: () {
-                            this.widget.callback(false, false);
-                          },
-                          child: Text('CREATE',
-                              style: TextStyle(
-                                  color: Colors.deepOrangeAccent[200],
-                                  fontSize: 14 * ratio,
-                                  fontWeight: FontWeight.bold)))
-                    ],
-                  )
-                ],
-              ),
-            )
+            // Container(
+            //   margin: EdgeInsets.symmetric(horizontal: 20 * ratio),
+            //   height: height * 0.1,
+            //   child: Column(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: <Widget>[
+            //       Divider(
+            //         color: lightColor,
+            //       ),
+            //       SizedBox(
+            //         height: 10 * ratio,
+            //       ),
+            //       Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: <Widget>[
+            //           Text("DON'T HAVE AN ACCOUNT?",
+            //               style:
+            //                   TextStyle(color: lightColor[400], fontSize: 13 * ratio)),
+            //           SizedBox(
+            //             width: 5 * ratio,
+            //           ),
+            //           InkWell(
+            //               onTap: () {
+            //                 this.widget.callback(false, false);
+            //               },
+            //               child: Text('CREATE',
+            //                   style: TextStyle(
+            //                       color: Colors.deepOrangeAccent[200],
+            //                       fontSize: 14 * ratio,
+            //                       fontWeight: FontWeight.bold)))
+            //         ],
+            //       )
+            //     ],
+            //   ),
+            // )
           ],
         ),
       ),
