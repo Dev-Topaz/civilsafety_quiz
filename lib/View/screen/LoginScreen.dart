@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (loginResponse['success'] == 'success') {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
-      String prevUserToken = prefs.getString('userToken')!;
+      String prevUserToken = prefs.getString('userToken') ?? '';
 
       if (prevUserToken != loginResponse['userToken']) {
         await prefs.setBool('isChangeUser', true);

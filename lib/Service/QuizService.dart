@@ -15,17 +15,17 @@ class QuizService {
 
     bool result = true;
 
-    await request.send().then((response) async {
-      response.stream.transform(utf8.decoder).listen((value) {
-        if (response.statusCode == 200) {
-          result = true;
-        } else {
-          result = false;
-        }
-      });
-    }).catchError((e) {
-      return false;
-    });
+    var response = await request.send();
+    final String respStr = await response.stream.bytesToString();
+    print('[QuizService] sendEmail respStr $respStr');
+
+    var resultData = jsonDecode(respStr);
+
+    if (resultData['success']) {
+      result = true;
+    } else {
+      result = false;
+    }
 
     return result;
   }
