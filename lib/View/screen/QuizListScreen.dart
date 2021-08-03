@@ -10,6 +10,7 @@ import 'package:civilsafety_quiz/View/widget/CustomBanner.dart';
 import 'package:civilsafety_quiz/const.dart';
 import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -194,18 +195,14 @@ class _QuizListScreenState extends State<QuizListScreen> {
             title: Text('Please Confirm'),
             content: Text('Are you sure to remove assets?'),
             actions: [
-              // The "Yes" button
               TextButton(
                   onPressed: () {
                     deleteAssets(id, token);
-
-                    // Close the dialog
                     Navigator.of(context).pop();
                   },
                   child: Text('Yes')),
               TextButton(
                   onPressed: () {
-                    // Close the dialog
                     Navigator.of(context).pop();
                   },
                   child: Text('No'))
@@ -232,203 +229,244 @@ class _QuizListScreenState extends State<QuizListScreen> {
     bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
 
     return Scaffold(
-            appBar: AppBar(
-              actions: [
-                IconButton(
-                    onPressed: () async {
-                      widget.callback(true, false);
-
-                      SharedPreferences prefs = await SharedPreferences.getInstance();
-                      await prefs.setString('userToken', '');
-                    },
-                    icon: Icon(
-                      Icons.logout,
-                      color: Colors.black,
-                    ))
-              ],
-              centerTitle: true,
-              backgroundColor: Colors.white,
-              title: Text(
-                'Quiz List',
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            const DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.blue,
+              ),
+              child: Text('Civil Safety Quiz App',
                 style: TextStyle(
-                  color: Colors.black,
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            body: Center(
-              child: isLoading
-              ? CircularProgressIndicator(
-                  color: Colors.grey,
-                )
-              : Container(
-                child: ListView.builder(
-                    itemCount: quizList.length,
-                    itemBuilder: (BuildContext context, int index) {
+            ListTile(
+              title: Row(children: [
+                Icon(Icons.close_rounded, size: 24.0, color: Colors.black,),
+                SizedBox(width: 20,),
+                Text('Close', style: TextStyle(color: Colors.black, fontSize: 20.0,),),
+              ]),
+              onTap: () {
+                SystemNavigator.pop();
+                exit(0);
+              },
+            ),
+            ListTile(
+              title: Row(children: [
+                Icon(Icons.logout, size: 24.0, color: Colors.black,),
+                SizedBox(width: 20,),
+                Text('Logout', style: TextStyle(color: Colors.black, fontSize: 20.0,),),
+              ]),
+              onTap: () async {
+                widget.callback(true, false);
 
-                      double rating = (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] < 1 ? (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] * 5 : 5;
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                await prefs.setString('userToken', '');
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        centerTitle: true,
+        backgroundColor: Colors.white,
+        title: Text(
+          'Quiz List',
+          style: TextStyle(
+            color: Colors.black,
+          ),
+        ),
+        leading: Builder(
+          builder: (BuildContext context) {
+            return IconButton(
+              icon: const Icon(Icons.menu, color: Colors.black),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+              tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+            );
+          },
+        ),
+      ),
+      body: Center(
+        child: isLoading
+        ? CircularProgressIndicator(
+            color: Colors.grey,
+          )
+        : Container(
+          child: ListView.builder(
+              itemCount: quizList.length,
+              itemBuilder: (BuildContext context, int index) {
 
-                      return Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
-                        child: ExpansionTileCard(
-                          baseColor: Colors.cyan[300],
-                          expandedColor: Colors.cyan[50],
-                          leading: CircleAvatar(
-                            child: isOnline && quizList[index]['exam_icon'] != ''
-                            ? Image.network(quizList[index]['exam_icon'])
-                            : Text(quizList[index]['name'][0].toUpperCase())),
-                          title: Row(
+                double rating = (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] < 1 ? (quizList[index]['score'] ?? 0) / quizList[index]['passing_score'] * 5 : 5;
+
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 5),
+                  child: ExpansionTileCard(
+                    baseColor: Colors.cyan[300],
+                    expandedColor: Colors.cyan[50],
+                    leading: CircleAvatar(
+                      child: isOnline && quizList[index]['exam_icon'] != ''
+                      ? Image.network(quizList[index]['exam_icon'])
+                      : Text(quizList[index]['name'][0].toUpperCase())),
+                    title: Row(
+                      children: [
+                        Text(quizList[index]['name']),
+                        SizedBox(width: 10.0),
+                        Text(quizList[index]['result'] ?? '',
+                          style: TextStyle(
+                            color: quizList[index]['result'] == 'Pass' ? Colors.green : Colors.red,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                    subtitle: Text('Passing score: ${quizList[index]['passing_score']}'),
+                    children: <Widget>[
+                      Divider(
+                        thickness: 1.0,
+                        height: 1.0,
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          child: Text(
+                            quizList[index]['description'],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .copyWith(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 8.0,
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
-                              Text(quizList[index]['name']),
-                              SizedBox(width: 10.0),
-                              Text(quizList[index]['result'] ?? '',
+                              Text('Score: ' + (quizList[index]['score'] ?? 0).toString(),
                                 style: TextStyle(
-                                  color: quizList[index]['result'] == 'Pass' ? Colors.green : Colors.red,
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 12.0,
                                 ),
+                              ),
+                              RatingBar.builder(
+                                initialRating: rating,
+                                ignoreGestures: true,
+                                unratedColor: Colors.white,
+                                itemSize: 24.0,
+                                allowHalfRating: true,
+                                itemBuilder: (context, _) => Icon(
+                                  Icons.star,
+                                  color: Colors.amber,
+                                ),
+                                onRatingUpdate: (rating) {
+                                  print(rating);
+                                },
                               ),
                             ],
                           ),
-                          subtitle: Text('Passing score: ${quizList[index]['passing_score']}'),
-                          children: <Widget>[
-                            Divider(
-                              thickness: 1.0,
-                              height: 1.0,
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 8.0,
+                        ),
+                      ),
+                      ButtonBar(
+                        alignment: MainAxisAlignment.spaceAround,
+                        buttonHeight: 52.0,
+                        buttonMinWidth: 90.0,
+                        children: <Widget>[
+                          FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0)),
+                            onPressed: () {
+                              if (quizList[index]['downloaded'] == 'true') Navigator.push(context,
+                                MaterialPageRoute(builder: (context) =>
+                                  QuizScreen(
+                                    id: quizList[index]['id'],
+                                    name: quizList[index]['name'],
+                                  ),
                                 ),
-                                child: Text(
-                                  quizList[index]['description'],
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2!
-                                      .copyWith(fontSize: 16),
-                                ),
-                              ),
-                            ),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16.0,
-                                  vertical: 8.0,
-                                ),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Text('Score: ' + (quizList[index]['score'] ?? 0).toString(),
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    RatingBar.builder(
-                                      initialRating: rating,
-                                      ignoreGestures: true,
-                                      unratedColor: Colors.white,
-                                      itemSize: 24.0,
-                                      allowHalfRating: true,
-                                      itemBuilder: (context, _) => Icon(
-                                        Icons.star,
-                                        color: Colors.amber,
-                                      ),
-                                      onRatingUpdate: (rating) {
-                                        print(rating);
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            ButtonBar(
-                              alignment: MainAxisAlignment.spaceAround,
-                              buttonHeight: 52.0,
-                              buttonMinWidth: 90.0,
+                              );
+                            },
+                            child: Column(
                               children: <Widget>[
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  onPressed: () {
-                                    if (quizList[index]['downloaded'] == 'true') Navigator.push(context,
-                                      MaterialPageRoute(builder: (context) =>
-                                        QuizScreen(
-                                          id: quizList[index]['id'],
-                                          name: quizList[index]['name'],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                  child: Column(
-                                    children: <Widget>[
-                                      Icon(Icons.play_arrow,
-                                        color: quizList[index]['downloaded'] == 'true' ? Colors.blue : Colors.grey,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                      ),
-                                      Text('Start',
-                                        style: TextStyle(
-                                          color: quizList[index]['downloaded'] == 'true' ? Colors.blue : Colors.grey,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                Icon(Icons.play_arrow,
+                                  color: quizList[index]['downloaded'] == 'true' ? Colors.blue : Colors.grey,
                                 ),
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  onPressed: () {
-                                    if (this.widget.isOnline! && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
-                                  },
-                                  child: Column(
-                                    children: <Widget>[
-                                      Icon(Icons.download,
-                                        color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.blue : Colors.grey,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                      ),
-                                      Text('Download',
-                                        style: TextStyle(color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.blue : Colors.grey),
-                                      ),
-                                    ],
-                                  ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 2.0),
                                 ),
-                                FlatButton(
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(4.0)),
-                                  onPressed: () {
-                                    if (!(this.widget.isOnline! && quizList[index]['downloaded'] == 'false')) _delete(quizList[index]['id'], currentUserToken!);
-                                  },
-                                  child: Column(
-                                    children: <Widget>[
-                                      Icon(Icons.delete_sweep_sharp,
-                                        color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.grey : Colors.blue,
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(vertical: 2.0),
-                                      ),
-                                      Text('Delete',
-                                        style: TextStyle(
-                                          color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.grey : Colors.blue,
-                                        ),
-                                      ),
-                                    ],
+                                Text('Start',
+                                  style: TextStyle(
+                                    color: quizList[index]['downloaded'] == 'true' ? Colors.blue : Colors.grey,
                                   ),
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                      );
-                    }),
-              ),
-            ),
-          );
+                          ),
+                          FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0)),
+                            onPressed: () {
+                              if (this.widget.isOnline! && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.download,
+                                  color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.blue : Colors.grey,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                Text('Download',
+                                  style: TextStyle(color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.blue : Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ),
+                          FlatButton(
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(4.0)),
+                            onPressed: () {
+                              if (!(this.widget.isOnline! && quizList[index]['downloaded'] == 'false')) _delete(quizList[index]['id'], currentUserToken!);
+                            },
+                            child: Column(
+                              children: <Widget>[
+                                Icon(Icons.delete_sweep_sharp,
+                                  color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.grey : Colors.blue,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 2.0),
+                                ),
+                                Text('Delete',
+                                  style: TextStyle(
+                                    color: this.widget.isOnline! && quizList[index]['downloaded'] == 'false' ? Colors.grey : Colors.blue,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }),
+        ),
+      ),
+    );
   }
 
   Future<bool> _checkPermission() async {

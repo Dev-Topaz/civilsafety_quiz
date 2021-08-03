@@ -78,7 +78,7 @@ class QuizCommand extends BaseCommand {
     for (var id in localQuizIndex) {
       id = id.toString();
       if (remoteQuizIndex.indexOf(id) == -1) {
-        await sqliteService.deleteQuiz(id);
+        await sqliteService.deleteQuiz(int.parse(id));
       }
     }
   }
