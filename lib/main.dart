@@ -44,6 +44,7 @@ class MyApp extends StatelessWidget {
           title: 'Civil Safety Quiz',
           theme: ThemeData(
             primarySwatch: Colors.blue,
+            primaryColor: Color(0xFFC80063),
           ),
           initialRoute: '/',
           routes: {
