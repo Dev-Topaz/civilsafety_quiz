@@ -25,6 +25,7 @@ class UserService {
       result = {
         'success': 'success',
         'userToken': userToken,
+        'userId': userData['data']['userId'],
       };
     } else {
       result = {
