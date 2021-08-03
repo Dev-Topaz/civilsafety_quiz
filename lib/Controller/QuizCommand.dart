@@ -6,6 +6,7 @@ import 'package:civilsafety_quiz/const.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizCommand extends BaseCommand {
 
@@ -34,6 +35,9 @@ class QuizCommand extends BaseCommand {
   }
 
   Future downloadQuizList(String token) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool isChangeUser = prefs.getBool('isChangeUser')!;
+
     await sqliteService.createDatabase();
 
     List remoteQuizIndex = await quizService.fetchAllQuizIndex(token);
@@ -63,7 +67,7 @@ class QuizCommand extends BaseCommand {
 
           print('[QuizCommand] downloadQuizList isUpdated $isUpdated');
           print('[QuizCommand] downloadQuizList: update quiz $id');
-          if (!isUpdated) await sqliteService.updateQuiz(quizModel);
+          if (!isUpdated || isChangeUser) await sqliteService.updateQuiz(quizModel);
         }
       }
     }

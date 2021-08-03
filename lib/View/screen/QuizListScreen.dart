@@ -318,7 +318,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                       children: [
                         Text(quizList[index]['name']),
                         SizedBox(width: 10.0),
-                        Text(quizList[index]['result'] ?? '',
+                        Text(quizList[index]['result'] == 'none' ? '' : quizList[index]['result'],
                           style: TextStyle(
                             color: quizList[index]['result'] == 'Pass' ? Colors.green : Colors.red,
                             fontWeight: FontWeight.bold,

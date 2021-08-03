@@ -61,6 +61,14 @@ class _LoginScreenState extends State<LoginScreen> {
     if (loginResponse['success'] == 'success') {
       SharedPreferences prefs = await SharedPreferences.getInstance();
 
+      String userToken = prefs.getString('userToken')!;
+
+      if (userToken != loginResponse['userToken']) {
+        await prefs.setBool('isChangeUser', true);
+      } else {
+        await prefs.setBool('isChangeUser', false);
+      }
+
       await prefs.setString('userToken', loginResponse['userToken']);
 
       await QuizCommand().downloadQuizList(loginResponse['userToken']);

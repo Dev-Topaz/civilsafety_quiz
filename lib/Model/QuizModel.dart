@@ -49,7 +49,7 @@ class QuizModel extends ChangeNotifier {
         isDownload: jsonData['downloaded'] == 1,
         updatedAt: jsonData['updated_at'] ?? '1900-01-01T00:00',
         result: jsonData['result'] ?? 'none',
-        score: jsonData['score'] ?? 0,
+        score: jsonData['exam_user_score'] ?? 0,
         examIcon: jsonData['exam_icon'] ?? '',
       );
 
@@ -67,6 +67,8 @@ class QuizModel extends ChangeNotifier {
       'quiz_content_path': '',
       'downloaded': 'false',
       'exam_icon': examIcon,
+      'score': score,
+      'result': result,
       // 'updated_at': formattedDate
     };
   }
