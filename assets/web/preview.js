@@ -1909,19 +1909,21 @@ function limit_time() {
         $('#question_time span').html(limit_second);
 
         $('#timer_confirm_dialog').fadeIn(200);
-
+        $('#preview_container').addClass('container-hidden');
+        
     }
-
+    
 }
 
 $('#timer_dialog_btn button').click(function () {
     if (start_or_end == 'start') {
-
+        
         start_question_timer();
         start_or_end = 'end';
     }
-
+    
     $('#timer_confirm_dialog').fadeOut(200);
+    $('#preview_container').removeClass('container-hidden');
 });
 
 function get_limit_time_to_second() {
