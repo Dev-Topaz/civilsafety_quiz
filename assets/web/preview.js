@@ -507,6 +507,7 @@ function rearrange_preview_ui() {
             $('.quiz_show .slide_view_answer_element .col-md-12').html('<div id="image-hotspots" style="position: relative;width: 300px;height: 214px;left: 50%;transform: translateX(-50%)"><img src="' + json_bg_url.background + '" height="214" width="300" onclick="create_hotspots(event)" style="position: relative;left: 50%;transform: translateX(-50%);object-fit: contain;"></div>');
 
             $('#clear_hotspots').css('visibility', 'visible');
+            ClearHotspot.postMessage('show');
             break;
 
         case '13':
@@ -571,9 +572,13 @@ function create_hotspots(event) {
 * ************* Clear Hotspots ****************
 * */
 $('#clear_hotspots').click(function () {
+    clear_hotspots();
+});
+
+function clear_hotspots() {
     $('.preview_hotspots').remove();
     hotspots_points = [];
-});
+}
 
 
 function review_button() {
@@ -813,7 +818,10 @@ function preview(element) {
                     }
                 }
 
-                if (type_id != 11) $('#clear_hotspots').css('visibility', 'hidden');
+                if (type_id != 11) {
+                    $('#clear_hotspots').css('visibility', 'hidden');
+                    ClearHotspot.postMessage('hide');
+                }
             } else {
 
                 show_result($('.quiz_show .correct_answer').html(), current_show_type_id, current_show_id);
@@ -838,7 +846,10 @@ function preview(element) {
                     ButtonName.postMessage('Continue');
                     return;
                 }
-                if (type_id != 11) $('#clear_hotspots').css('visibility', 'hidden');
+                if (type_id != 11) {
+                    $('#clear_hotspots').css('visibility', 'hidden');
+                    ClearHotspot.postMessage('hide');
+                }
                 $('#submit_btn').html('Submit');
                 ButtonName.postMessage('Submit');
             }

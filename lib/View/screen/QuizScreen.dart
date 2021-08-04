@@ -43,6 +43,7 @@ class _QuizScreenState extends State<QuizScreen> {
   bool isReview = false;
   bool isReviewButtonShow = false;
   bool isListShow = false;
+  bool isClearHotspotShow = false;
   String currentUserToken = '';
   String quizStatus = '[]';
   String buttonName = 'Next';
@@ -234,6 +235,21 @@ class _QuizScreenState extends State<QuizScreen> {
                               });
                             }),
                         JavascriptChannel(
+                            name: 'ClearHotspot',
+                            onMessageReceived: (s) async {
+                              print(
+                                  '[QuizScreen] onMessageReceived ClearHotspot ${s.message}');
+                              if (s.message == 'hide') {
+                                setState(() {
+                                  isClearHotspotShow = false;
+                                });
+                              } else {
+                                setState(() {
+                                  isClearHotspotShow = true;
+                                });
+                              }
+                            }),
+                        JavascriptChannel(
                             name: 'AudioStop',
                             onMessageReceived: (s) async {
                               print(
@@ -313,6 +329,21 @@ class _QuizScreenState extends State<QuizScreen> {
                           size: 30.0,
                         ),
                         label: Text('Play Video',
+                          style: TextStyle(color: Colors.white, fontSize: 14.0),
+                        ),
+                      )
+                      : Container(),
+                      isClearHotspotShow
+                      ? CustomTextIconButton(
+                        onPressed: () {
+                          _controller.webViewController.evaluateJavascript('clear_hotspots();');
+                        },
+                        icon: Icon(
+                          Icons.clear_all,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                        label: Text('Clear hotspot',
                           style: TextStyle(color: Colors.white, fontSize: 14.0),
                         ),
                       )
