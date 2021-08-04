@@ -107,19 +107,47 @@ class _QuizScreenState extends State<QuizScreen> {
         resizeToAvoidBottomInset: false,
         appBar: MediaQuery.of(context).orientation == Orientation.portrait
         ? AppBar(
-          centerTitle: true,
-          leading: IconButton(
-            onPressed: () {
-              Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
-            }, 
-          icon: Icon(Icons.arrow_back,
-            color: Colors.blue,
-            size: 30.0,
-          )),
+          // centerTitle: true,
+          actions: [
+            Container(
+              margin: EdgeInsets.all(10.0),
+              child: ElevatedButton(
+                child: Row(
+                  children: [
+                    Text(
+                      "exit".toUpperCase(),
+                      style: TextStyle(fontSize: 14, color: Theme.of(context).primaryColor)
+                    ),
+                    SizedBox(width: 5,),
+                    Icon(Icons.logout_outlined, color: Theme.of(context).primaryColor, size: 18,)
+                  ],
+                ), 
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(18),
+                    )
+                  )
+                ),
+                onPressed: () {
+                  Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
+                }
+              ),
+            ),
+          ], 
+          // IconButton(
+          //   onPressed: () {
+          //     Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
+          //   }, 
+          // icon: Icon(Icons.arrow_back,
+          //   color: Colors.white,
+          //   size: 30.0,
+          // )),
           title: Text(this.widget.name!,
-            style: TextStyle(color: Colors.blue),
+            style: TextStyle(color: Colors.white),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).primaryColor,
         )
         : null,
         body: Container(
@@ -319,7 +347,7 @@ class _QuizScreenState extends State<QuizScreen> {
               isLoading
               ? Center(
                   child: CircularProgressIndicator(
-                    color: Colors.black,
+                    color: Theme.of(context).primaryColor,
                   ),
                 )
               : Stack(),

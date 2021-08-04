@@ -328,17 +328,19 @@ function set_mobile_portrait_style() {
 
     $('#preview_container').attr('style', 'position: unset !important; left: 0; top: 0; transform: unset;');
     $('.quiz_show').attr('style', '');
-    $('.quiz_show .quiz_item_container').attr('style', 'font-size: 20px !important;');
+    $('.quiz_show .quiz_item_container').attr('style', 'font-size: 20px !important; display: flex; flex-direction: column;');
     $('.quiz_show font').css("cssText", "font-size: 20px !important;");
     $('.quiz_show label').css("cssText", "font-size: 20px !important;");
     // $('.quiz_show .droppable').css("cssText", "font-size: 20px !important;");
     // $('.quiz_show .draggable').css("cssText", "font-size: 20px !important;");
     $('.quiz_show span').css("cssText", "font-size: 20px !important;");
     // $('.quiz_show .quiz_item_container .slide_view_group').attr('style', 'padding-bottom: 20px !important;');
-    $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%;padding: 40px !important;border-radius: 15px;margin: auto;box-shadow: 0 3px 10px rgb(0 0 0 / 0.2);');
-    $('.quiz_show .quiz_item_container .slide_view_answer_element').attr('style', 'padding-bottom: 20px !important;padding-top: 20px !important;');
-    $('.quiz_show .quiz_item_container .slide_view_media_element').attr('style', 'padding-bottom: 20px !important;border-radius: 20px;');
+    // $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%;padding: 40px !important;border-radius: 15px;margin: auto;box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); order: 1;');
+    $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%; margin: auto; order: 2;');
+    $('.quiz_show .quiz_item_container .slide_view_answer_element').attr('style', 'padding-bottom: 20px !important;padding-top: 20px !important; order: 3;');
+    $('.quiz_show .quiz_item_container .slide_view_media_element').attr('style', 'padding-bottom: 20px !important;border-radius: 20px; order: 1;');
     $('#preview_toast').attr('style', 'display:none; width: 90%; margin-left: 0; transform: translateX(-50%);');
+
     
     $('.quiz_show .slide_view_video_element').hide();
     if ($('.quiz_show .slide_view_media_element img').attr('src') == '#') $('.quiz_show .slide_view_media_element').hide();
