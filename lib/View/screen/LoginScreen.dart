@@ -122,11 +122,11 @@ class _LoginScreenState extends State<LoginScreen> {
             Container(
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
-                        begin: Alignment.topRight,
-                        end: Alignment.bottomLeft,
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
                         colors: [
-                      Colors.amberAccent,
-                      Colors.deepOrangeAccent,
+                      Theme.of(context).primaryColor,
+                      Color(0xFF752146),
                     ])),
                 height: height * 0.25,
                 width: width,
@@ -170,15 +170,15 @@ class _LoginScreenState extends State<LoginScreen> {
                             Icon(Icons.email_outlined, color: lightColor[400]),
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
-                            color: Colors.deepOrangeAccent,
+                            color: Theme.of(context).primaryColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 14 * ratio),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.zero,
+                            borderRadius: BorderRadius.circular(27.5 * ratio),
                             borderSide: BorderSide(color: lightColor)),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.zero,
-                            borderSide: BorderSide(color: Colors.amberAccent)),
+                            borderRadius: BorderRadius.circular(27.5 * ratio),
+                            borderSide: BorderSide(color: Theme.of(context).primaryColor)),
                       )),
                   SizedBox(height: 30 * ratio),
                   TextField(
@@ -200,16 +200,16 @@ class _LoginScreenState extends State<LoginScreen> {
                             }),
                         labelText: 'PASSWORD',
                         labelStyle: TextStyle(
-                          color: Colors.deepOrangeAccent,
+                          color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 14 * ratio,
                         ),
                         enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.zero,
+                            borderRadius: BorderRadius.circular(27.5 * ratio),
                             borderSide: BorderSide(color: lightColor)),
                         focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.zero,
-                            borderSide: BorderSide(color: Colors.amberAccent)),
+                            borderRadius: BorderRadius.circular(27.5 * ratio),
+                            borderSide: BorderSide(color: Theme.of(context).primaryColor)),
                       )),
                   SizedBox(height: 15 * ratio),
                   // Row(
@@ -232,7 +232,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       // color: Colors.blueGrey,
                       style: ButtonStyle(
                         backgroundColor:
-                            MaterialStateProperty.all(Colors.blueGrey),
+                            MaterialStateProperty.all(Theme.of(context).primaryColor),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(27.5 * ratio),
+                          )
+                        )   
                       ),
                       onPressed: () {
                         if (!isLogging)
