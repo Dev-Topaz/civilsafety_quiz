@@ -14,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -32,6 +33,8 @@ class QuizListScreen extends StatefulWidget {
 
 class _QuizListScreenState extends State<QuizListScreen> {
   List quizList = [];
+  List allQuizList = [];
+  int filterIndex = 0;
   bool isLoading = true;
   List<TaskInfo>? _tasks;
   late bool _permissionReady;
@@ -54,14 +57,14 @@ class _QuizListScreenState extends State<QuizListScreen> {
     _prepare();
 
     getUserToken();
-    // clearQuizStatus();
 
     QuizCommand().getQuizzes().then((value) {
-      print('[QuizListScreen] initState $value');
       setState(() {
-        quizList = value;
+        allQuizList = value;
         isLoading = false;
       });
+      print('[QuizListScreen] initState $allQuizList');
+      filterQuizList(filterIndex);
     });
   }
 
@@ -71,10 +74,37 @@ class _QuizListScreenState extends State<QuizListScreen> {
     super.dispose();
   }
 
-  // void clearQuizStatus() async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   prefs.setString('quizStatus', '[]');
-  // }
+  void filterQuizList(int id) {
+    print('[QuizListScreen] filterQuizList filterIndex $id');
+    List tmp = [];
+    switch (id) {
+      case 0:
+        tmp = allQuizList;
+        break;
+      case 1:
+        for (var item in allQuizList) {
+          if (item['result'] == 'Pass') tmp.add(item); 
+        }
+        break;
+      case 2:
+        for (var item in allQuizList) {
+          if (item['result'] == 'Fail') tmp.add(item);
+        }
+        break;
+      case 3:
+        for (var item in allQuizList) {
+          if (item['result'] == 'none') tmp.add(item);
+        }
+        break;
+      default:
+    }
+
+    setState(() {
+      quizList = tmp;
+    });
+
+    print('[QuizListScreen] quizList $quizList');
+  }
 
   void getUserToken() async {
 
@@ -85,18 +115,6 @@ class _QuizListScreenState extends State<QuizListScreen> {
       currentUserToken = userToken;
     });
   }
-
-  // void updateResult(int id, String result) {
-  //   setState(() {
-  //     quizList[id]['result'] = result;
-  //   });
-  // }
-
-  // void updateScore(int id, int score) {
-  //   setState(() {
-  //     quizList[id]['score'] = score;
-  //   });
-  // }
 
   void _onDownloading() {
     showDialog(
@@ -180,9 +198,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
     QuizCommand().getQuizzes().then((value) {
       print('[QuizListScreen] downloadAssets $value');
       setState(() {
-        quizList = value;
+        allQuizList = value;
         isLoading = false;
       });
+      filterQuizList(filterIndex);
     });
 
     Navigator.pop(context);
@@ -218,9 +237,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
     QuizCommand().getQuizzes().then((value) {
       print('[QuizListScreen] deleteAssets $value');
       setState(() {
-        quizList = value;
+        allQuizList = value;
         isLoading = false;
       });
+      filterQuizList(filterIndex);
     });
   }
 
@@ -275,17 +295,17 @@ class _QuizListScreenState extends State<QuizListScreen> {
       ),
       appBar: AppBar(
         centerTitle: true,
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).primaryColor,
         title: Text(
           'Quiz List',
           style: TextStyle(
-            color: Theme.of(context).primaryColor,
+            color: Colors.white,
           ),
         ),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: Icon(Icons.menu, color: Theme.of(context).primaryColor),
+              icon: Icon(Icons.menu, color: Colors.white),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },
@@ -299,40 +319,94 @@ class _QuizListScreenState extends State<QuizListScreen> {
         ? CircularProgressIndicator(
             color: Theme.of(context).primaryColor,
           )
-        : Container(
-          child: ListView.builder(
-              itemCount: quizList.length,
-              itemBuilder: (BuildContext context, int index) {
-
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
-                  child: QuizListCard(
-                    title: quizList[index]['name'],
-                    quizType: quizList[index]['result'],
-                    description: quizList[index]['description'],
-                    score: quizList[index]['score'],
-                    passingScore: quizList[index]['passing_score'],
-                    downloaded: quizList[index]['downloaded'],
-                    isOnline: this.widget.isOnline,
-                    startPressed: () {
-                      if (quizList[index]['downloaded'] == 'true') Navigator.push(context, MaterialPageRoute(builder: (context) =>
-                          QuizScreen(
-                            id: quizList[index]['id'],
-                            name: quizList[index]['name'],
-                          ),
-                        ),
-                      );
-                    },
-                    downloadPressed: () {
-                      if (this.widget.isOnline! && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
-                    },
-                    deletePressed: () {
-                      if (!(this.widget.isOnline! && quizList[index]['downloaded'] == 'false')) _delete(quizList[index]['id'], currentUserToken!);
-                    },
+        : Column(
+          children: [
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 25.0),
+              child: Column(
+                children: [
+                  Container(
+                    height: 60,
+                    color: Colors.grey[200],
+                    child: Center(
+                      child: FlutterToggleTab(  
+                        width: 60,  
+                        borderRadius: 30,  
+                        height: 30,  
+                        initialIndex:0, 
+                        selectedBackgroundColors: [Theme.of(context).primaryColor],  
+                        selectedTextStyle: TextStyle(  
+                          color: Colors.white,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700),
+                        unSelectedBackgroundColors: [Colors.white],
+                        unSelectedTextStyle: TextStyle(  
+                          color: Colors.black87,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500),
+                        labels: ["All", "Pass", "Fail", "Pending"],  
+                        selectedLabelIndex: (index) {  
+                          print("Selected Index $index");
+                          setState(() {
+                            filterIndex = index;
+                          });
+                          filterQuizList(filterIndex);
+                        },  
+                      ),
+                    ),
                   ),
-                );
-              }),
-        ),
+                  SizedBox(height: 15.0,),
+                  Row(
+                    children: [
+                      Icon(Icons.bookmark_outline, size: 24.0),
+                      SizedBox(width: 10.0,),
+                      Text(quizList.length == 1 ? '1 Quiz' : '${quizList.length} Quizzes',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: quizList.length,
+                  itemBuilder: (BuildContext context, int index) {
+
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5),
+                      child: QuizListCard(
+                        title: quizList[index]['name'],
+                        quizType: quizList[index]['result'],
+                        description: quizList[index]['description'],
+                        score: quizList[index]['score'],
+                        passingScore: quizList[index]['passing_score'],
+                        downloaded: quizList[index]['downloaded'],
+                        isOnline: this.widget.isOnline,
+                        startPressed: () {
+                          if (quizList[index]['downloaded'] == 'true') Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                              QuizScreen(
+                                id: quizList[index]['id'],
+                                name: quizList[index]['name'],
+                              ),
+                            ),
+                          );
+                        },
+                        downloadPressed: () {
+                          if (this.widget.isOnline! && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
+                        },
+                        deletePressed: () {
+                          if (!(this.widget.isOnline! && quizList[index]['downloaded'] == 'false')) _delete(quizList[index]['id'], currentUserToken!);
+                        },
+                      ),
+                    );
+                  }),
+            ),
+          ],
+        ), 
       ),
     );
   }

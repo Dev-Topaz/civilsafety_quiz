@@ -71,7 +71,6 @@ class _QuizListCardState extends State<QuizListCard> {
                   // }
                   isExpanded = !isExpanded;
                 });
-                print(isExpanded);
               },
               child: Container(
                 // constraints: BoxConstraints(
@@ -92,13 +91,13 @@ class _QuizListCardState extends State<QuizListCard> {
                         bottomRight: Radius.circular(5.0)),
                     color: Colors.white,
                     boxShadow: [
-                      BoxShadow(color: Colors.grey, spreadRadius: 1, blurRadius: 4)
+                      BoxShadow(color: Colors.grey, spreadRadius: 1, blurRadius: 4, offset: Offset(3, 3))
                     ]
                   ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Container(height: 65,
+                      Container(height: 60,
                         child:  Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
