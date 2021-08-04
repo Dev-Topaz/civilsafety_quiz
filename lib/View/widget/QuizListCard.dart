@@ -50,7 +50,7 @@ class _QuizListCardState extends State<QuizListCard> {
         break;
       case 'Fail':
         color = Color(0xFFDD4F43);
-        icon = Icons.close;
+        icon = Icons.warning;
         break;
       case 'none':
         color = Color(0xFFFFCD43);
@@ -116,10 +116,10 @@ class _QuizListCardState extends State<QuizListCard> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                      SizedBox(width: 5.0,),
-                                      this.widget.quizType != 'none' ? Icon(Icons.circle_rounded, size: 8.0, color: color,) : SizedBox(width: 0),
-                                      SizedBox(width: 5.0,),
-                                      this.widget.quizType != 'none' ? Text(this.widget.quizType!, style: TextStyle(color: color),) : SizedBox(width: 0,),
+                                      // SizedBox(width: 5.0,),
+                                      // this.widget.quizType != 'none' ? Icon(Icons.circle_rounded, size: 8.0, color: color,) : SizedBox(width: 0),
+                                      // SizedBox(width: 5.0,),
+                                      // this.widget.quizType != 'none' ? Text(this.widget.quizType!, style: TextStyle(color: color),) : SizedBox(width: 0,),
                                     ],),
                                     Container(
                                       child: Text('Passing Score: ${this.widget.passingScore}', 
@@ -130,7 +130,22 @@ class _QuizListCardState extends State<QuizListCard> {
                                 ),
                               ],
                             ),
-                            this.widget.quizType != 'none' ? Icon(icon, color: color,) : SizedBox(width: 0,),
+                            Container(
+                              width: 75,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      this.widget.quizType != 'none' ? Icon(Icons.circle_rounded, size: 8.0, color: color,) : SizedBox(width: 0),
+                                      SizedBox(width: 5.0,),
+                                      this.widget.quizType != 'none' ? Text(this.widget.quizType!, style: TextStyle(color: color),) : SizedBox(width: 0,),
+                                    ],
+                                  ),
+                                  this.widget.quizType != 'none' ? Icon(icon, color: color,) : SizedBox(width: 0,),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       ),

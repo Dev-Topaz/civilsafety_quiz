@@ -908,7 +908,8 @@ if it's not present, don't show loader */
 #preview_toast_body {
     padding: 10px 25px;
     font-size: 18px;
-    line-height: 3;
+    line-height: 2.3;
+    text-align: center;
 }
 
 #question_control_btn_container {

@@ -404,7 +404,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           if (isReview) _controller.webViewController.evaluateJavascript('review_prev_button();');
                         },
                         icon: Icon(
-                          Icons.navigate_before_rounded,
+                          Icons.arrow_left,
                           color: Colors.white,
                           size: 30.0,
                         ),
@@ -425,7 +425,7 @@ class _QuizScreenState extends State<QuizScreen> {
                           }
                         },
                         icon: Icon(
-                          Icons.navigate_next_rounded,
+                          Icons.arrow_right,
                           color: Colors.white,
                           size: 30.0,
                         ),

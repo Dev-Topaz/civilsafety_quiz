@@ -140,7 +140,7 @@
 }
 
 #question_list {
-    padding: 0 5px 0 20px;
+    padding: 0 5px;
 }
 
 #question_list:hover {
@@ -171,6 +171,8 @@
     font-size: 20px;
     display: flex;
     justify-content: center;
+    line-height: 25px;
+    text-align: center;
 }
 
 #timer_dialog_btn {
