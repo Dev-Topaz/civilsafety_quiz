@@ -244,8 +244,8 @@
     text-align: center;
     width: 100%;
     border: 1px solid white;
-    border-radius: 5px;
-    background: black;
+    border-radius: 10px;
+    background: #CC397B;
     color: white;
     font-weight: bold;
 }
@@ -256,7 +256,7 @@
 
 .up_container svg, .down_container svg {
     display: flex;
-    width: 35px;
+    width: 20px;
     fill: white;
 }
 
@@ -321,4 +321,8 @@
 .quiz_show input:focus {
     border-color: #CC397B !important;
     box-shadow: 0 0 0 0.2rem #cc397b25 !important;
+}
+
+.quiz_show #sortable {
+    padding: 0 !important;
 }
