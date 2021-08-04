@@ -45,6 +45,7 @@ class _QuizScreenState extends State<QuizScreen> {
   bool isListShow = false;
   String currentUserToken = '';
   String quizStatus = '[]';
+  String buttonName = 'Next';
   late WebViewPlusController _controller;
   AudioPlayer audioPlayer = AudioPlayer();
 
@@ -115,7 +116,7 @@ class _QuizScreenState extends State<QuizScreen> {
                 child: Row(
                   children: [
                     Text(
-                      "exit".toUpperCase(),
+                      "Exit",
                       style: TextStyle(fontSize: 14, color: Theme.of(context).primaryColor)
                     ),
                     SizedBox(width: 5,),
@@ -136,14 +137,6 @@ class _QuizScreenState extends State<QuizScreen> {
               ),
             ),
           ], 
-          // IconButton(
-          //   onPressed: () {
-          //     Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
-          //   }, 
-          // icon: Icon(Icons.arrow_back,
-          //   color: Colors.white,
-          //   size: 30.0,
-          // )),
           title: Text(this.widget.name!,
             style: TextStyle(color: Colors.white),
           ),
@@ -247,6 +240,15 @@ class _QuizScreenState extends State<QuizScreen> {
                                   '[QuizScreen] onMessageReceived AudioStop ${s.message}');
                               await audioPlayer.stop();
                             }),
+                        JavascriptChannel(
+                            name: 'ButtonName',
+                            onMessageReceived: (s) async {
+                              print(
+                                  '[QuizScreen] onMessageReceived ButtonName ${s.message}');
+                              setState(() {
+                                buttonName = s.message;
+                              });
+                            }),
                       ].toSet(),
                       onWebViewCreated: (controller) {
                         this._controller = controller;
@@ -265,65 +267,91 @@ class _QuizScreenState extends State<QuizScreen> {
                   ),
                   CustomLayout(
                     layout: isPortrait == 'true' ? 'row' : 'column',
-                    size: 50.0,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    size: 65.0,
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       MediaQuery.of(context).orientation != Orientation.portrait
                       ? CustomTextIconButton(
                         onPressed: () {
                           Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
                         },
-                        icon: Icon(Icons.arrow_back, color: Colors.blue),
-                        label: Text('Back', style: TextStyle(fontSize: 8.0, color: Colors.blue),),
+                        icon: Icon(Icons.logout, color: Colors.white),
+                        label: Text('Exit', style: TextStyle(fontSize: 14.0, color: Colors.white),),
                       )
                       : Container(),
-                      MediaQuery.of(context).orientation != Orientation.portrait
-                      ? isListShow
-                        ? CustomTextIconButton(
-                          onPressed: () {
-                            _controller.webViewController.evaluateJavascript('hide_list_button();');
-                            setState(() {
-                              isListShow = false;
-                            });
-                          },
-                          icon: Icon(Icons.close, color: Colors.blue),
-                          label: Text('Close List', style: TextStyle(fontSize: 8.0, color: Colors.blue),),
-                        )
-                        : CustomTextIconButton(
-                          onPressed: () {
-                            _controller.webViewController.evaluateJavascript('click_list_button();');
-                            setState(() {
-                              isListShow = true;
-                            });
-                          },
-                          icon: Icon(Icons.list_sharp, color: Colors.blue),
-                          label: Text('Quiz List', style: TextStyle(fontSize: 8.0, color: Colors.blue)),
-                        )
-                      : Container(),
-                      CustomTextIconButton(
+                      // MediaQuery.of(context).orientation != Orientation.portrait
+                      // ? isListShow
+                      //   ? CustomTextIconButton(
+                      //     onPressed: () {
+                      //       _controller.webViewController.evaluateJavascript('hide_list_button();');
+                      //       setState(() {
+                      //         isListShow = false;
+                      //       });
+                      //     },
+                      //     icon: Icon(Icons.close, color: Colors.white),
+                      //     label: Text('Close List', style: TextStyle(fontSize: 14.0, color: Colors.white),),
+                      //   )
+                      //   : CustomTextIconButton(
+                      //     onPressed: () {
+                      //       _controller.webViewController.evaluateJavascript('click_list_button();');
+                      //       setState(() {
+                      //         isListShow = true;
+                      //       });
+                      //     },
+                      //     icon: Icon(Icons.list_sharp, color: Colors.white),
+                      //     label: Text('Quiz List', style: TextStyle(fontSize: 14.0, color: Colors.white)),
+                      //   )
+                      // : Container(),
+                      videoUrl != '#'
+                      ? CustomTextIconButton(
                         onPressed: () {
-                          if (isReviewButtonShow) _controller.webViewController.evaluateJavascript('review_button();');
+                          openVideo(videoUrl);
+                        },
+                        icon: Icon(
+                          Icons.video_camera_front,
+                          color: Colors.white,
+                          size: 30.0,
+                        ),
+                        label: Text('Play Video',
+                          style: TextStyle(color: Colors.white, fontSize: 14.0),
+                        ),
+                      )
+                      : Container(),
+                      isReviewButtonShow
+                      ? CustomTextIconButton(
+                        onPressed: () {
+                          if (isReviewButtonShow) {
+                            _controller.webViewController.evaluateJavascript('review_button();');
+                            setState(() {
+                              buttonName = 'Next';
+                            });  
+                          }
                         },
                         icon: Icon(Icons.rate_review_sharp,
-                          color: isReviewButtonShow ? Colors.blue : Colors.white,
+                          color: Colors.white,
                         ), 
                         label: Text('Review',
-                          style: TextStyle(color: isReviewButtonShow ? Colors.blue : Colors.white, fontSize: 8.0),
-                        )),
-                      CustomTextIconButton(
+                          style: TextStyle(color: Colors.white, fontSize: 14.0),
+                        ))
+                      : Container(),
+                      isReview
+                      ? CustomTextIconButton(
                         onPressed: () {
                           if (isReview) _controller.webViewController.evaluateJavascript('review_prev_button();');
                         },
                         icon: Icon(
                           Icons.navigate_before_rounded,
-                          color: isReview ? Colors.blue : Colors.white,
+                          color: Colors.white,
                           size: 30.0,
                         ),
                         label: Text('Previous',
-                          style: TextStyle(color: isReview ? Colors.blue : Colors.white, fontSize: 8.0),
+                          style: TextStyle(color: Colors.white, fontSize: 14.0),
                         ),
-                      ),
-                      CustomTextIconButton(
+                      )
+                      : Container(),
+                      buttonName == 'Close'
+                      ? Container()
+                      : CustomTextIconButton(
                         onPressed: () {
                           if (isReview) {
                             _controller.webViewController.evaluateJavascript('review_next_button();');
@@ -333,11 +361,11 @@ class _QuizScreenState extends State<QuizScreen> {
                         },
                         icon: Icon(
                           Icons.navigate_next_rounded,
-                          color: Colors.blue,
+                          color: Colors.white,
                           size: 30.0,
                         ),
-                        label: Text('Next',
-                          style: TextStyle(color: Colors.blue, fontSize: 8.0),
+                        label: Text(buttonName,
+                          style: TextStyle(color: Colors.white, fontSize: 14.0),
                         ),
                       ),
                     ],
@@ -354,21 +382,6 @@ class _QuizScreenState extends State<QuizScreen> {
             ],
           ),
         ),
-        floatingActionButton: (videoUrl == '#')
-            ? null
-            : Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 70.0, 20.0),
-                child: IconButton(
-                  onPressed: () {
-                    openVideo(videoUrl);
-                  },
-                  icon: Icon(
-                    Icons.video_call_sharp,
-                    size: 50.0,
-                    color: Colors.blue,
-                  ),
-                ),
-              ),
       ),
     );
   }

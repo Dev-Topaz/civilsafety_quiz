@@ -13,19 +13,28 @@ class CustomTextIconButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(4.0)),
-      onPressed: this.onPressed,
-      child: Column(
-        children: <Widget>[
-          this.icon!,
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 2.0),
+    return Row(
+      children: [
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFC80063)),
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18),
+              )
+            )
           ),
-          this.label!,
-        ],
-      ),
-    );
+          onPressed: this.onPressed,
+          child: Row(
+            children: <Widget>[
+              this.label!,
+              SizedBox(width: 5,),
+              this.icon!,
+            ],
+          ),
+        ),
+        SizedBox(width: 10,),
+      ],
+    ); 
   }
 }

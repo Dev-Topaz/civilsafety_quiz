@@ -128,10 +128,12 @@ class _QuizListScreenState extends State<QuizListScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               new CircularProgressIndicator(
-                color: Colors.black,
+                color: Theme.of(context).primaryColor,
               ),
               SizedBox(width: 10.0),
-              new Text("Downloading"),
+              new Text("Downloading",
+                style: TextStyle(color: Theme.of(context).primaryColor),
+              ),
             ],
           ),
         ));

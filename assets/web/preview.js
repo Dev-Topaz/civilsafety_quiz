@@ -373,6 +373,7 @@ function rearrange_preview_ui() {
 
     if ($('.quiz_show .type_id').html() == '12') {
         $('#submit_btn').html('Continue');
+        ButtonName.postMessage('Continue');
     }
 
 
@@ -650,12 +651,14 @@ function preview(element) {
                     show_modal('error', 'Warning', 'You must complete the form correctly before submitting.');
                 } else {
                     $('#submit_btn').html('Continue');
+                    ButtonName.postMessage('Continue');
                 }
                 return;
             }
 
             if ($('.quiz_show').find('.type_id').html() == '13') {
                 $('#submit_btn').html('Continue');
+                ButtonName.postMessage('Continue');
                 return;
             }
 
@@ -682,6 +685,7 @@ function preview(element) {
                 question_feedback = $('.quiz_show .feedback_correct').html();
                 question_result = 'Correct';
                 $('#submit_btn').html('Continue');
+                ButtonName.postMessage('Continue');
             } else {
                 attempts += 1;
                 incorrect_process();
@@ -690,6 +694,7 @@ function preview(element) {
 
         case 'Try again':
             $('#submit_btn').html('Submit');
+            ButtonName.postMessage('Submit');
             break;
 
         case 'Start Quiz':
@@ -713,9 +718,11 @@ function preview(element) {
 
                 if (current_type_id == 13) {
                     $('#submit_btn').html('Close');
+                    ButtonName.postMessage('Close');
                 } else {
 
                     $('#submit_btn').html('See Result');
+                    ButtonName.postMessage('See Result');
                     $('#review_btn').css('visibility', 'visible');
                 }
 
@@ -737,9 +744,11 @@ function preview(element) {
 
                 if (type_id == 12) {
                     $('#submit_btn').html('Continue');
+                    ButtonName.postMessage('Continue');
                     return;
                 }
                 $('#submit_btn').html('Submit');
+                ButtonName.postMessage('Submit');
             }
 
 
@@ -787,12 +796,15 @@ function preview(element) {
 
                 if (current_show_type_id == 12) {
                     $('#submit_btn').html('Close');
+                    ButtonName.postMessage('Close');
                 } else {
                     $('#review_btn').css('visibility', 'visible');
                     if ($('#is_quiz').html() == '0') {
                         $('#submit_btn').html('Close');
+                        ButtonName.postMessage('Close');
                     } else {
                         $('#submit_btn').html('See Result');
+                        ButtonName.postMessage('See Result');
                     }
                 }
 
@@ -817,10 +829,12 @@ function preview(element) {
 
                 if (type_id == 12) {
                     $('#submit_btn').html('Continue');
+                    ButtonName.postMessage('Continue');
                     return;
                 }
                 if (type_id != 11) $('#clear_hotspots').css('visibility', 'hidden');
                 $('#submit_btn').html('Submit');
+                ButtonName.postMessage('Submit');
             }
 
 
@@ -903,6 +917,7 @@ function preview(element) {
 
 
                 $('#submit_btn').html('Close');
+                ButtonName.postMessage('Close');
             } else {
                 window.close();
                 // alert('Answered: ' + correct_quiz_count + '/' + quizId + ', Total Score: ' + total_score);
@@ -1296,6 +1311,7 @@ function incorrect_process() {
         question_feedback = $('.quiz_show .feedback_incorrect').html();
 
         $('#submit_btn').html('Continue');
+        ButtonName.postMessage('Continue');
         if ($('.quiz_show .feedback_type').html() != 'none') {
             show_modal('error', 'Incorrect', $('.quiz_show .feedback_incorrect').html());
             $('.quiz_show .is_correct').html('false');
@@ -1306,6 +1322,7 @@ function incorrect_process() {
         question_feedback = $('.quiz_show .feedback_try_again').html();
 
         $('#submit_btn').html('Try again');
+        ButtonName.postMessage('Try again');
         if ($('.quiz_show .feedback_type').html() != 'none') {
             show_modal('error', 'Incorrect', $('.quiz_show .feedback_try_again').html());
             $('.quiz_show .is_correct').html('false');
@@ -1709,6 +1726,7 @@ function see_result() {
     $('.preview_btn').show();
 
     $('#submit_btn').html('Close');
+    ButtonName.postMessage('Close');
 
     const length = $('.quiz_list_container').length;
 
@@ -1837,6 +1855,7 @@ function see_result() {
             hide_preload();
         });
         $('#submit_btn').html('Close');
+        ButtonName.postMessage('Close');
     } else {
         window.close();
     }
