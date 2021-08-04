@@ -651,6 +651,7 @@ function preview(element) {
                     show_modal('error', 'Warning', 'You must complete the form correctly before submitting.');
                 } else {
                     $('#submit_btn').html('Continue');
+                    $('.quiz_show').addClass('freezen');
                     ButtonName.postMessage('Continue');
                 }
                 return;
@@ -658,6 +659,7 @@ function preview(element) {
 
             if ($('.quiz_show').find('.type_id').html() == '13') {
                 $('#submit_btn').html('Continue');
+                $('.quiz_show').addClass('freezen');
                 ButtonName.postMessage('Continue');
                 return;
             }
@@ -685,6 +687,7 @@ function preview(element) {
                 question_feedback = $('.quiz_show .feedback_correct').html();
                 question_result = 'Correct';
                 $('#submit_btn').html('Continue');
+                $('.quiz_show').addClass('freezen');
                 ButtonName.postMessage('Continue');
             } else {
                 attempts += 1;
@@ -744,6 +747,7 @@ function preview(element) {
 
                 if (type_id == 12) {
                     $('#submit_btn').html('Continue');
+                    $('.quiz_show').addClass('freezen');
                     ButtonName.postMessage('Continue');
                     return;
                 }
@@ -829,6 +833,7 @@ function preview(element) {
 
                 if (type_id == 12) {
                     $('#submit_btn').html('Continue');
+                    $('.quiz_show').addClass('freezen');
                     ButtonName.postMessage('Continue');
                     return;
                 }
@@ -1311,6 +1316,7 @@ function incorrect_process() {
         question_feedback = $('.quiz_show .feedback_incorrect').html();
 
         $('#submit_btn').html('Continue');
+        $('.quiz_show').addClass('freezen');
         ButtonName.postMessage('Continue');
         if ($('.quiz_show .feedback_type').html() != 'none') {
             show_modal('error', 'Incorrect', $('.quiz_show .feedback_incorrect').html());
@@ -1911,6 +1917,8 @@ function start_question_timer() {
             $('#timer_dialog_content').html('Your time is up for this question.');
             $('#timer_confirm_dialog').fadeIn(200);
             $('#submit_btn').html('Continue');
+            $('.quiz_show').addClass('freezen');
+            ButtonName.postMessage('Continue');
         }
     }, 1000);
 }
