@@ -1573,7 +1573,10 @@ function show_result(question_correct_answer, question_type_id, question_id) {
 
         case '7':
             let matching_correct_answer_array = question_correct_answer.split('@');
+            console.log(matching_correct_answer_array);
             matching_correct_answer_array.pop();
+
+            console.log(matching_correct_answer_array);
 
             for (let i = 0; i < matching_correct_answer_array.length; i++) {
                 matching_correct_answer_array[i] = matching_correct_answer_array[i].split('<p>').join('').split('</p>').join('');
@@ -1585,18 +1588,22 @@ function show_result(question_correct_answer, question_type_id, question_id) {
                 matching_content_correct_answer_array.push(matching_correct_answer_array[i].split(';')[1]);
             }
 
-            console.log(matching_correct_answer_array);
+            console.log(matching_content_correct_answer_array[0]);
             const matching_elements = $('.quiz_show .slide_view_answer_element .col-md-12 > div');
 
             let matching_correct_index;
 
-            for (let i = 1; i < matching_elements.length; i++) {
+            for (let i = 0; i < matching_elements.length; i++) {
 
                 console.log(matching_elements.eq(i));
                 if (matching_elements.eq(i).find('.ui-widget-content').html() != undefined) {
+                    console.log(matching_elements.eq(i).find('.ui-widget-content').html());
                     matching_correct_index = matching_content_correct_answer_array.indexOf(matching_elements.eq(i).find('.ui-widget-content').html().split('<p>').join('').split('</p>').join(''));
 
-                    if (matching_correct_index == i) {
+                    console.log(matching_correct_index);
+                    console.log(i);
+
+                    if (matching_correct_index == i - 1) {
                         matching_elements.eq(i).find('.ui-widget-header').css('border', '1px solid green');
                         matching_elements.eq(i).find('.ui-widget-content').css('border', '1px solid green');
                     } else {
