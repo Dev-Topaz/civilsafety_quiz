@@ -334,7 +334,7 @@ function set_mobile_portrait_style() {
     // $('.quiz_show .droppable').css("cssText", "font-size: 20px !important;");
     // $('.quiz_show .draggable').css("cssText", "font-size: 20px !important;");
     $('.quiz_show span').css("cssText", "font-size: 20px !important;");
-    $('.quiz_show select').css("cssText", "font-size: 20px !important;");
+    $('.quiz_show select').addClass('font-20');
     // $('.quiz_show .quiz_item_container .slide_view_group').attr('style', 'padding-bottom: 20px !important;');
     // $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%;padding: 40px !important;border-radius: 15px;margin: auto;box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); order: 1;');
     $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%; margin: auto; order: 2;');
