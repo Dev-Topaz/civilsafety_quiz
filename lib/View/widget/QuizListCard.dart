@@ -110,7 +110,12 @@ class _QuizListCardState extends State<QuizListCard> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(children: [
-                                      Text(this.widget.title!, style: TextStyle(fontSize: 16.0),),
+                                      Container(
+                                        width: 180,
+                                        child: Text(this.widget.title!, style: TextStyle(fontSize: 16.0),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
                                       SizedBox(width: 5.0,),
                                       this.widget.quizType != 'none' ? Icon(Icons.circle_rounded, size: 8.0, color: color,) : SizedBox(width: 0),
                                       SizedBox(width: 5.0,),

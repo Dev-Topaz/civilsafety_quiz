@@ -17,7 +17,7 @@ class CustomTextIconButton extends StatelessWidget {
       children: [
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFC80063)),
+            backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFCC397B)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),
