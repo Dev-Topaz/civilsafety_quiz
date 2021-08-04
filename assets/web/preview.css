@@ -153,7 +153,7 @@
 }
 
 #timer_confirm_dialog {
-    width: 600px;
+    width: 90%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -179,12 +179,13 @@
 }
 
 #timer_dialog_btn button {
-    background: #2f7de3;
     color: white;
     font-size: 18px;
     font-weight: 500;
     padding: 5px 25px;
     border-radius: 8px;
+    background: #CC397B;
+    border: none;
 }
 
 #question_time {
@@ -201,10 +202,10 @@
 
 #progress_bar_container {
     position: absolute;
-    width: 50%;
-    left: 25%;
+    width: 90%;
+    left: 50%;
     top: 50%;
-    transform: translateY(-50%);
+    transform: translate(-50%, -50%);
     padding: 20px 40px;
     border-radius: 4px;
     box-sizing: border-box;
@@ -212,6 +213,11 @@
     box-shadow: 0 10px 20px rgb(0 0 0 / 50%);
     z-index: 1000;
     display: none;
+    color: #CC397B;
+}
+
+#progress_bar_container .progress-bar {
+    background-color: #CC397B !important;
 }
 
 #progress_bar_content {
