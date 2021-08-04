@@ -1481,12 +1481,15 @@ function preview_review() {
 
 function disable_next_and_prev_btn() {
     $('.review_buttons > div button').removeClass('disable_btn');
+    PrevButton.postMessage('enable');
+    NextButton.postMessage('enable');
 
     var next_show_id = $('.quiz_show').next().attr('id');
     var next_type_id = $('.quiz_show').next().find('.type_id').html();
 
     if (next_show_id === undefined || next_type_id == 14 || next_type_id == 15) {
         $('.review_buttons > div button').eq(1).addClass('disable_btn');
+        NextButton.postMessage('disable');
     }
 
     var previous_show_id = $('.quiz_show').prev().attr('id');
@@ -1494,6 +1497,7 @@ function disable_next_and_prev_btn() {
 
     if (previous_show_id === undefined || previous_type_id == 14 || previous_type_id == 15) {
         $('.review_buttons > div button').eq(0).addClass('disable_btn');
+        PrevButton.postMessage('disable');
     }
 }
 

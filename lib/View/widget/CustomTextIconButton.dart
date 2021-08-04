@@ -4,11 +4,13 @@ class CustomTextIconButton extends StatelessWidget {
   final void Function()? onPressed;
   final Widget? icon;
   final Widget? label;
+  final Color? color;
 
   const CustomTextIconButton({ Key? key, 
     this.onPressed,
     this.icon,
     this.label,
+    this.color,
   }) : super(key: key);
 
   @override
@@ -17,7 +19,7 @@ class CustomTextIconButton extends StatelessWidget {
       children: [
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFCC397B)),
+            backgroundColor: MaterialStateProperty.all<Color>(color ?? Color(0xFFCC397B)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),

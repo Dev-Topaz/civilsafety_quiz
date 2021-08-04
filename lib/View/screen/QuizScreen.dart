@@ -39,6 +39,8 @@ class _QuizScreenState extends State<QuizScreen> {
   // String filePath = 'assets/web/test.html';
   String quizContent = '';
   String videoUrl = '#';
+  bool isPrevButtonEnable = true;
+  bool isNextButtonEnable = true;
   bool isLoading = true;
   bool isReview = false;
   bool isReviewButtonShow = false;
@@ -167,6 +169,36 @@ class _QuizScreenState extends State<QuizScreen> {
                               setState(() {
                                 videoUrl = s.message;
                               });
+                            }),
+                        JavascriptChannel(
+                            name: 'PrevButton',
+                            onMessageReceived: (s) {
+                              print(
+                                  '[QuizScreen] onMessageReceived PrevButton ${s.message}');
+                              if (s.message == 'enable') {
+                                setState(() {
+                                  isPrevButtonEnable = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isPrevButtonEnable = false;
+                                });
+                              }
+                            }),
+                        JavascriptChannel(
+                            name: 'NextButton',
+                            onMessageReceived: (s) {
+                              print(
+                                  '[QuizScreen] onMessageReceived NextButton ${s.message}');
+                              if (s.message == 'enable') {
+                                setState(() {
+                                  isNextButtonEnable = true;
+                                });
+                              } else {
+                                setState(() {
+                                  isNextButtonEnable = false;
+                                });
+                              }
                             }),
                         JavascriptChannel(
                             name: 'ReviewButtonShow',
@@ -367,6 +399,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       : Container(),
                       isReview
                       ? CustomTextIconButton(
+                        color: isPrevButtonEnable ? Theme.of(context).primaryColor : Colors.grey,
                         onPressed: () {
                           if (isReview) _controller.webViewController.evaluateJavascript('review_prev_button();');
                         },
@@ -383,6 +416,7 @@ class _QuizScreenState extends State<QuizScreen> {
                       buttonName == 'Close'
                       ? Container()
                       : CustomTextIconButton(
+                        color: isNextButtonEnable ? Theme.of(context).primaryColor : Colors.grey,
                         onPressed: () {
                           if (isReview) {
                             _controller.webViewController.evaluateJavascript('review_next_button();');
