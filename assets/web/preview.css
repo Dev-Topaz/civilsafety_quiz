@@ -261,8 +261,8 @@
 }
 
 .selected_sequence_list, .selected_matching_list, .selected_drag_word {
-    border: 2px solid #3FA1E1 !important;
-    background-color: #E0EDF5 !important;
+    border: 2px solid #CC397B !important;
+    background-color: #f1b7d1 !important;
 }
 
  /* .selected_matching_list, .selected_drag_word {
@@ -316,4 +316,9 @@
 
 .freezen {
     pointer-events: none;
+}
+
+.quiz_show input:focus {
+    border-color: #CC397B !important;
+    box-shadow: 0 0 0 0.2rem #cc397b25 !important;
 }

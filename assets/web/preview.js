@@ -334,6 +334,7 @@ function set_mobile_portrait_style() {
     // $('.quiz_show .droppable').css("cssText", "font-size: 20px !important;");
     // $('.quiz_show .draggable').css("cssText", "font-size: 20px !important;");
     $('.quiz_show span').css("cssText", "font-size: 20px !important;");
+    $('.quiz_show select').css("cssText", "font-size: 20px !important;");
     // $('.quiz_show .quiz_item_container .slide_view_group').attr('style', 'padding-bottom: 20px !important;');
     // $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%;padding: 40px !important;border-radius: 15px;margin: auto;box-shadow: 0 3px 10px rgb(0 0 0 / 0.2); order: 1;');
     $('.quiz_show .quiz_item_container .slide_view_question_element').attr('style', 'width: 90%; margin: auto; order: 2;');
@@ -562,7 +563,7 @@ function create_hotspots(event) {
     // var y = Math.round(event.offsetY / zoomScale);
 
     console.log(x, y);
-    $('.quiz_show #image-hotspots').append('<div class="preview_hotspots" style="top: ' + y + 'px;height: 20px;width: 20px;position: absolute;background: #29b160;border-radius: 50%;cursor: pointer;z-index: 200;margin-left: -10px;margin-top: -10px;left: ' + x + 'px;"></div>');
+    $('.quiz_show #image-hotspots').append('<div class="preview_hotspots" style="top: ' + y + 'px;height: 10px;width: 10px;position: absolute;background: #CC397B;border-radius: 50%;cursor: pointer;z-index: 200;margin-left: -10px;margin-top: -10px;left: ' + x + 'px;"></div>');
     hotspots_points.push([x, y]);
 }
 
