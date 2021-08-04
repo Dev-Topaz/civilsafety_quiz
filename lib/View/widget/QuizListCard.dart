@@ -9,6 +9,7 @@ class QuizListCard extends StatefulWidget {
   final int? score;
   final int? passingScore;
   final String? downloaded;
+  final String? examIcon;
   final bool? isOnline;
   final void Function()? startPressed;
   final void Function()? downloadPressed;
@@ -25,6 +26,7 @@ class QuizListCard extends StatefulWidget {
     this.startPressed,
     this.deletePressed,
     this.downloadPressed,
+    this.examIcon,
   }) : super(key: key);
 
   @override
@@ -43,15 +45,15 @@ class _QuizListCardState extends State<QuizListCard> {
 
     switch (this.widget.quizType) {
       case 'Pass':
-        color = Colors.lightGreen;
+        color = Color(0xFF17A05D);
         icon = Icons.check_circle_rounded;
         break;
       case 'Fail':
-        color = Colors.red;
+        color = Color(0xFFDD4F43);
         icon = Icons.close;
         break;
       case 'none':
-        color = Colors.yellow;
+        color = Color(0xFFFFCD43);
         break;
       default:
     }
@@ -64,25 +66,15 @@ class _QuizListCardState extends State<QuizListCard> {
            GestureDetector(
               onTap: () {
                 setState(() {
-                  // if (isExpanded) {
-                  //   height = 250;
-                  // } else {
-                  //   height = 65.0;
-                  // }
                   isExpanded = !isExpanded;
                 });
               },
               child: Container(
-                // constraints: BoxConstraints(
-                //   minHeight: 65,
-                // ),
-                // duration: new Duration(milliseconds: 0),
                 padding: EdgeInsets.only(left: 8.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5.0),
                   color: color,
                 ),
-                // height: height,
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
                   decoration: BoxDecoration(
@@ -101,23 +93,36 @@ class _QuizListCardState extends State<QuizListCard> {
                         child:  Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Row(
                               children: [
-                                Row(children: [
-                                  Text(this.widget.title!, style: TextStyle(fontSize: 16.0),),
-                                  SizedBox(width: 5.0,),
-                                  this.widget.quizType != 'none' ? Icon(Icons.circle_rounded, size: 8.0, color: color,) : SizedBox(width: 0),
-                                  SizedBox(width: 5.0,),
-                                  this.widget.quizType != 'none' ? Text(this.widget.quizType!, style: TextStyle(color: color),) : SizedBox(width: 0,),
-                                ],),
-                                Container(
-                                  width: 300,
-                                  child: Text('Passing Score: ${this.widget.passingScore}', 
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(color: Colors.grey),),
-                                )
+                                CircleAvatar(
+                                  backgroundColor: this.widget.isOnline! && this.widget.examIcon != '' ? Colors.transparent : color,
+                                  backgroundImage: this.widget.isOnline! && this.widget.examIcon != '' ? NetworkImage(this.widget.examIcon!) : null,
+                                  child: this.widget.isOnline! && this.widget.examIcon != ''
+                                  ? null
+                                  :Text(this.widget.title![0].toUpperCase(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                ),
+                                SizedBox(width: 10,),
+                                Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(children: [
+                                      Text(this.widget.title!, style: TextStyle(fontSize: 16.0),),
+                                      SizedBox(width: 5.0,),
+                                      this.widget.quizType != 'none' ? Icon(Icons.circle_rounded, size: 8.0, color: color,) : SizedBox(width: 0),
+                                      SizedBox(width: 5.0,),
+                                      this.widget.quizType != 'none' ? Text(this.widget.quizType!, style: TextStyle(color: color),) : SizedBox(width: 0,),
+                                    ],),
+                                    Container(
+                                      child: Text('Passing Score: ${this.widget.passingScore}', 
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(color: Colors.grey),),
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
                             this.widget.quizType != 'none' ? Icon(icon, color: color,) : SizedBox(width: 0,),

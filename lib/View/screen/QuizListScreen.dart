@@ -386,6 +386,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                         passingScore: quizList[index]['passing_score'],
                         downloaded: quizList[index]['downloaded'],
                         isOnline: this.widget.isOnline,
+                        examIcon: quizList[index]['exam_icon'],
                         startPressed: () {
                           if (quizList[index]['downloaded'] == 'true') Navigator.push(context, MaterialPageRoute(builder: (context) =>
                               QuizScreen(
