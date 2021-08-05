@@ -122,7 +122,7 @@ class _QuizListCardState extends State<QuizListCard> {
                                       // this.widget.quizType != 'none' ? Text(this.widget.quizType!, style: TextStyle(color: color),) : SizedBox(width: 0,),
                                     ],),
                                     Container(
-                                      child: Text('Passing Score: ${this.widget.passingScore}', 
+                                      child: Text('Passing Score: ${this.widget.passingScore}%', 
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(color: Colors.grey),),
                                     )
@@ -181,7 +181,7 @@ class _QuizListCardState extends State<QuizListCard> {
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                                   children: [
-                                    Text('Score: ' + (this.widget.score ?? 0).toString(),
+                                    Text('Score: ' + (this.widget.score ?? 0).toString() + '%',
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                       ),

@@ -12,6 +12,7 @@ let screen_height = 0;
 
 let result = '';
 let total_score = 0;
+let quiz_total_score = 0;
 let correct_quiz_count = 0;
 let hotspots_points = [];
 let isReview = false;
@@ -537,8 +538,8 @@ function rearrange_preview_ui() {
         case '14':
             let passed_score_html = $('.quiz_show .slide_view_answer_element .col-md-12').html();
             console.log(passed_score_html);
-            passed_score_html = passed_score_html.split('%%')[0] + total_score + passed_score_html.split('%%')[1];
-            passed_score_html = passed_score_html.split('##')[0] + $('.quiz_show .passing_score').html() + passed_score_html.split('##')[1];
+            passed_score_html = passed_score_html.split('%%')[0] + (total_score / quiz_total_score * 100).toFixed(0) + '%' + passed_score_html.split('%%')[1];
+            passed_score_html = passed_score_html.split('##')[0] + $('.quiz_show .passing_score').html() + '%' + passed_score_html.split('##')[1];
             console.log(passed_score_html);
 
             $('.quiz_show .slide_view_answer_element .col-md-12').html(passed_score_html);
@@ -546,8 +547,8 @@ function rearrange_preview_ui() {
 
         case '15':
             let failed_score_html = $('.quiz_show .slide_view_answer_element .col-md-12').html();
-            failed_score_html = failed_score_html.split('%%')[0] + total_score + failed_score_html.split('%%')[1];
-            failed_score_html = failed_score_html.split('##')[0] + $('.quiz_show .passing_score').html() + failed_score_html.split('##')[1];
+            failed_score_html = failed_score_html.split('%%')[0] + (total_score / quiz_total_score * 100).toFixed(0) + '%' + failed_score_html.split('%%')[1];
+            failed_score_html = failed_score_html.split('##')[0] + $('.quiz_show .passing_score').html() + '%' + failed_score_html.split('##')[1];
 
             $('.quiz_show .slide_view_answer_element .col-md-12').html(failed_score_html);
             break;
@@ -703,6 +704,7 @@ function preview(element) {
                 clearInterval(question_timer);
                 attempts += 1;
                 total_score += parseInt($('.quiz_show .correct_score').html());
+                quiz_total_score += parseInt($('.quiz_show .correct_score').html());
                 question_user_point += parseInt($('.quiz_show .correct_score').html());
                 correct_quiz_count += 1;
                 if ($('.quiz_show .feedback_type').html() != 'none') {
@@ -886,7 +888,7 @@ function preview(element) {
             $('.preview_btn').show();
             if ($('#is_quiz').html() != '0') {
 
-                if (total_score < parseInt($('.quiz_show .passing_score').html())) {
+                if ((total_score / quiz_total_score * 100) < parseInt($('.quiz_show .passing_score').html())) {
                     result = 'Fail';
                     var current_show_id = $('.quiz_show').attr('id');
 
@@ -943,7 +945,8 @@ function preview(element) {
                     email_comment: $('.quiz_show .email_comment').html(),
                     exam_answered: correct_quiz_count,
                     exam_question_count: quizId,
-                    exam_user_score: total_score,
+                    exam_user_score: parseInt(total_score / quiz_total_score * 100),
+                    exam_total_score: quiz_total_score,
                     exam_passing_score: $('.quiz_show .passing_score').html(),
                     result: result,
                     quizzes: quizzes,
@@ -951,7 +954,7 @@ function preview(element) {
 
                 QuizResult.postMessage(JSON.stringify(result_json));
                 Result.postMessage(result);
-                Score.postMessage(total_score);
+                Score.postMessage(parseInt(total_score / quiz_total_score * 100));
 
 
                 $('#submit_btn').html('Close');
@@ -1344,6 +1347,7 @@ function incorrect_process() {
         clearInterval(question_timer);
 
         total_score += parseInt($('.quiz_show .incorrect_score').html());
+        quiz_total_score += parseInt($('.quiz_show .correct_score').html());
         question_user_point += parseInt($('.quiz_show .incorrect_score').html());
         question_result = 'Wrong';
         question_feedback = $('.quiz_show .feedback_incorrect').html();
@@ -1830,7 +1834,7 @@ function see_result() {
 
     if ($('#is_quiz').html() != '0') {
 
-        if (total_score < parseInt($('.quiz_show .passing_score').html())) {
+        if ((total_score / quiz_total_score * 100) < parseInt($('.quiz_show .passing_score').html())) {
             result = 'Fail';
             var current_show_id = $('.quiz_show').attr('id');
 
@@ -1892,7 +1896,8 @@ function see_result() {
                 email_comment: $('.quiz_show .email_comment').html(),
                 exam_answered: correct_quiz_count,
                 exam_question_count: quizId,
-                exam_user_score: total_score,
+                exam_user_score: parseInt(total_score / quiz_total_score * 100),
+                exam_total_score: quiz_total_score,
                 exam_passing_score: $('.quiz_show .passing_score').html(),
                 result: result,
                 quizzes: quizzes,

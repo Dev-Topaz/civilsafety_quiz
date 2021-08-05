@@ -167,7 +167,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(fontSize: 18 * ratio),
                       decoration: InputDecoration(
                         prefixIcon:
-                            Icon(Icons.email_outlined, color: lightColor[400]),
+                            Icon(Icons.email_outlined, color: lightColor[400], size: 24.0 * ratio),
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
                             color: Theme.of(context).primaryColor,
@@ -188,11 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: isObscured,
                       decoration: InputDecoration(
                         prefixIcon:
-                            Icon(Icons.lock_open, color: lightColor[400]),
+                            Icon(Icons.lock_open, color: lightColor[400], size: 24.0 * ratio,),
                         suffixIcon: IconButton(
                             icon: isObscured
-                                ? Icon(Icons.visibility_off, color: lightColor)
-                                : Icon(Icons.visibility, color: lightColor),
+                                ? Icon(Icons.visibility_off, color: lightColor, size: 24.0 * ratio)
+                                : Icon(Icons.visibility, color: lightColor, size: 24.0 * ratio),
                             onPressed: () {
                               setState(() {
                                 isObscured = !isObscured;
