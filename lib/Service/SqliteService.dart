@@ -41,7 +41,6 @@ class SqliteService {
         ")");
 
     await database.execute("CREATE TABLE Result ("
-        "id INTEGER PRIMARY KEY,"
         "quizId TEXT,"
         "content TEXT"
         ")");
@@ -53,9 +52,12 @@ class SqliteService {
 
     var database = await openDatabase(dbPath);
 
-    var result =
-        await database.rawInsert("INSERT INTO Result (quizId, content)"
-            " VALUES ('$quizId', '$content')");
+    var result = await database.insert("Result", {
+      'quizId': quizId,
+      'content': content,
+    });
+        // await database.rawInsert("INSERT INTO Result (quizId, content)"
+            // " VALUES ('$quizId', '$content')");
     return result;
   }
 
@@ -68,7 +70,6 @@ class SqliteService {
 
     await database.execute("DROP TABLE IF EXISTS Result");
     await database.execute("CREATE TABLE Result ("
-        "id INTEGER PRIMARY KEY,"
         "quizId TEXT,"
         "content TEXT"
         ")");
@@ -91,6 +92,8 @@ class SqliteService {
         });
     }
 
+    print('[SqliteService] getAllResult $result');
+
     return result;
   }
 
@@ -100,7 +103,7 @@ class SqliteService {
 
     var database = await openDatabase(dbPath);
 
-    var result =
+    var result = 
         await database.rawInsert("INSERT INTO Asset (id, url, file_path)"
             " VALUES ('$id', '$url', '$filePath')");
     return result;

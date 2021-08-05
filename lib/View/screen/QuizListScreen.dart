@@ -279,7 +279,8 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 exit(0);
               },
             ),
-            ListTile(
+            this.widget.isOnline!
+            ? ListTile(
               title: Row(children: [
                 Icon(Icons.logout, size: 24.0, color: Colors.black,),
                 SizedBox(width: 20,),
@@ -291,7 +292,8 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 await prefs.setString('userToken', '');
               },
-            ),
+            )
+            : ListTile(),
           ],
         ),
       ),
