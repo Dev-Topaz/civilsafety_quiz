@@ -1,6 +1,7 @@
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 
 class UserCommand extends BaseCommand {
+
   Future<Map> login(String email, String password) async {
     Map loginResponse = await userService.login(email, password);
 

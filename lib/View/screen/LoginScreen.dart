@@ -1,5 +1,6 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Controller/UserCommand.dart';
+import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
 import 'package:civilsafety_quiz/View/widget/CurvePointer.dart';
 import 'package:civilsafety_quiz/global.dart' as global;
 import 'package:flutter/material.dart';
@@ -24,6 +25,13 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void login(String email, String password, double ratio) async {
     print('[LoginScreen] login');
+    
+    bool isOnline = await UserCommand().isOnlineCheck();
+
+    if (!isOnline) {
+      Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
+      return;
+    }
 
     if (email == '') {
       Fluttertoast.showToast(
@@ -167,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       style: TextStyle(fontSize: 18 * ratio),
                       decoration: InputDecoration(
                         prefixIcon:
-                            Icon(Icons.email_outlined, color: lightColor[400], size: 24.0 * ratio),
+                            Icon(Icons.email_outlined, color: lightColor[400], size: 18.0 * ratio),
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
                             color: Theme.of(context).primaryColor,
@@ -188,11 +196,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: isObscured,
                       decoration: InputDecoration(
                         prefixIcon:
-                            Icon(Icons.lock_open, color: lightColor[400], size: 24.0 * ratio,),
+                            Icon(Icons.lock_open, color: lightColor[400], size: 18.0 * ratio,),
                         suffixIcon: IconButton(
                             icon: isObscured
-                                ? Icon(Icons.visibility_off, color: lightColor, size: 24.0 * ratio)
-                                : Icon(Icons.visibility, color: lightColor, size: 24.0 * ratio),
+                                ? Icon(Icons.visibility_off, color: lightColor, size: 18.0 * ratio)
+                                : Icon(Icons.visibility, color: lightColor, size: 18.0 * ratio),
                             onPressed: () {
                               setState(() {
                                 isObscured = !isObscured;
