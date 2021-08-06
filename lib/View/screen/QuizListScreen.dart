@@ -3,6 +3,7 @@ import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
+import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/Model/TaskInfo.dart';
 import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
@@ -15,6 +16,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -41,6 +43,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
   late String _localPath;
   ReceivePort _port = ReceivePort();
   String? currentUserToken;
+  bool? isOnline;
 
   @override
   void initState() {
@@ -53,6 +56,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
       _permissionReady = false;
     }
+
+    setState(() {
+      isOnline = this.widget.isOnline;
+    });
 
     _prepare();
 
@@ -279,7 +286,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 exit(0);
               },
             ),
-            this.widget.isOnline!
+            isOnline
             ? ListTile(
               title: Row(children: [
                 Icon(Icons.logout, size: 24.0, color: Colors.black,),
@@ -287,6 +294,28 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 Text('Logout', style: TextStyle(color: Colors.black, fontSize: 20.0,),),
               ]),
               onTap: () async {
+                bool online = await UserCommand().isOnlineCheck();
+                print('online $online');
+
+                if (!online) {
+                  Navigator.pop(context);
+
+                  setState(() {
+                    isOnline = online;
+                  });
+
+                  Fluttertoast.showToast(
+                    msg: "You're offline!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.black,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                  
+                  return;
+                }
+
                 widget.callback(true, false);
 
                 SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -389,7 +418,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                         score: quizList[index]['score'],
                         passingScore: quizList[index]['passing_score'],
                         downloaded: quizList[index]['downloaded'],
-                        isOnline: this.widget.isOnline,
+                        isOnline: isOnline,
                         examIcon: quizList[index]['exam_icon'],
                         startPressed: () {
                           if (quizList[index]['downloaded'] == 'true') Navigator.push(context, MaterialPageRoute(builder: (context) =>
@@ -400,11 +429,28 @@ class _QuizListScreenState extends State<QuizListScreen> {
                             ),
                           );
                         },
-                        downloadPressed: () {
-                          if (this.widget.isOnline! && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
+                        downloadPressed: () async {
+                          bool online = await UserCommand().isOnlineCheck();
+                          if (!online) {
+                            setState(() {
+                              isOnline = online;
+                            });
+
+                            Fluttertoast.showToast(
+                              msg: "You're offline!",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.black,
+                              textColor: Colors.white,
+                              fontSize: 16.0);
+
+                            return;
+                          }
+                          if (isOnline && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
                         },
                         deletePressed: () {
-                          if (!(this.widget.isOnline! && quizList[index]['downloaded'] == 'false')) _delete(quizList[index]['id'], currentUserToken!);
+                          if (quizList[index]['downloaded'] == 'true') _delete(quizList[index]['id'], currentUserToken!);
                         },
                       ),
                     );

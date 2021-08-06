@@ -1,4 +1,5 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
+import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
 import 'package:civilsafety_quiz/View/widget/CustomLayout.dart';
@@ -96,7 +97,7 @@ class _QuizScreenState extends State<QuizScreen> {
   Widget build(BuildContext context) {
     print('[QuizScreen] quizContent $quizContent');
     
-    bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
+    // bool isOnline = context.select<AppModel, bool>((value) => value.isOnline);
     // String isPortrait = MediaQuery.of(context).orientation == Orientation.portrait ? 'true' : 'false';
     String isPortrait = 'true';
     double screenWidth = MediaQuery.of(context).size.width;
@@ -228,7 +229,9 @@ class _QuizScreenState extends State<QuizScreen> {
                               print(
                                   '[QuizScreen] onMessageReceived QuizResult ${s.message}');
 
+                              bool isOnline = await UserCommand().isOnlineCheck();
                               print('[QuizScreen] isOnline $isOnline');
+
                               if (isOnline) {
                                 print('[QuizScreen] currentUserToken $currentUserToken');
                                 _controller.webViewController.evaluateJavascript('show_progress_bar();');

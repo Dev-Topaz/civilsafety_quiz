@@ -254,14 +254,14 @@ class _QuizListCardState extends State<QuizListCard> {
                                   child: Column(
                                     children: <Widget>[
                                       Icon(Icons.delete_sweep_sharp,
-                                        color: this.widget.isOnline! && this.widget.downloaded == 'false' ? Colors.grey : Theme.of(context).primaryColor,
+                                        color: this.widget.downloaded == 'false' ? Colors.grey : Theme.of(context).primaryColor,
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(vertical: 2.0),
                                       ),
                                       Text('Delete',
                                         style: TextStyle(
-                                          color: this.widget.isOnline! && this.widget.downloaded == 'false' ? Colors.grey : Theme.of(context).primaryColor,
+                                          color: this.widget.downloaded == 'false' ? Colors.grey : Theme.of(context).primaryColor,
                                         ),
                                       ),
                                     ],
