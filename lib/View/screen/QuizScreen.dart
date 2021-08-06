@@ -1,6 +1,5 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Controller/UserCommand.dart';
-import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
 import 'package:civilsafety_quiz/View/widget/CustomLayout.dart';
 import 'package:civilsafety_quiz/View/widget/CustomTextIconButton.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:webview_flutter_plus/webview_flutter_plus.dart';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:provider/provider.dart';
 
 class QuizScreen extends StatefulWidget {
   // final int? quizId;

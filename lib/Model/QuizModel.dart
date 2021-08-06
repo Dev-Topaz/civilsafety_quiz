@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:intl/intl.dart';
 
 import 'package:flutter/material.dart';
 
@@ -54,9 +53,6 @@ class QuizModel extends ChangeNotifier {
       );
 
   Map<String, dynamic> toMap() {
-    // DateTime now = DateTime.now().toUtc();
-    // String formattedDate = DateFormat('yyyy-MM-ddTkk:mm:ss').format(now);
-
     return {
       'id': quizId,
       'name': name,
@@ -69,7 +65,6 @@ class QuizModel extends ChangeNotifier {
       'exam_icon': examIcon,
       'score': score,
       'result': result,
-      // 'updated_at': formattedDate
     };
   }
 }

@@ -7,14 +7,11 @@ import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/Model/TaskInfo.dart';
 import 'package:civilsafety_quiz/View/screen/QuizScreen.dart';
-import 'package:civilsafety_quiz/View/widget/CustomBanner.dart';
 import 'package:civilsafety_quiz/View/widget/QuizListCard.dart';
 import 'package:civilsafety_quiz/const.dart';
-import 'package:expansion_tile_card/expansion_tile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -23,7 +20,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class QuizListScreen extends StatefulWidget {
-  Function callback;
+  final Function callback;
   final TargetPlatform? platform;
   final bool? isOnline;
 
