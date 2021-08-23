@@ -10,7 +10,7 @@ class SqliteService {
   createDatabase() async {
     String databasesPath = await getDatabasesPath();
     String dbPath = join(databasesPath, 'civilsafety_quiz.db');
-    var database = await openDatabase(dbPath, version: 1, onCreate: populateDb);
+    var database = await openDatabase(dbPath, version: 2, onCreate: populateDb);
     return database;
   }
 
