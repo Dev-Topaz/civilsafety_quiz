@@ -43,4 +43,11 @@ class UserCommand extends BaseCommand {
 
     return isOnline;
   }
+  
+  Future<bool> createDatabase() async {
+    print('[Create Database]');
+    await sqliteService.createDatabase();
+    return true;
+  }
+
 }
