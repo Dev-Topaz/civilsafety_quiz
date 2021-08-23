@@ -1,6 +1,5 @@
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Controller/UserCommand.dart';
-import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
 import 'package:civilsafety_quiz/View/widget/CurvePointer.dart';
 import 'package:civilsafety_quiz/global.dart' as global;
 import 'package:flutter/material.dart';
@@ -27,11 +26,6 @@ class _LoginScreenState extends State<LoginScreen> {
     print('[LoginScreen] login');
     
     bool isOnline = await UserCommand().isOnlineCheck();
-
-    if (!isOnline) {
-      Navigator.push(context,MaterialPageRoute(builder: (context) => HomeScreen()));
-      return;
-    }
 
     if (email == '') {
       Fluttertoast.showToast(
@@ -61,31 +55,34 @@ class _LoginScreenState extends State<LoginScreen> {
       isLogging = true;
     });
 
-    Map loginResponse = await UserCommand().login(email, password);
+    Map loginResponse;
+
+    if(isOnline)
+      loginResponse = await UserCommand().login(email, password);
+    else
+      loginResponse = await UserCommand().offlineLogin(email, password);
 
     print('[LoginScreen] $loginResponse');
 
 
     if (loginResponse['success'] == 'success') {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-
-      int prevUserId = prefs.getInt('userId') ?? -1;
-
-      if (prevUserId != loginResponse['userId']) {
-        await prefs.setBool('isChangeUser', true);
-      } else {
-        await prefs.setBool('isChangeUser', false);
-      }
-
+      //   int prevUserId = prefs.getInt('userId') ?? -1;
+      //
+      // if (prevUserId != loginResponse['userId']) {
+      //   await prefs.setBool('isChangeUser', true);
+      // } else {
+      //   await prefs.setBool('isChangeUser', false);
+      // }
       await prefs.setString('userToken', loginResponse['userToken']);
       await prefs.setInt('userId', loginResponse['userId']);
+      if(isOnline) {
 
-      await QuizCommand().downloadQuizList(loginResponse['userToken']);
-      await QuizCommand().removeQuizList(loginResponse['userToken']);
-      await QuizCommand().sendAllSavedResult(loginResponse['userToken']);
+        await QuizCommand().downloadQuizList(loginResponse['userToken'], loginResponse['userId']);
+        await QuizCommand().removeQuizList(loginResponse['userToken']);
 
-      global.isFirst = false;
-
+        global.isFirst = false;
+      }
       this.widget.callback(true, true);
     } else {
       Fluttertoast.showToast(

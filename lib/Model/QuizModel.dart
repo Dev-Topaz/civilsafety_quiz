@@ -54,7 +54,7 @@ class QuizModel extends ChangeNotifier {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': quizId,
+      'quizId': quizId,
       'name': name,
       'description': description,
       'passing_score': passingScore,

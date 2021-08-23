@@ -1,3 +1,4 @@
+import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/Model/AppModel.dart';
 import 'package:civilsafety_quiz/View/screen/LoginScreen.dart';
@@ -21,14 +22,14 @@ class _HomeScreenState extends State<HomeScreen> {
   bool isLoggedin = false;
   bool hasAccount = true;
   bool isLoading = true;
-  final bool isFirst = global.isFirst; 
+  final bool isFirst = global.isFirst;
 
   @override
   void initState() {
     super.initState();
 
-    SystemChrome.setPreferredOrientations(
-        [DeviceOrientation.portraitUp]);
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
+    QuizCommand().sendAllSavedResult();
 
     UserCommand().isOnlineCheck().then((value) {
       setState(() {
@@ -46,9 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-
   void getUserToken() async {
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String userToken = prefs.getString('userToken') ?? '';
 
@@ -83,14 +82,12 @@ class _HomeScreenState extends State<HomeScreen> {
       print('[HomeScreen] isOnline $isOnline');
     }
 
-
-
     return isLoading
         ? CircularProgressIndicator(
             color: Colors.black87,
           )
         : Container(
-            child: isLoggedin || !isOnline
+            child: isLoggedin
                 ? QuizListScreen(
                     callback: callback,
                     platform: platform,

@@ -6,18 +6,19 @@ import 'package:civilsafety_quiz/const.dart';
 import 'package:http/http.dart' as http;
 
 class QuizService {
-  Future<bool> sendEmail(String token, String json) async {
+  Future<bool> sendEmail(String json) async {
     var request = http.MultipartRequest(
         'POST', Uri.parse(API_ROOT_URL + 'send_email'));
 
     request.fields['json'] = json;
-    request.headers['Authorization'] = 'Bearer ' + token;
 
     bool result = true;
 
     var response = await request.send();
     final String respStr = await response.stream.bytesToString();
     print('[QuizService] sendEmail respStr $respStr');
+
+    print('[send email] $respStr');
 
     var resultData = jsonDecode(respStr);
 
@@ -30,13 +31,12 @@ class QuizService {
     return result;
   }
 
-  Future<bool> saveResult(String token, String json, String userId, String quizId) async {
+  Future<bool> saveResult(String json, String userId, String quizId) async {
     var request = http.MultipartRequest('POST', Uri.parse(API_ROOT_URL + 'save_result'));
 
     request.fields['json'] = json;
     request.fields['user_id'] = userId;
     request.fields['exam_id'] = quizId;
-    request.headers['Authorization'] = 'Bearer ' + token;
 
     bool result = true;
 
@@ -85,6 +85,7 @@ class QuizService {
   }
 
   Future<QuizModel> fetchQuiz(String token, int quizId) async {
+    print('[Fecth Quiz] $quizId');
     final response = await http.get(
       Uri.parse(API_ROOT_URL + 'get_quiz/' + quizId.toString()),
       headers: {

@@ -1,9 +1,12 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 import 'package:civilsafety_quiz/Model/QuizModel.dart';
 import 'package:civilsafety_quiz/const.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -11,37 +14,61 @@ import 'package:shared_preferences/shared_preferences.dart';
 class QuizCommand extends BaseCommand {
 
   Future saveResult(String content, String quizId) async {
+    
     await sqliteService.createResult(content, quizId);
   }
 
-  Future sendEmail(String token, String json) async {
-    await quizService.sendEmail(token, json);
+  Future sendEmail(String json) async {
+    var result = await quizService.sendEmail(json);
+    if(result == true) {
+      var content = jsonDecode(json);
+      print("[Email content] $content");
+      var status = await sqliteService.getResult(content['userId'], content['quizId']);
+      if(status == 'Pending')
+        sqliteService.updateQuizResult("Pass", int.parse(content['quizId']));
+    } else {
+      Fluttertoast.showToast(
+          msg: "Please enter your email.",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
   }
 
-  Future saveResultAtServer(String token, String json, String quizId) async {
-    String userId = await userService.gerUserId(token);
-    await quizService.saveResult(token, json, userId, quizId);
+  Future saveResultAtServer(String json, String quizId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userId = prefs.getInt('userId')!;
+    await quizService.saveResult(json, userId.toString(), quizId);
   }
 
-  Future sendAllSavedResult(token) async {
+  Future sendAllSavedResult() async {
+    print('[OFFLINE -> ONLINE] SEND ALL SAVED RESULT');
     List resultList = await sqliteService.getAllResult();
 
     for (var result in resultList) {
-      await this.sendEmail(token, result['content']);
-      await this.saveResultAtServer(token, result['content'], result['quizId']);
+      var content = result['content'];
+      var json = jsonDecode(content);
+      var data = {
+        'userId': result['userId'],
+        'quizId': result['quizId'],
+        ...json
+      };
+      await this.sendEmail(jsonEncode(data));
+      await quizService.saveResult(jsonEncode(data), result['userId'].toString(), result['quizId']);
     }
 
     await sqliteService.dropResult();
   }
 
-  Future downloadQuizList(String token) async {
+  Future downloadQuizList(String token, int userId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool isChangeUser = prefs.getBool('isChangeUser')!;
-
-    await sqliteService.createDatabase();
+    int userId = prefs.getInt('userId')!;
 
     List remoteQuizIndex = await quizService.fetchQuizIndex(token);
-    List localQuizIndex = await sqliteService.getQuizIndex();
+    List localQuizIndex = await sqliteService.getQuizIndex(userId);
 
     print('[QuizCommand] downloadQuizList: $localQuizIndex');
     for (var id in remoteQuizIndex) {
@@ -53,10 +80,10 @@ class QuizCommand extends BaseCommand {
         QuizModel quizModel = await quizService.fetchQuiz(token, id);
         if (localQuizIndex.indexOf(id) == -1) {
           //create quiz
-          await sqliteService.createQuiz(quizModel);
+          await sqliteService.createQuiz(quizModel, userId);
         } else {
           //update quiz
-          QuizModel? localQuizModel = await sqliteService.getQuiz(id);
+          QuizModel? localQuizModel = await sqliteService.getQuiz(id, userId);
 
           print('quizmodel updatedate ${DateTime.parse(quizModel.updatedAt)}');
           print(
@@ -67,7 +94,7 @@ class QuizCommand extends BaseCommand {
 
           print('[QuizCommand] downloadQuizList isUpdated $isUpdated');
           print('[QuizCommand] downloadQuizList: update quiz $id');
-          if (!isUpdated || isChangeUser) await sqliteService.updateQuiz(quizModel);
+          if (!isUpdated) await sqliteService.updateQuiz(quizModel, userId);
         }
       }
     }
@@ -75,9 +102,11 @@ class QuizCommand extends BaseCommand {
 
   Future removeQuizList(String token) async {
     await sqliteService.createDatabase();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userId = prefs.getInt('userId') ?? -1;
 
     List remoteQuizIndex = await quizService.fetchQuizIndex(token);
-    List localQuizIndex = await sqliteService.getQuizIndex();
+    List localQuizIndex = await sqliteService.getQuizIndex(userId);
 
     for (var id in localQuizIndex) {
       id = id.toString();
@@ -88,6 +117,9 @@ class QuizCommand extends BaseCommand {
   }
 
   Future<List> getQuizzes() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int userId = prefs.getInt('userId') ?? -1;
+
     return await sqliteService.getQuizzes();
   }
 
@@ -168,7 +200,7 @@ class QuizCommand extends BaseCommand {
     return await sqliteService.getPathWithUrl(url);
   }
 
-  Future<QuizModel?> getQuiz(int? id) async {
-    return await sqliteService.getQuiz(id);
+  Future<QuizModel?> getQuiz(int? id, userId) async {
+    return await sqliteService.getQuiz(id, userId);
   }
 }

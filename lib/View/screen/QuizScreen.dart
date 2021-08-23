@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:civilsafety_quiz/Controller/QuizCommand.dart';
 import 'package:civilsafety_quiz/Controller/UserCommand.dart';
 import 'package:civilsafety_quiz/View/screen/HomeScreen.dart';
@@ -232,9 +234,18 @@ class _QuizScreenState extends State<QuizScreen> {
 
                               if (isOnline) {
                                 print('[QuizScreen] currentUserToken $currentUserToken');
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                int userId = prefs.getInt('userId')!;
+                                var message = jsonDecode(s.message);
+                                var data = {
+                                  'userId': userId,
+                                  'quizId': this.widget.id.toString(),
+                                  ...message
+                                };
+                                print('[QuizScreen] $data');
                                 _controller.webViewController.evaluateJavascript('show_progress_bar();');
-                                await QuizCommand().sendEmail(currentUserToken, s.message);
-                                await QuizCommand().saveResultAtServer(currentUserToken, s.message, this.widget.id.toString());
+                                await QuizCommand().sendEmail(jsonEncode(data));
+                                await QuizCommand().saveResultAtServer(s.message, this.widget.id.toString());
                                 _controller.webViewController.evaluateJavascript('hide_progress_bar();');
                               } else {
                                 await QuizCommand().saveResult(s.message, this.widget.id.toString());
@@ -246,7 +257,14 @@ class _QuizScreenState extends State<QuizScreen> {
                               print(
                                   '[QuizScreen] onMessageReceived Result ${s.message}');
 
-                              await QuizCommand().updateQuizResult(s.message, this.widget.id!);
+                              bool isOnline = await UserCommand().isOnlineCheck();
+                              print('[QuizScreen] isOnline $isOnline');
+                              var result = s.message;
+                              if(!isOnline && s.message == "Pass") {
+                                 result = "Pending";
+                              }
+
+                              await QuizCommand().updateQuizResult(result, this.widget.id!);
                               // this.widget.updateResult!(this.widget.id!, s.message);
                             }),
                         JavascriptChannel(

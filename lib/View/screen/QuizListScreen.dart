@@ -46,6 +46,8 @@ class _QuizListScreenState extends State<QuizListScreen> {
   void initState() {
     super.initState();
 
+
+
     if (this.widget.isOnline!) {
       _bindBackgroundIsolate();
 
@@ -97,7 +99,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
         break;
       case 3:
         for (var item in allQuizList) {
-          if (item['result'] == 'none') tmp.add(item);
+          if (item['result'] == 'none' || item['result'] == 'Pending') tmp.add(item);
         }
         break;
       default:
@@ -283,43 +285,41 @@ class _QuizListScreenState extends State<QuizListScreen> {
                 exit(0);
               },
             ),
-            isOnline
-            ? ListTile(
+            ListTile(
               title: Row(children: [
                 Icon(Icons.logout, size: 24.0, color: Colors.black,),
                 SizedBox(width: 20,),
                 Text('Logout', style: TextStyle(color: Colors.black, fontSize: 20.0,),),
               ]),
               onTap: () async {
-                bool online = await UserCommand().isOnlineCheck();
-                print('online $online');
-
-                if (!online) {
-                  Navigator.pop(context);
-
-                  setState(() {
-                    isOnline = online;
-                  });
-
-                  Fluttertoast.showToast(
-                    msg: "You're offline!",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.BOTTOM,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.black,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-                  
-                  return;
-                }
-
+                // bool online = await UserCommand().isOnlineCheck();
+                // print('online $online');
+                //
+                // if (!online) {
+                //   Navigator.pop(context);
+                //
+                //   setState(() {
+                //     isOnline = online;
+                //   });
+                //
+                //   Fluttertoast.showToast(
+                //     msg: "You're offline!",
+                //     toastLength: Toast.LENGTH_SHORT,
+                //     gravity: ToastGravity.BOTTOM,
+                //     timeInSecForIosWeb: 1,
+                //     backgroundColor: Colors.black,
+                //     textColor: Colors.white,
+                //     fontSize: 16.0);
+                //
+                //   return;
+                // }
+                //
                 widget.callback(true, false);
 
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 await prefs.setString('userToken', '');
               },
             )
-            : ListTile(),
           ],
         ),
       ),
@@ -420,7 +420,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
                         startPressed: () {
                           if (quizList[index]['downloaded'] == 'true') Navigator.push(context, MaterialPageRoute(builder: (context) =>
                               QuizScreen(
-                                id: quizList[index]['id'],
+                                id: quizList[index]['quizId'],
                                 name: quizList[index]['name'],
                               ),
                             ),
@@ -444,10 +444,10 @@ class _QuizListScreenState extends State<QuizListScreen> {
 
                             return;
                           }
-                          if (isOnline && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['id'], currentUserToken!);
+                          if (isOnline && quizList[index]['downloaded'] == 'false') downloadAssets(quizList[index]['quizId'], currentUserToken!);
                         },
                         deletePressed: () {
-                          if (quizList[index]['downloaded'] == 'true') _delete(quizList[index]['id'], currentUserToken!);
+                          if (quizList[index]['downloaded'] == 'true') _delete(quizList[index]['quizId'], currentUserToken!);
                         },
                       ),
                     );
@@ -505,6 +505,9 @@ class _QuizListScreenState extends State<QuizListScreen> {
     final directory = widget.platform == TargetPlatform.android
         ? await getExternalStorageDirectory()
         : await getApplicationDocumentsDirectory();
+
+    print("DIRECTORY");
+    print(directory);
     return directory?.path;
   }
 }

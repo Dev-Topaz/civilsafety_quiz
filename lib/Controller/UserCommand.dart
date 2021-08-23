@@ -3,17 +3,25 @@ import 'package:civilsafety_quiz/Controller/BaseCommand.dart';
 class UserCommand extends BaseCommand {
 
   Future<Map> login(String email, String password) async {
+    await sqliteService.createDatabase();
     Map loginResponse = await userService.login(email, password);
 
     print('[UserCommand] loginResponse $loginResponse');
 
     if (loginResponse['success'] == 'success') {
-      appModel.currentUserToken = loginResponse['userToken'];
+      bool success = await sqliteService.createUser(loginResponse['userId'], email, password);
+      print('[Sqlite] Create user $success');
+      if(success == true)
+        appModel.currentUserToken = loginResponse['userToken'];
     } else {
       appModel.currentUserToken = '';
     }
 
     return loginResponse;
+  }
+
+  Future<Map> offlineLogin(String email, String password) async {
+    return await sqliteService.login(email, password);
   }
 
   Future<String> register(String username, String email, String password,

@@ -585,6 +585,7 @@ function create_hotspots(event) {
     // var y = Math.round(event.offsetY / zoomScale);
 
     console.log(x, y);
+    clear_hotspots();
     $('.quiz_show #image-hotspots').append('<div class="preview_hotspots" style="top: ' + y + 'px;height: 10px;width: 10px;position: absolute;background: #CC397B;border-radius: 50%;cursor: pointer;z-index: 200;margin-left: -10px;margin-top: -10px;left: ' + x + 'px;"></div>');
     hotspots_points.push([x, y]);
 }
@@ -600,7 +601,6 @@ function clear_hotspots() {
     $('.preview_hotspots').remove();
     hotspots_points = [];
 }
-
 
 function review_button() {
     $('#review_btn').trigger('click');

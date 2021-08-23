@@ -53,6 +53,7 @@ class _QuizListCardState extends State<QuizListCard> {
         icon = Icons.warning;
         break;
       case 'none':
+      case 'Pending':
         color = Color(0xFFFFCD43);
         break;
       default:
@@ -131,7 +132,7 @@ class _QuizListCardState extends State<QuizListCard> {
                               ],
                             ),
                             Container(
-                              width: 75,
+                              width: 90,
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [

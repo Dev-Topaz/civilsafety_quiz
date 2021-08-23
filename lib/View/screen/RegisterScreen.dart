@@ -102,12 +102,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     if (userToken != '') {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-
       await prefs.setString('userToken', userToken);
-
-      await QuizCommand().downloadQuizList(userToken);
+      // await QuizCommand().downloadQuizList(userToken);
       await QuizCommand().removeQuizList(userToken);
-      await QuizCommand().sendAllSavedResult(userToken);
+      // await QuizCommand().sendAllSavedResult(userToken);
 
       this.widget.callback(true, true);
     } else {
@@ -127,7 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
     return;
   }
-
+ 
   @override
   Widget build(BuildContext context) {
     final color = Colors.black;
