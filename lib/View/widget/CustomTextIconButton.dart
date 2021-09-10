@@ -19,7 +19,7 @@ class CustomTextIconButton extends StatelessWidget {
       children: [
         ElevatedButton(
           style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all<Color>(color ?? Color(0xFFCC397B)),
+            backgroundColor: MaterialStateProperty.all<Color>(color ?? Color(0xFFF6941D)),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
               RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(18),

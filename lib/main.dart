@@ -41,10 +41,11 @@ class MyApp extends StatelessWidget {
         Commands.init(context);
 
         return MaterialApp(
-          title: 'Civil Safety Quiz',
+          title: 'Access Now',
           theme: ThemeData(
             primarySwatch: Colors.blue,
-            primaryColor: Color(0xFFCC397B),
+            primaryColor: Color(0xFFF6941D),
+            secondaryHeaderColor: Color(0xFF02205C)
             // primaryColor: Color(0xFFC80063),
           ),
           initialRoute: '/',
