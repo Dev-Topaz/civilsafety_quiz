@@ -142,7 +142,7 @@ class _QuizScreenState extends State<QuizScreen> {
             ),
           ], 
           title: Text(this.widget.name!,
-            style: TextStyle(color: Colors.white),
+            style: TextStyle(color: Theme.of(context).secondaryHeaderColor),
           ),
           backgroundColor: Theme.of(context).primaryColor,
         )
