@@ -266,7 +266,7 @@ class _QuizListScreenState extends State<QuizListScreen> {
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
               ),
-              child: Text('Access Now',
+              child: Text('Assess Now',
                 style: TextStyle(
                   color: Theme.of(context).secondaryHeaderColor,
                   fontSize: 20.0,

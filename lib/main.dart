@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
         Commands.init(context);
 
         return MaterialApp(
-          title: 'Access Now',
+          title: 'Assess Now',
           theme: ThemeData(
             primarySwatch: Colors.blue,
             primaryColor: Color(0xFFF6941D),

@@ -1,6 +1,6 @@
 # accessnow_quiz
 
-Access Now Quiz
+Assess Now Quiz
 
 ## Getting Started
 
