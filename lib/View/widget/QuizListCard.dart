@@ -112,7 +112,7 @@ class _QuizListCardState extends State<QuizListCard> {
                                   children: [
                                     Row(children: [
                                       Container(
-                                        width: 180,
+                                        width: MediaQuery.of(context).size.width - 120,
                                         child: Text(this.widget.title!, style: TextStyle(fontSize: 16.0),
                                           overflow: TextOverflow.ellipsis,
                                         ),

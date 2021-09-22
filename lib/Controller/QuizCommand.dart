@@ -86,8 +86,7 @@ class QuizCommand extends BaseCommand {
           QuizModel? localQuizModel = await sqliteService.getQuiz(id, userId);
 
           print('quizmodel updatedate ${DateTime.parse(quizModel.updatedAt)}');
-          print(
-              'quizmodel updatedate ${DateTime.parse(localQuizModel!.updatedAt + 'Z')}');
+          print('quizmodel updatedate ${DateTime.parse(localQuizModel!.updatedAt + 'Z')}');
 
           bool isUpdated = DateTime.parse(localQuizModel.updatedAt + 'Z')
               .isAfter(DateTime.parse(quizModel.updatedAt));
