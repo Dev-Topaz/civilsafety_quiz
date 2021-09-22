@@ -146,7 +146,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         children: <Widget>[
                           Text('SIGN IN',
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Theme.of(context).secondaryHeaderColor,
                                   fontSize: 24 * ratio,
                                   fontWeight: FontWeight.w600)),
                         ],
@@ -156,7 +156,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 )),
             Container(
                 height: height * 0.2,
-                width: width,
+                width: width * 3 / 4,
                 child: Image(
                   image: AssetImage('assets/images/login_logo.png'),
                   fit: BoxFit.fitWidth,
@@ -175,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             Icon(Icons.email_outlined, color: lightColor[400], size: 18.0 * ratio),
                         labelText: 'EMAIL',
                         labelStyle: TextStyle(
-                            color: Theme.of(context).primaryColor,
+                            color: Theme.of(context).secondaryHeaderColor,
                             fontWeight: FontWeight.w600,
                             fontSize: 14 * ratio),
                         enabledBorder: OutlineInputBorder(
@@ -205,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             }),
                         labelText: 'PASSWORD',
                         labelStyle: TextStyle(
-                          color: Theme.of(context).primaryColor,
+                          color: Theme.of(context).secondaryHeaderColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 14 * ratio,
                         ),
@@ -250,11 +250,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                       child: isLogging
                           ? CircularProgressIndicator(
-                              color: Colors.white,
+                              color: Theme.of(context).secondaryHeaderColor,
                             )
                           : Text('CONTINUE',
                               style:
-                                  TextStyle(color: primaryColor, fontSize: 18 * ratio)),
+                                  TextStyle(color: Theme.of(context).secondaryHeaderColor, fontSize: 18 * ratio)),
                       // shape: RoundedRectangleBorder(
                       // borderRadius: BorderRadius.circular(30))
                     ),

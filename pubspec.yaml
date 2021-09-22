@@ -44,6 +44,7 @@ dependencies:
   shared_preferences: ^2.0.6
   flutter_toggle_tab: ^1.1.5
   crypto: ^3.0.1
+  flutter_launcher_icons: ^0.9.2
 
 dev_dependencies:
   flutter_test:
@@ -53,6 +54,11 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+
+flutter_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/icon.png"
 
 # The following section is specific to Flutter.
 flutter:
@@ -116,7 +122,7 @@ flutter_native_splash:
 
   # The image parameter allows you to specify an image used in the splash screen.  It must be a 
   # png file.  
-  image: assets/images/splash.png
+  image: assets/images/app_splash.png
 
   # The color_dark, background_image_dark, and image_dark are parameters that set the background
   # and image when the device is in dark mode. If they are not specified, the app will use the

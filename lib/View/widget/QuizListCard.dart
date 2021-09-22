@@ -49,7 +49,7 @@ class _QuizListCardState extends State<QuizListCard> {
         icon = Icons.check_circle_rounded;
         break;
       case 'Fail':
-        color = Color(0xFFDD4F43);
+        color = Color(0xFFF6941D);
         icon = Icons.warning;
         break;
       case 'none':

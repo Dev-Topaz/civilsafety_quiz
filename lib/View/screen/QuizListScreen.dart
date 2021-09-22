@@ -266,9 +266,9 @@ class _QuizListScreenState extends State<QuizListScreen> {
               decoration: BoxDecoration(
                 color: Theme.of(context).primaryColor,
               ),
-              child: Text('Civil Safety Quiz App',
+              child: Text('Assess Now',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: Theme.of(context).secondaryHeaderColor,
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
                 ),
@@ -329,13 +329,13 @@ class _QuizListScreenState extends State<QuizListScreen> {
         title: Text(
           'Quiz List',
           style: TextStyle(
-            color: Colors.white,
+            color: Theme.of(context).secondaryHeaderColor,
           ),
         ),
         leading: Builder(
           builder: (BuildContext context) {
             return IconButton(
-              icon: Icon(Icons.menu, color: Colors.white),
+              icon: Icon(Icons.menu, color: Theme.of(context).secondaryHeaderColor),
               onPressed: () {
                 Scaffold.of(context).openDrawer();
               },

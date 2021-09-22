@@ -1,6 +1,6 @@
-# civilsafety_quiz
+# accessnow_quiz
 
-Civil Safety Quiz
+Assess Now Quiz
 
 ## Getting Started
 

@@ -133,7 +133,7 @@ main {
 
 #content .post .content_body #entries_actions ul li a {
     font-family: 'globerbold', Arial, helvetica, 'Trebuchet MS', 'Lucida Grande';
-    color: #cb6852;
+    color: #f6941d;
     font-weight: 400;
     display: block;
     padding: 5px 10px 2px 10px;
@@ -159,7 +159,7 @@ main {
 }
 
 #entries_actions .vline_separator {
-    border-left: 1px dotted #CB6852;
+    border-left: 1px dotted #f6941d;
 }
 
 #entries_actions_arrow {
@@ -895,7 +895,7 @@ if it's not present, don't show loader */
 #preview_toast_title {
     height: 45px;
     width: 100%;
-    background: red;
+    background: #f6941d;
     border-radius: 10px 10px 0 0;
     display: flex;
     align-items: center;
