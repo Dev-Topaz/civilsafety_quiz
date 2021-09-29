@@ -40,7 +40,7 @@ class QuizModel extends ChangeNotifier {
         name: jsonData['name'],
         description:
             jsonData['description'] != null ? jsonData['description'] : '',
-        passingScore: jsonData['passing_score'],
+        passingScore: int.parse(jsonData['passing_score'].toString()),
         staffEmail: jsonData['stuff_emails'],
         quizContentPath: jsonData['quiz_content_path'] != null
             ? jsonData['quiz_content_path']

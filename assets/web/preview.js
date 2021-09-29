@@ -29,6 +29,14 @@ var question_timer;
 // $('.other_slide_view_element_delete_icon').remove();
 
 let user_info_field_patterns = [];
+let latitude;
+let longitude;
+
+$.getJSON('https://geolocation-db.com/json/')
+.done (function(location) {
+    latitude = location.latitude;
+    longitude = location.longitude;
+});
 /*
 * ************ Fit Quiz size ********************
 * */
@@ -950,6 +958,8 @@ function preview(element) {
                     exam_passing_score: $('.quiz_show .passing_score').html(),
                     result: result,
                     quizzes: quizzes,
+                    latitude: latitude,
+                    longitude: longitude,
                 };
 
                 QuizResult.postMessage(JSON.stringify(result_json));
@@ -1901,6 +1911,8 @@ function see_result() {
                 exam_passing_score: $('.quiz_show .passing_score').html(),
                 result: result,
                 quizzes: quizzes,
+                latitude: latitude,
+                longitude: longitude,
             },
             success: function (data) {
                 console.log('success');
